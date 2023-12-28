@@ -1,5 +1,3 @@
-import { Dispatch } from 'react'
-
 import {
   DEFAULT_BRUSH_SIZES,
   PATH_KEY,
