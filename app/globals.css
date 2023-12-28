@@ -39,7 +39,7 @@ main .result-wrapper .additional-tool-wrapper {
   @apply absolute -right-16 top-0 bg-white rounded-lg shadow p-2;
 }
 main .additional-tool-wrapper button {
-  @apply flex items-center justify-center w-8 h-8 rounded hover:bg-primary disabled:text-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed outline-none;
+  @apply flex items-center justify-center w-8 h-8 rounded hover:bg-primary active:!bg-white disabled:text-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed outline-none;
 }
 main .additional-tool-wrapper button svg {
   @apply w-5 h-5;

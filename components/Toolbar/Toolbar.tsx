@@ -8,7 +8,7 @@ import React from 'react'
 import { cn } from '@/libs/utils'
 
 import { Tools } from '../SketchDrawer'
-import useSketchDrawerStore from '../SketchDrawer/SketchDrawer.store'
+import { useSketchDrawerContext } from '../SketchDrawer/SketchDrawer.context'
 import style from './Toolbar.module.css'
 
 const Toolbar = () => {
@@ -16,7 +16,7 @@ const Toolbar = () => {
   const [isFreehandActive, setIsFreehandActive] = useState(true)
   const [isColorActive, setIsColorActive] = useState(true)
 
-  const { instance } = useSketchDrawerStore()
+  const { instance } = useSketchDrawerContext()
 
   return (
     <div className={style.toolbarWrapper}>

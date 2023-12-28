@@ -1,4 +1,9 @@
-import { PATH_KEY, SELECTED_KEYS, SELECTED_VALUES } from './data/constants'
+import {
+  DEFAULT_BRUSH_SIZES,
+  PATH_KEY,
+  SELECTED_DEFAULT_VALUES,
+  SELECTED_KEYS
+} from './data/constants'
 import { FreehandTools, ShapeTools } from './data/enums'
 import { SketchDrawerOptions } from './data/types'
 
@@ -6,40 +11,39 @@ class SketchDrawerHandler {
   #canvas = document.createElement('canvas')
   #ctx = this.#canvas.getContext('2d')
   container?: HTMLElement
+  #isDrawing = false
+  #rzTimeout?: NodeJS.Timeout | null
+  #redo: any[] = []
 
   #CONSTANTS = {
     DATA_KEY: PATH_KEY,
     TOOL_KEY: SELECTED_KEYS.tool,
-    COLOR_KEY: SELECTED_KEYS.color
+    COLOR_KEY: SELECTED_KEYS.color,
+    BG_KEY: SELECTED_KEYS.bg
   }
-
-  #isDrawing = false
-  #paths: any[] = []
-  #rzTimeout?: NodeJS.Timeout | null
-  #redo: any[] = []
 
   #opts: SketchDrawerOptions = {
     width: 600,
     height: 600,
-    bg: '#ffffff',
-    color: '#000000',
-    brushSize: 2,
     logs: false,
-    lineCap: 'round',
-    lineJoin: 'round',
     overflow: 'hidden',
     autosave: true
   }
 
-  brushType = FreehandTools.Pencil
+  // Initial values from store
+  #paths: any[] = []
+  #canvasBg: string = SELECTED_DEFAULT_VALUES.bg
+  #selectedTool: FreehandTools | ShapeTools = SELECTED_DEFAULT_VALUES.tool
+  #selectedColor: string = SELECTED_DEFAULT_VALUES.color
+  #brushSize: number = DEFAULT_BRUSH_SIZES[FreehandTools.Pencil]
 
   constructor(element: string, opts: SketchDrawerOptions) {
     this.#opts = { ...this.#opts, ...opts }
 
     this.#initializeContainer(element)
-    this.#initializeOptions()
+    this.#initializeData()
+    this.#initializeTools()
     this.#initializeCanvas()
-    this.#initializeTool()
     this.drawFromSaved()
     this.#canvas.addEventListener('mousedown', this.#handleStart)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
@@ -53,6 +57,66 @@ class SketchDrawerHandler {
 
     window.addEventListener('resize', this.#handleResize)
     this.#log('Events initialized')
+  }
+
+  #initializeContainer(element: any) {
+    this.container = document.body
+
+    if (element) {
+      if (typeof element === 'string') {
+        this.container = document.querySelector(element) as HTMLElement
+        if (!this.container) {
+          throw new Error('Element not found. Please check your selector.')
+        }
+      } else if (element.tagName) {
+        this.container = element
+      } else {
+        console.error('Invalid element')
+      }
+    }
+    this.container!.style.overflow = this.#opts.overflow!
+    this.#log('Container Initialized')
+  }
+
+  #initializeData() {
+    const { width: elWidth, height: elHeight } =
+      this.container!.getBoundingClientRect() as DOMRect
+    this.#opts.width = elWidth
+    this.#opts.height = elHeight
+
+    if (this.#opts.storeObj) {
+      this.#paths = [...this.#opts.storeObj.paths]
+      this.#selectedTool = this.#opts.storeObj.selectedTool
+      this.#selectedColor = this.#opts.storeObj.selectedColor
+      this.#canvasBg = this.#opts.storeObj.canvasBg
+      this.#brushSize = this.#opts.storeObj.brushSize
+    }
+    this.#log('Data Initialized')
+  }
+
+  #initializeTools() {
+    this.#selectedTool = localStorage.getItem(SELECTED_KEYS.tool)
+      ? (localStorage.getItem(SELECTED_KEYS.tool) as FreehandTools | ShapeTools)
+      : this.#selectedTool
+
+    this.#selectedColor =
+      localStorage.getItem(SELECTED_KEYS.color) || this.#selectedColor
+
+    this.#canvasBg = localStorage.getItem(SELECTED_KEYS.bg) || this.#canvasBg
+
+    this.#log('Tools Initialized')
+  }
+
+  #initializeCanvas() {
+    this.#initializeCanvasSize()
+    this.#canvas.style.background = this.#canvasBg
+    this.container!.appendChild(this.#canvas)
+    this.#log('Canvas initialized')
+  }
+
+  #initializeCanvasSize() {
+    this.#canvas.width = this.#opts.width!
+    this.#canvas.height = this.#opts.height!
   }
 
   #handleKeypress = (e: KeyboardEvent) => {
@@ -73,43 +137,54 @@ class SketchDrawerHandler {
     }
   }
 
-  #getBrush() {
-    const brushProps = {
+  #getFreehandTools() {
+    const selectedColor =
+      localStorage.getItem(SELECTED_KEYS.color) || this.#selectedColor
+    const selectedTool = localStorage.getItem(SELECTED_KEYS.tool)
+      ? (localStorage.getItem(SELECTED_KEYS.tool) as FreehandTools)
+      : this.#selectedTool
+
+    const freehandProps = {
       [FreehandTools.Pencil]: {
-        color:
-          localStorage.getItem(SELECTED_KEYS.color) ||
-          this.brushColor ||
-          this.#opts.color,
+        brushColor: selectedColor,
+        brushSize: this.#brushSize,
         lineCap: 'round',
         lineJoin: 'round'
       },
       [FreehandTools.Highlighter]: {
-        color:
-          localStorage.getItem(SELECTED_KEYS.color) ||
-          this.brushColor ||
-          this.#opts.color,
+        brushColor: selectedColor + 55,
+        brushSize: DEFAULT_BRUSH_SIZES[FreehandTools.Highlighter],
         lineCap: 'butt',
-        lineJoin: 'round',
-        brushSize: 20
+        lineJoin: 'round'
       },
       [FreehandTools.Eraser]: {
-        color: this.#opts.bg,
+        brushColor: this.#canvasBg,
+        brushSize: DEFAULT_BRUSH_SIZES[FreehandTools.Eraser],
         lineCap: 'round',
-        lineJoin: 'round',
-        brushSize: 10
+        lineJoin: 'round'
       }
     }
 
-    return {
-      bg: this.#opts.bg,
-      brushSize: this.#opts.brushSize,
-      ...brushProps[
-        (localStorage.getItem(SELECTED_KEYS.tool) ||
-          SELECTED_VALUES.tool) as FreehandTools
-      ]
-    }
+    return (
+      freehandProps[selectedTool as FreehandTools] ||
+      freehandProps[FreehandTools.Pencil]
+    )
   }
 
+  // #getShapeTools() {
+  //   const shapeProps = {
+  //     [ShapeTools.Square]: {},
+  //     [ShapeTools.Circle]: {},
+  //     [ShapeTools.Triangle]: {}
+  //   }
+
+  //   return (
+  //     shapeProps[this.#selectedTool as ShapeTools] ||
+  //     shapeProps[ShapeTools.Square]
+  //   )
+  // }
+
+  // BEGIN: Event Handler
   #handleStart = (e: MouseEvent | TouchEvent) => {
     e.preventDefault()
 
@@ -117,7 +192,7 @@ class SketchDrawerHandler {
       if (e.button == 0) {
         this.#log('Drawing Started')
         this.#isDrawing = true
-        this.#paths.push([[...this.#coordinates(e), this.#getBrush()]])
+        this.#paths.push([[...this.#coordinates(e), this.#getFreehandTools()]])
         this.#draw()
       }
     }
@@ -126,7 +201,7 @@ class SketchDrawerHandler {
       if (e.touches) {
         this.#log('Drawing Started', this.#opts)
         this.#isDrawing = true
-        this.#paths.push([[...this.#coordinates(e), this.#getBrush()]])
+        this.#paths.push([[...this.#coordinates(e), this.#getFreehandTools()]])
         this.#draw()
       }
     }
@@ -168,48 +243,7 @@ class SketchDrawerHandler {
       this.#draw()
     }, 200)
   }
-
-  #initializeContainer(element: any) {
-    this.container = document.body
-
-    if (element) {
-      if (typeof element === 'string') {
-        this.container = document.querySelector(element) as HTMLElement
-        if (!this.container) {
-          throw new Error('Element not found. Please check your selector.')
-        }
-      } else if (element.tagName) {
-        this.container = element
-      } else {
-        console.error('Invalid element')
-      }
-    }
-    this.container!.style.overflow = this.#opts.overflow!
-    this.#log('Container Initialized')
-  }
-
-  #initializeOptions() {
-    const { width: elWidth, height: elHeight } =
-      this.container!.getBoundingClientRect() as DOMRect
-    this.#opts.width = elWidth
-    this.#opts.height = elHeight
-  }
-
-  #initializeCanvas() {
-    this.#initializeCanvasSize()
-    this.#canvas.style.background = this.#opts.bg!
-    this.container!.appendChild(this.#canvas)
-    this.#log('Canvas initialized')
-  }
-
-  #initializeCanvasSize() {
-    this.#canvas.width = this.#opts.width!
-    this.#canvas.height = this.#opts.height!
-  }
-
-  #initializeTool() {
-    this.pencil()
-  }
+  // END: Event Handler
 
   #coordinates(e: any) {
     const { left: canvasLeft, top: canvasTop } =
@@ -225,17 +259,21 @@ class SketchDrawerHandler {
     return [e.clientX - canvasLeft, e.clientY - canvasTop]
   }
 
-  #draw() {
+  #draw(storage?: boolean) {
     this.clearOnlyScreen()
-    this.#drawPath()
+    this.#drawPath(storage)
   }
 
-  #drawPath() {
-    for (let i = 0; i < this.#paths.length; i++) {
-      const line = this.#paths[i]
+  #drawPath(storage?: boolean) {
+    const storagePaths = localStorage.getItem(this.#CONSTANTS.DATA_KEY)
+    const usingPath =
+      storage && storagePaths ? JSON.parse(storagePaths) : this.#paths
+
+    for (let i = 0; i < usingPath.length; i++) {
+      const line = usingPath[i]
       const startPath = line[0]
       this.#ctx!.lineWidth = startPath[2].brushSize
-      this.#ctx!.strokeStyle = startPath[2].color
+      this.#ctx!.strokeStyle = startPath[2].brushColor
       this.#ctx?.beginPath()
       this.#ctx?.moveTo(startPath[0], startPath[1])
       for (let j = 0; j < line.length; j++) {
@@ -275,39 +313,6 @@ class SketchDrawerHandler {
     return this.#log(message, { color: 'yellow', logs: true })
   }
 
-  set bg(color: any) {
-    this.#opts.bg = color
-    this.#canvas.style.background = this.#opts.bg!
-  }
-
-  set brushSize(size) {
-    this.#opts.brushSize = size
-  }
-
-  get brushSize() {
-    return this.#opts.brushSize
-  }
-
-  set brushColor(color) {
-    if (this.brushType == FreehandTools.Highlighter) {
-      this.#opts.color = color + '55'
-      this.saveColor(color!)
-      return
-    }
-    if (this.brushType == FreehandTools.Eraser) {
-      this.#opts.color = color
-      // this.saveColor(color!)
-      return
-    }
-
-    this.#opts.color = color
-    this.saveColor(color!)
-  }
-
-  get brushColor() {
-    return this.#opts.color
-  }
-
   get ctx() {
     return this.#ctx
   }
@@ -316,33 +321,37 @@ class SketchDrawerHandler {
     return this.#canvas
   }
 
+  get selectedTool() {
+    return localStorage.getItem(SELECTED_KEYS.tool)
+      ? (localStorage.getItem(SELECTED_KEYS.tool) as FreehandTools | ShapeTools)
+      : this.#selectedTool
+  }
+
+  set selectedTool(tool: FreehandTools | ShapeTools) {
+    this.#selectedTool = tool
+  }
+
+  get selectedColor() {
+    return localStorage.getItem(SELECTED_KEYS.color) || this.#selectedColor
+  }
+
+  set selectedColor(color: string) {
+    this.#selectedColor = color
+  }
+
+  // BEGIN: Public Properties
+
+  // BEGIN: Freehand Tools
   pencil = () => {
-    this.brushType = FreehandTools.Pencil
-    this.#opts.lineCap = 'round'
-    this.#opts.lineJoin = 'round'
     this.saveTool(FreehandTools.Pencil)
   }
 
-  highlighter = (size = 60) => {
-    this.brushType = FreehandTools.Highlighter
-    this.brushSize = size
-    this.#opts.lineCap = 'butt'
-    this.#opts.lineJoin = 'round'
+  highlighter = () => {
     this.saveTool(FreehandTools.Highlighter)
   }
 
   eraser = () => {
-    this.brushType = FreehandTools.Eraser
-    this.brushColor = this.#opts.bg
-    this.#opts.lineCap = 'round'
-    this.#opts.lineJoin = 'round'
-    this.brushSize = 50
     this.saveTool(FreehandTools.Eraser)
-  }
-
-  redraw = () => {
-    this.#draw()
-    this.#log('Redraw called')
   }
 
   clearOnlyScreen = () => {
@@ -353,6 +362,7 @@ class SketchDrawerHandler {
     this.clearOnlyScreen()
     this.#paths = []
     this.clearSaved()
+    this.#draw(true)
     this.#isDrawing = false
     this.#log('Cleared')
   }
@@ -364,21 +374,25 @@ class SketchDrawerHandler {
         data: this.#paths[this.#paths.length - 1]
       })
       this.#paths.pop()
-      this.redraw()
+      this.save()
+      this.#draw(true)
       this.#log('Undo Called')
     }
   }
 
   redo = () => {
     const redoObj = this.#redo[this.#redo.length - 1]
-    if (redoObj && redoObj.type == 'path') {
+    if (redoObj && redoObj.type === 'path') {
       this.#paths.push(redoObj.data)
-      this.redraw()
+      this.save()
+      this.#draw(true)
       this.#redo.pop()
       this.#log('Redo Called')
     }
   }
+  // END: Freehand Tools
 
+  // BEGIN: Local Storage
   save = () => {
     localStorage.removeItem(this.#CONSTANTS.DATA_KEY)
     localStorage.setItem(this.#CONSTANTS.DATA_KEY, JSON.stringify(this.#paths))
@@ -388,31 +402,36 @@ class SketchDrawerHandler {
   }
 
   saveTool = (tool: FreehandTools | ShapeTools) => {
+    this.#selectedTool = tool
     localStorage.removeItem(this.#CONSTANTS.TOOL_KEY)
     localStorage.setItem(this.#CONSTANTS.TOOL_KEY, tool)
   }
 
   saveColor = (color: string) => {
+    this.#selectedColor = color
     localStorage.removeItem(this.#CONSTANTS.COLOR_KEY)
     localStorage.setItem(this.#CONSTANTS.COLOR_KEY, color)
   }
 
   clearSaved = () => {
     localStorage.removeItem(this.#CONSTANTS.DATA_KEY)
+    localStorage.removeItem(this.#CONSTANTS.TOOL_KEY)
+    localStorage.removeItem(this.#CONSTANTS.COLOR_KEY)
     this.#log('Saved cleared')
   }
+  // END: Local Storage
 
   drawFromSaved = () => {
     const paths = localStorage.getItem(this.#CONSTANTS.DATA_KEY)
     if (paths) {
       this.#paths = JSON.parse(paths)
-      this.redraw()
+      this.#draw()
     }
     this.#log('Redrawn from save')
   }
 
   download = (filename = 'drawing') => {
-    this.#ctx!.fillStyle = this.#opts.bg!
+    this.#ctx!.fillStyle = this.#canvasBg
     this.#ctx?.fillRect(0, 0, this.#canvas.width, this.#canvas.height)
     this.#drawPath()
     const a = document.createElement('a')
@@ -425,6 +444,8 @@ class SketchDrawerHandler {
     document.body.removeChild(a)
     this.#log('Download called')
   }
+
+  // END: Public Properties
 }
 
 export default SketchDrawerHandler

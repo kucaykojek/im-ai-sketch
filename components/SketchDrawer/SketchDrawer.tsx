@@ -2,32 +2,52 @@
 
 import { useEffect } from 'react'
 
+import { useSketchDrawerContext } from './SketchDrawer.context'
 import SketchDrawerHandler from './SketchDrawer.handler'
 import useSketchDrawerStore from './SketchDrawer.store'
-import { SELECTED_KEYS, SELECTED_VALUES } from './data/constants'
+import { SELECTED_KEYS } from './data/constants'
+import { FreehandTools, ShapeTools } from './data/enums'
 import { SketchDrawerOptions, SketchDrawerProps } from './data/types'
 
 const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
-  const { setInstance, setSelectedColor, setSelectedTool } =
-    useSketchDrawerStore()
+  const { setInstance } = useSketchDrawerContext()
+  const {
+    setSelectedColor,
+    setSelectedTool,
+    setCanvasBg,
+    paths,
+    canvasBg,
+    freehandTools,
+    shapesTools,
+    selectedColor,
+    selectedTool,
+    brushSize
+  } = useSketchDrawerStore()
 
   useEffect(() => {
-    let color = SELECTED_VALUES.color
-    let tool = SELECTED_VALUES.tool
+    const storedSelectedColor =
+      localStorage.getItem(SELECTED_KEYS.color) || selectedColor
+    const storedSelectedTool = localStorage.getItem(SELECTED_KEYS.tool)
+      ? (localStorage.getItem(SELECTED_KEYS.tool) as FreehandTools | ShapeTools)
+      : selectedTool
+    const storedCanvasBg = localStorage.getItem(SELECTED_KEYS.bg) || canvasBg
 
-    if (localStorage) {
-      color = localStorage.getItem(SELECTED_KEYS.color) || SELECTED_VALUES.color
-      tool = localStorage.getItem(SELECTED_KEYS.tool) || SELECTED_VALUES.tool
-
-      setSelectedColor(color)
-      setSelectedTool(tool)
-    }
+    setSelectedColor(storedSelectedColor)
+    setSelectedTool(storedSelectedTool)
+    setCanvasBg(storedCanvasBg)
 
     initInstance({
       logs: true,
-      brushSize: 3,
       autosave: true,
-      color
+      storeObj: {
+        paths,
+        canvasBg: storedCanvasBg,
+        freehandTools,
+        shapesTools,
+        selectedColor: storedSelectedColor,
+        selectedTool: storedSelectedTool,
+        brushSize
+      }
     })
   }, [])
 

@@ -1,25 +1,49 @@
 import { create } from 'zustand'
 
 import SketchDrawerHandler from './SketchDrawer.handler'
-import { SELECTED_VALUES } from './data/constants'
-
-type SketchDrawerStore = {
-  instance?: SketchDrawerHandler
-  setInstance: (_: SketchDrawerHandler) => void
-  selectedColor: string
-  setSelectedColor: (_: string) => void
-  selectedTool: string
-  setSelectedTool: (_: string) => void
-}
+import { DEFAULT_BRUSH_SIZES, SELECTED_DEFAULT_VALUES } from './data/constants'
+import { FreehandTools, ShapeTools } from './data/enums'
+import type {
+  FreehandTools as FreehandToolsType,
+  ShapeTools as ShapeToolsType,
+  SketchDrawerStore
+} from './data/types'
 
 const useSketchDrawerStore = create<SketchDrawerStore>((set) => ({
-  instance: undefined,
-  selectedColor: SELECTED_VALUES.color,
-  selectedTool: SELECTED_VALUES.tool,
-  setInstance(val: SketchDrawerHandler) {
+  paths: [],
+  canvasBg: SELECTED_DEFAULT_VALUES.bg,
+  freehandTools: {
+    brushColor: SELECTED_DEFAULT_VALUES.color,
+    brushSize: DEFAULT_BRUSH_SIZES[FreehandTools.Pencil],
+    lineCap: 'round',
+    lineJoin: 'round'
+  },
+  shapesTools: {},
+  selectedColor: SELECTED_DEFAULT_VALUES.color,
+  selectedTool: SELECTED_DEFAULT_VALUES.tool,
+  brushSize: DEFAULT_BRUSH_SIZES[FreehandTools.Pencil],
+  setPaths(val: any[]) {
     set((state) => ({
       ...state,
-      instance: val
+      paths: val
+    }))
+  },
+  setCanvasBg(val: string) {
+    set((state) => ({
+      ...state,
+      canvasBg: val
+    }))
+  },
+  setFreehandTools(val: FreehandToolsType) {
+    set((state) => ({
+      ...state,
+      freehandTools: val
+    }))
+  },
+  setShapeTools(val: ShapeToolsType) {
+    set((state) => ({
+      ...state,
+      shapesTools: val
     }))
   },
   setSelectedColor(val: string) {
@@ -28,10 +52,16 @@ const useSketchDrawerStore = create<SketchDrawerStore>((set) => ({
       selectedColor: val
     }))
   },
-  setSelectedTool(val: string) {
+  setSelectedTool(val: FreehandTools | ShapeTools) {
     set((state) => ({
       ...state,
       selectedTool: val
+    }))
+  },
+  setBrushSize(val: number) {
+    set((state) => ({
+      ...state,
+      brushSize: val
     }))
   }
 }))

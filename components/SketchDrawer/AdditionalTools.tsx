@@ -7,10 +7,20 @@ import {
   Undo2Icon
 } from 'lucide-react'
 
-import useSketchDrawerStore from './SketchDrawer.store'
+import { useSketchDrawerContext } from './SketchDrawer.context'
 
 const DrawerAdditionalTools = () => {
-  const { instance } = useSketchDrawerStore()
+  const { instance } = useSketchDrawerContext()
+
+  const handleUndo = () => {
+    return instance?.undo()
+  }
+  const handleRedo = () => {
+    return instance?.redo()
+  }
+  const handleClear = () => {
+    return instance?.clear()
+  }
 
   return (
     <>
@@ -26,13 +36,13 @@ const DrawerAdditionalTools = () => {
           <button disabled>
             <MousePointerClickIcon />
           </button>
-          <button>
+          <button disabled onClick={handleUndo}>
             <Undo2Icon />
           </button>
-          <button>
+          <button disabled onClick={handleRedo}>
             <Redo2Icon />
           </button>
-          <button>
+          <button disabled onClick={handleClear}>
             <Trash2Icon />
           </button>
         </>

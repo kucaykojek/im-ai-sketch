@@ -1,15 +1,17 @@
 import { cn } from '@/libs/utils'
 
+import { useSketchDrawerContext } from '../../SketchDrawer.context'
 import useSketchDrawerStore from '../../SketchDrawer.store'
 import { COLORS } from '../../data/constants'
 import style from '../Tools.module.css'
 
 const Palette = () => {
-  const { instance, selectedColor, setSelectedColor } = useSketchDrawerStore()
+  const { instance } = useSketchDrawerContext()
+  const { selectedColor, setSelectedColor } = useSketchDrawerStore()
 
   const handleClick = (color: string) => {
     setSelectedColor(color)
-    instance!.brushColor = color
+    instance!.saveColor(color)
   }
 
   return (
