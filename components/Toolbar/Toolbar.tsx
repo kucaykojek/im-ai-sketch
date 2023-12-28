@@ -2,13 +2,13 @@
 
 import { AudioWaveformIcon, PaletteIcon, ShapesIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import React from 'react'
 
+import { Tools } from '@/components/SketchDrawer'
+import { useSketchDrawerContext } from '@/components/SketchDrawer/SketchDrawer.context'
 import { cn } from '@/libs/utils'
 
-import { Tools } from '../SketchDrawer'
-import { useSketchDrawerContext } from '../SketchDrawer/SketchDrawer.context'
 import style from './Toolbar.module.css'
 
 const Toolbar = () => {

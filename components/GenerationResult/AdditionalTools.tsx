@@ -2,10 +2,11 @@
 
 import { DownloadIcon, RefreshCcwIcon, Wand2Icon } from 'lucide-react'
 
-import useSketchDrawerStore from '@/components/SketchDrawer/SketchDrawer.store'
+import { useSketchDrawerContext } from '@/components/SketchDrawer/SketchDrawer.context'
 
 const GenerationAdditionalTools = () => {
-  const { instance } = useSketchDrawerStore()
+  const { instance } = useSketchDrawerContext()
+
   return (
     <>
       {!instance &&
