@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #ffc40c;
+  --branding-cyan: #17bfb8;
+  --branding-pink: #e22a73;
+  --branding-blue: #3370ba;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #ffc40c;
+    --branding-cyan: #17bfb8;
+    --branding-pink: #e22a73;
+    --branding-blue: #3370ba;
+  }
+}
+
+html {
+  @apply bg-neutral-200 text-neutral-800;
+}
+
+main {
+  @apply flex items-center justify-center space-x-6 w-screen h-screen -mt-8;
+}
+main > div {
+  @apply relative bg-white rounded-xl overflow-hidden h-[calc(100vh-20rem)] aspect-square;
+}

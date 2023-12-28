@@ -1,0 +1,28 @@
+.toolbarWrapper {
+  @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-6 py-4 bg-white rounded-t-lg flex items-center justify-center space-x-4;
+}
+.toolbarLogo {
+  @apply h-4 w-auto mr-4;
+}
+.toolGroup {
+  @apply relative flex items-center w-fit overflow-hidden;
+}
+.toolGroup::before {
+  @apply hidden absolute w-6 h-6 left-11 top-1/2 -translate-y-1/2 opacity-30;
+  content: url("data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTAuMjExIDcuMTU1Yy0uMTQxLS4xMDgtLjMtLjE1Ny0uNDU2LS4xNTctLjM4OSAwLS43NTUuMzA2LS43NTUuNzQ5djguNTAxYzAgLjQ0NS4zNjcuNzUuNzU1Ljc1LjE1NyAwIC4zMTYtLjA1LjQ1Ny0uMTU5IDEuNTU0LTEuMjAzIDQuMTk5LTMuMjUyIDUuNDk4LTQuMjU4LjE4NC0uMTQyLjI5LS4zNi4yOS0uNTkyIDAtLjIzLS4xMDctLjQ0OS0uMjkxLS41OTEtMS4yOTktMS4wMDItMy45NDUtMy4wNDQtNS40OTgtNC4yNDN6Ii8+PC9zdmc+");
+}
+.toolGroupActive::before {
+  @apply block;
+}
+.toolItems {
+  @apply flex space-x-2 w-0 max-w-0 transition-all ease-in-out;
+}
+.toolGroupActive .toolItems {
+  @apply pl-8 w-fit max-w-[50rem];
+}
+.toolGroupButton {
+  @apply flex items-center shrink-0 justify-center w-10 h-10 bg-neutral-100 hover:bg-neutral-200 rounded;
+}
+.toolGroupActive::before {
+  @apply block;
+}
