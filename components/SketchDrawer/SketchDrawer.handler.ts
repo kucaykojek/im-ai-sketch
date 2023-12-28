@@ -138,6 +138,7 @@ class SketchDrawerHandler {
   }
 
   #getFreehandTools() {
+    const canvasBg = localStorage.getItem(SELECTED_KEYS.bg) || this.#canvasBg
     const selectedColor =
       localStorage.getItem(SELECTED_KEYS.color) || this.#selectedColor
     const selectedTool = localStorage.getItem(SELECTED_KEYS.tool)
@@ -158,7 +159,7 @@ class SketchDrawerHandler {
         lineJoin: 'round'
       },
       [FreehandTools.Eraser]: {
-        brushColor: this.#canvasBg,
+        brushColor: canvasBg,
         brushSize: DEFAULT_BRUSH_SIZES[FreehandTools.Eraser],
         lineCap: 'round',
         lineJoin: 'round'
@@ -413,10 +414,19 @@ class SketchDrawerHandler {
     localStorage.setItem(this.#CONSTANTS.COLOR_KEY, color)
   }
 
+  saveBg = (color: string) => {
+    this.#canvasBg = color
+    localStorage.removeItem(this.#CONSTANTS.BG_KEY)
+    localStorage.setItem(this.#CONSTANTS.BG_KEY, color)
+
+    this.#canvas.style.background = color
+  }
+
   clearSaved = () => {
     localStorage.removeItem(this.#CONSTANTS.DATA_KEY)
     localStorage.removeItem(this.#CONSTANTS.TOOL_KEY)
     localStorage.removeItem(this.#CONSTANTS.COLOR_KEY)
+    localStorage.removeItem(this.#CONSTANTS.BG_KEY)
     this.#log('Saved cleared')
   }
   // END: Local Storage

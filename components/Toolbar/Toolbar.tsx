@@ -26,6 +26,7 @@ const Toolbar = () => {
         width="122"
         height="24"
         className={style.toolbarLogo}
+        priority
       />
 
       <div className={style.toolWrapper}>
@@ -118,6 +119,12 @@ const Toolbar = () => {
             )}
           </div>
         </div>
+
+        {instance ? (
+          <Tools.Background />
+        ) : (
+          <div className="animate-pulse rounded-full bg-neutral-300 h-8 w-8"></div>
+        )}
       </div>
     </div>
   )

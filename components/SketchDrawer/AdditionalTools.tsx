@@ -36,13 +36,13 @@ const DrawerAdditionalTools = () => {
           <button disabled>
             <MousePointerClickIcon />
           </button>
-          <button disabled onClick={handleUndo}>
+          <button onClick={handleUndo}>
             <Undo2Icon />
           </button>
-          <button disabled onClick={handleRedo}>
+          <button onClick={handleRedo}>
             <Redo2Icon />
           </button>
-          <button disabled onClick={handleClear}>
+          <button onClick={handleClear}>
             <Trash2Icon />
           </button>
         </>

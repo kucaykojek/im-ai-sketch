@@ -1,3 +1,4 @@
+import Background from './Colors/Background'
 import Palette from './Colors/Palette'
 import Picker from './Colors/Picker'
 import Eraser from './Freehand/Eraser'
@@ -14,6 +15,7 @@ export {
   Circle,
   Square,
   Triangle,
+  Background,
   Palette,
   Picker
 }

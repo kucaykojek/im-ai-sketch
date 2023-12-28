@@ -10,7 +10,7 @@ import { FreehandTools, ShapeTools } from './data/enums'
 import { SketchDrawerOptions, SketchDrawerProps } from './data/types'
 
 const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
-  const { setInstance } = useSketchDrawerContext()
+  const { instance, setInstance } = useSketchDrawerContext()
   const {
     setSelectedColor,
     setSelectedTool,
@@ -36,19 +36,21 @@ const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
     setSelectedTool(storedSelectedTool)
     setCanvasBg(storedCanvasBg)
 
-    initInstance({
-      logs: true,
-      autosave: true,
-      storeObj: {
-        paths,
-        canvasBg: storedCanvasBg,
-        freehandTools,
-        shapesTools,
-        selectedColor: storedSelectedColor,
-        selectedTool: storedSelectedTool,
-        brushSize
-      }
-    })
+    if (!instance) {
+      initInstance({
+        logs: true,
+        autosave: true,
+        storeObj: {
+          paths,
+          canvasBg: storedCanvasBg,
+          freehandTools,
+          shapesTools,
+          selectedColor: storedSelectedColor,
+          selectedTool: storedSelectedTool,
+          brushSize
+        }
+      })
+    }
   }, [])
 
   const initInstance = (opts: SketchDrawerOptions) => {
@@ -58,7 +60,8 @@ const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
   return (
     <div
       id={id}
-      className="relative h-full bg-white overflow-hidden rounded-xl"
+      className="relative h-full overflow-hidden rounded-xl"
+      style={{ backgroundColor: canvasBg }}
     ></div>
   )
 }
