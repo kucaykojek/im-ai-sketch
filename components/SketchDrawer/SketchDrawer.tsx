@@ -35,7 +35,12 @@ const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
     setInstance(new SketchDrawerHandler(`#${id}`, opts))
   }
 
-  return <div id={id} className="relative h-full"></div>
+  return (
+    <div
+      id={id}
+      className="relative h-full bg-white overflow-hidden rounded-xl"
+    ></div>
+  )
 }
 
 export default SketchDrawer

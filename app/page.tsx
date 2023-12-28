@@ -1,21 +1,24 @@
-import dynamic from 'next/dynamic'
-
-import GenerationResult from '@/components/GenerationResult'
+import GenerationResult, {
+  GenerationAdditionalTools
+} from '@/components/GenerationResult'
+import SketchDrawer, { DrawerAdditionalTools } from '@/components/SketchDrawer'
 import Toolbar from '@/components/Toolbar'
-
-const SketchDrawer = dynamic(() => import('@/components/SketchDrawer'), {
-  ssr: true
-})
 
 export default function Home() {
   return (
     <>
       <main>
         <div className="drawing-wrapper">
+          <div className="additional-tool-wrapper">
+            <DrawerAdditionalTools />
+          </div>
           <SketchDrawer />
         </div>
         <div className="result-wrapper">
           <GenerationResult />
+          <div className="additional-tool-wrapper">
+            <GenerationAdditionalTools />
+          </div>
         </div>
       </main>
       <Toolbar />

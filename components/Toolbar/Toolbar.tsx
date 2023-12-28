@@ -28,87 +28,95 @@ const Toolbar = () => {
         className={style.toolbarLogo}
       />
 
-      <div
-        className={cn(style.toolGroup, isShapesActive && style.toolGroupActive)}
-      >
-        <button
+      <div className={style.toolWrapper}>
+        <div
           className={cn(
-            style.toolGroupButton,
-            '!text-branding-cyan hover:!bg-branding-cyan hover:!text-white',
-            isShapesActive && '!bg-branding-cyan !text-white'
+            style.toolGroup,
+            isShapesActive && style.toolGroupActive
           )}
-          title="Freehand"
-          onClick={() => setIsShapesActive(!isShapesActive)}
         >
-          <ShapesIcon />
-        </button>
-        <div className={style.toolItems}>
-          {instance ? (
-            <>
-              <Tools.Square />
-              <Tools.Circle />
-              <Tools.Triangle />
-            </>
-          ) : (
-            <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
-          )}
+          <button
+            className={cn(
+              style.toolGroupButton,
+              '!text-branding-cyan hover:!bg-branding-cyan hover:!text-white',
+              isShapesActive && '!bg-branding-cyan !text-white'
+            )}
+            title="Freehand"
+            onClick={() => setIsShapesActive(!isShapesActive)}
+          >
+            <ShapesIcon />
+          </button>
+          <div className={style.toolItems}>
+            {instance ? (
+              <>
+                <Tools.Square />
+                <Tools.Circle />
+                <Tools.Triangle />
+              </>
+            ) : (
+              <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div
-        className={cn(
-          style.toolGroup,
-          isFreehandActive && style.toolGroupActive
-        )}
-      >
-        <button
+        <div
           className={cn(
-            style.toolGroupButton,
-            '!text-branding-pink hover:!bg-branding-pink hover:!text-white',
-            isFreehandActive && '!bg-branding-pink !text-white'
+            style.toolGroup,
+            isFreehandActive && style.toolGroupActive
           )}
-          title="Freehand"
-          onClick={() => setIsFreehandActive(!isFreehandActive)}
         >
-          <AudioWaveformIcon />
-        </button>
-        <div className={style.toolItems}>
-          {instance ? (
-            <>
-              <Tools.Pencil />
-              <Tools.Highlighter />
-              <Tools.Eraser />
-            </>
-          ) : (
-            <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
-          )}
+          <button
+            className={cn(
+              style.toolGroupButton,
+              '!text-branding-pink hover:!bg-branding-pink hover:!text-white',
+              isFreehandActive && '!bg-branding-pink !text-white'
+            )}
+            title="Freehand"
+            onClick={() => setIsFreehandActive(!isFreehandActive)}
+          >
+            <AudioWaveformIcon />
+          </button>
+          <div className={style.toolItems}>
+            {instance ? (
+              <>
+                <Tools.Pencil />
+                <Tools.Highlighter />
+                <Tools.Eraser />
+              </>
+            ) : (
+              <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div
-        className={cn(style.toolGroup, isColorActive && style.toolGroupActive)}
-      >
-        <button
+        <div
           className={cn(
-            style.toolGroupButton,
-            style.toolGroupButton,
-            '!text-branding-blue hover:!bg-branding-blue hover:!text-white',
-            isColorActive && '!bg-branding-blue !text-white'
+            style.toolGroup,
+            isColorActive && style.toolGroupActive
           )}
-          title="Freehand"
-          onClick={() => setIsColorActive(!isColorActive)}
         >
-          <PaletteIcon />
-        </button>
-        <div className={style.toolItems}>
-          {instance ? (
-            <>
-              <Tools.Palette />
-              <Tools.Picker />
-            </>
-          ) : (
-            <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
-          )}
+          <button
+            className={cn(
+              style.toolGroupButton,
+              style.toolGroupButton,
+              '!text-branding-blue hover:!bg-branding-blue hover:!text-white',
+              isColorActive && '!bg-branding-blue !text-white'
+            )}
+            title="Freehand"
+            onClick={() => setIsColorActive(!isColorActive)}
+          >
+            <PaletteIcon />
+          </button>
+          <div className={style.toolItems}>
+            {instance ? (
+              <>
+                <Tools.Palette />
+                <Tools.Picker />
+              </>
+            ) : (
+              <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
+            )}
+          </div>
         </div>
       </div>
     </div>
