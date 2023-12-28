@@ -13,12 +13,12 @@ export type SketchDrawerOptions = {
   height?: number
   logs?: boolean
   autosave?: boolean
-  overflow?: 'hidden',
+  overflow?: 'hidden'
   storeObj?: SketchDrawerStoreObject
 }
 
 export type SketchDrawerStoreContextType = {
-  instance?: SketchDrawerHandler,
+  instance?: SketchDrawerHandler
   setInstance: (_: SketchDrawerHandler) => void
 }
 
