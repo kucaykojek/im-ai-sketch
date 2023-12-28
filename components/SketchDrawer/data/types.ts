@@ -1,8 +1,15 @@
+import { Dispatch } from 'react'
+
 import SketchDrawerHandler from '../SketchDrawer.handler'
 import {
   FreehandTools as FreehandToolsEnum,
   ShapeTools as ShapeToolsEnum
 } from './enums'
+
+export type Counter = {
+  object: number
+  drawing: number
+}
 
 export type SketchDrawerProps = {
   id?: string
@@ -15,11 +22,14 @@ export type SketchDrawerOptions = {
   autosave?: boolean
   overflow?: 'hidden'
   storeObj?: SketchDrawerStoreObject
+  counterCallback?: Dispatch<Counter>
 }
 
 export type SketchDrawerStoreContextType = {
   instance?: SketchDrawerHandler
   setInstance: (_: SketchDrawerHandler) => void
+  counter?: Counter
+  setCounter: Dispatch<Counter>
 }
 
 export type SketchDrawerStoreObject = {

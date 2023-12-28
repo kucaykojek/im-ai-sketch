@@ -1,3 +1,5 @@
+import { Dispatch } from 'react'
+
 import {
   DEFAULT_BRUSH_SIZES,
   PATH_KEY,
@@ -31,6 +33,7 @@ class SketchDrawerHandler {
   }
 
   // Initial values from store
+  #drawingCount: number = 0
   #paths: any[] = []
   #canvasBg: string = SELECTED_DEFAULT_VALUES.bg
   #selectedTool: FreehandTools | ShapeTools = SELECTED_DEFAULT_VALUES.tool
@@ -284,6 +287,15 @@ class SketchDrawerHandler {
       this.#ctx!.lineJoin = startPath[2].lineJoin
       this.#ctx?.stroke()
     }
+
+    this.#drawingCount++
+
+    if (this.#opts.counterCallback) {
+      this.#opts.counterCallback({
+        object: usingPath.length,
+        drawing: this.#drawingCount
+      })
+    }
   }
 
   #log(message: any, opts?: any) {
@@ -454,7 +466,6 @@ class SketchDrawerHandler {
     document.body.removeChild(a)
     this.#log('Download called')
   }
-
   // END: Public Properties
 }
 

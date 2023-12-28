@@ -10,8 +10,9 @@ export const SketchDrawerContext = createContext<
 
 export const SketchDrawerProvider: React.FC<any> = (props) => {
   const [instance, setInstance] = useState<SketchDrawerHandler>()
+  const [counter, setCounter] = useState(0)
 
-  const value = { instance, setInstance }
+  const value = { instance, counter, setInstance, setCounter }
 
   return <SketchDrawerContext.Provider value={value} {...props} />
 }

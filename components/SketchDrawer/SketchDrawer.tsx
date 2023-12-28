@@ -10,7 +10,7 @@ import { FreehandTools, ShapeTools } from './data/enums'
 import { SketchDrawerOptions, SketchDrawerProps } from './data/types'
 
 const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
-  const { instance, setInstance } = useSketchDrawerContext()
+  const { instance, setInstance, setCounter } = useSketchDrawerContext()
   const {
     setSelectedColor,
     setSelectedTool,
@@ -48,7 +48,8 @@ const SketchDrawer = ({ id = 'sketch-drawer-canvas' }: SketchDrawerProps) => {
           selectedColor: storedSelectedColor,
           selectedTool: storedSelectedTool,
           brushSize
-        }
+        },
+        counterCallback: setCounter
       })
     }
   }, [])

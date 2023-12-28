@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 
-import SketchDrawerHandler from './SketchDrawer.handler'
 import { DEFAULT_BRUSH_SIZES, SELECTED_DEFAULT_VALUES } from './data/constants'
 import { FreehandTools, ShapeTools } from './data/enums'
 import type {

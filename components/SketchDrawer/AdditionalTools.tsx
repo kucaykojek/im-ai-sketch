@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  DownloadIcon,
   MousePointerClickIcon,
   Redo2Icon,
   Trash2Icon,
@@ -20,6 +21,9 @@ const DrawerAdditionalTools = () => {
   }
   const handleClear = () => {
     return instance?.clear()
+  }
+  const handleDownload = () => {
+    return instance?.download()
   }
 
   return (
@@ -43,7 +47,10 @@ const DrawerAdditionalTools = () => {
             <Redo2Icon />
           </button>
           <button onClick={handleClear}>
-            <Trash2Icon />
+            <Trash2Icon className="text-red-600" />
+          </button>
+          <button onClick={handleDownload}>
+            <DownloadIcon />
           </button>
         </>
       )}
