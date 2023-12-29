@@ -7,7 +7,7 @@ import React, {
 
 import useSketchDrawContext from './SketchDraw.context'
 import SketchDrawEventListeners from './SketchDraw.eventListener'
-import { CANVAS_ID } from './data/constants'
+import { CANVAS_ID, COMMON_DEFAULT } from './data/constants'
 import type { ActionModeOption } from './data/types'
 import useActionMode from './store/useActionMode'
 import useActiveObjectId from './store/useActiveObjectId'
@@ -15,6 +15,8 @@ import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
 import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
 import useSelectedColor from './store/useSelectedColor'
+import useShapeType from './store/useShapeType'
+import useStrokeWidth from './store/useStrokeWidth'
 import useUserMode from './store/useUserMode'
 import generateUniqueId from './utils/generateUniqueId'
 import getControlPoints from './utils/getControlPoints'
@@ -56,6 +58,8 @@ export default function SketchDraw() {
   const { userMode, setUserMode } = useUserMode()
   const { actionMode, setActionMode } = useActionMode()
   const { selectedColor, setSelectedColor } = useSelectedColor()
+  const { strokeWidth } = useStrokeWidth()
+  const { shapeType } = useShapeType()
 
   const zoom = 100
 
@@ -182,7 +186,8 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 1,
+          strokeWidth:
+            strokeWidth['pencil'] || COMMON_DEFAULT.strokeWidth.pencil,
           opacity: 100,
           freeDrawPoints: [
             {
@@ -203,7 +208,9 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 20,
+          strokeWidth:
+            strokeWidth['highlighter'] ||
+            COMMON_DEFAULT.strokeWidth.highlighter,
           opacity: 55,
           freeDrawPoints: [
             {
@@ -224,7 +231,8 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 10,
+          strokeWidth:
+            strokeWidth['eraser'] || COMMON_DEFAULT.strokeWidth.eraser,
           opacity: 100,
           freeDrawPoints: [
             {
@@ -245,11 +253,19 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 0,
+          strokeWidth:
+            shapeType === 'outline'
+              ? strokeWidth['circle'] || COMMON_DEFAULT.strokeWidth.circle || 1
+              : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: selectedColor,
-          strokeColorHex: isHexLight(selectedColor) ? '#000000' : '#ffffff'
+          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          strokeColorHex:
+            shapeType === 'outline'
+              ? selectedColor
+              : isHexLight(selectedColor)
+                ? '#000000'
+                : '#ffffff'
         })
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
@@ -262,11 +278,19 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 0,
+          strokeWidth:
+            shapeType === 'outline'
+              ? strokeWidth['square'] || COMMON_DEFAULT.strokeWidth.square || 1
+              : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: selectedColor,
-          strokeColorHex: isHexLight(selectedColor) ? '#000000' : '#ffffff'
+          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          strokeColorHex:
+            shapeType === 'outline'
+              ? selectedColor
+              : isHexLight(selectedColor)
+                ? '#000000'
+                : '#ffffff'
         })
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
@@ -279,11 +303,21 @@ export default function SketchDraw() {
           y: initialDrawingPositionRef.current.y,
           width: 0,
           height: 0,
-          strokeWidth: 0,
+          strokeWidth:
+            shapeType === 'outline'
+              ? strokeWidth['triangle'] ||
+                COMMON_DEFAULT.strokeWidth.triangle ||
+                1
+              : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: selectedColor,
-          strokeColorHex: isHexLight(selectedColor) ? '#000000' : '#ffffff'
+          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          strokeColorHex:
+            shapeType === 'outline'
+              ? selectedColor
+              : isHexLight(selectedColor)
+                ? '#000000'
+                : '#ffffff'
         })
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
@@ -502,10 +536,9 @@ export default function SketchDraw() {
     <div
       id={`${id}-container`}
       ref={containerRef}
-      className="relative h-full overflow-hidden rounded-xl"
+      className="relative h-full overflow-hidden rounded-xl bg-white"
       style={{
-        cursor: getCursorFromModes({ userMode, actionMode }),
-        backgroundColor: canvasBackgroundColor
+        cursor: getCursorFromModes({ userMode, actionMode })
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -525,6 +558,9 @@ export default function SketchDraw() {
         ref={canvasRef}
         width={canvasWorkingSize.width}
         height={canvasWorkingSize.height}
+        style={{
+          backgroundColor: canvasBackgroundColor
+        }}
       />
       <SketchDrawEventListeners />
     </div>

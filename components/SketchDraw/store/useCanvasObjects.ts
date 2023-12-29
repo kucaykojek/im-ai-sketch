@@ -57,6 +57,7 @@ const useCanvasObjects = create<{
   }) => void
   setCanvasObjectLayerIndex: (_id: string, _layerIndex: number) => void
   resetCanvasObjects: () => void
+  reviveCanvasObjects: (_: CanvasObject[]) => void
 }>((set) => ({
   canvasObjects: [],
   appendPencilObject: (obj) =>
@@ -376,7 +377,8 @@ const useCanvasObjects = create<{
         })
       }
     }),
-  resetCanvasObjects: () => set(() => ({ canvasObjects: [] }))
+  resetCanvasObjects: () => set(() => ({ canvasObjects: [] })),
+  reviveCanvasObjects: (obj) => set(() => ({ canvasObjects: [...obj] }))
 }))
 
 export default useCanvasObjects

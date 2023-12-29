@@ -32,6 +32,7 @@ export default function renderShapeCircle({
     0,
     2 * Math.PI
   )
+
   context.fill()
   context.stroke()
   context.restore()

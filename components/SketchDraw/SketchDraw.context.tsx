@@ -10,6 +10,7 @@ import React, {
   useRef
 } from 'react'
 
+import { BG_STORAGE_KEY, OBJECTS_STORAGE_KEY } from './data/constants'
 import useActionMode from './store/useActionMode'
 import useActiveObjectId from './store/useActiveObjectId'
 import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
@@ -46,18 +47,15 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
   const zoom = 100
 
   const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects } = useCanvasObjects()
+  const { canvasObjects, reviveCanvasObjects } = useCanvasObjects()
   const { actionMode } = useActionMode()
   const { userMode } = useUserMode()
+  const { canvasBackgroundColor, setCanvasBackgroundColor } =
+    useCanvasBackgroundColor()
   const { canvasWorkingSize } = useCanvasWorkingSize()
   const { containerSize } = useContainerSize()
 
-  const canvasBackgroundColor = useCanvasBackgroundColor(
-    (state) => state.canvasBackgroundColor
-  )
-
   // Init canvas function
-
   const initCanvas = useCallback(() => {
     const container = containerRef.current
     if (!container) {
@@ -72,6 +70,18 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
     const context = canvas.getContext('2d', { willReadFrequently: true })
     if (!context) {
       return
+    }
+
+    // Restore from local storage
+    if (localStorage) {
+      reviveCanvasObjects(
+        localStorage.getItem(OBJECTS_STORAGE_KEY)
+          ? JSON.parse(localStorage.getItem(OBJECTS_STORAGE_KEY)!)
+          : canvasObjects
+      )
+      setCanvasBackgroundColor(
+        localStorage.getItem(BG_STORAGE_KEY) || canvasBackgroundColor
+      )
     }
 
     contextRef.current = context
@@ -90,7 +100,6 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
 
   // Set initial scroll position
   // Draw everything function
-
   const drawEverything = useCallback(() => {
     canvasDrawEverything({
       canvas: canvasRef.current,

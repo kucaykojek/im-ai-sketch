@@ -7,8 +7,6 @@ import SketchDraw, {
   SketchDrawAdditionalTools,
   SketchDrawProvider
 } from '@/components/SketchDraw'
-// import SketchDrawer, { DrawerAdditionalTools } from '@/components/SketchDrawer'
-// import SketchDrawerProvider from '@/components/SketchDrawer/SketchDrawer.context'
 import Toolbar from '@/components/Toolbar'
 
 export default function Home() {
@@ -19,7 +17,6 @@ export default function Home() {
           <div className="additional-tool-wrapper">
             <SketchDrawAdditionalTools />
           </div>
-          {/* <SketchDrawer /> */}
           <SketchDraw />
         </div>
         <div className="result-wrapper">

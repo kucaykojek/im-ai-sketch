@@ -34,6 +34,8 @@ export interface ScrollPosition {
   y: number
 }
 
+export type ShapeType = 'fill' | 'outline'
+
 // BEGIN: canvas related types
 export interface CanvasWorkingSize {
   width: number

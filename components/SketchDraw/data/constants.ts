@@ -1,4 +1,4 @@
-import { CanvasObject, UserMode } from './types'
+import { CanvasObject, ShapeType, UserMode } from './types'
 
 export const CANVAS_ID: string = 'im-aisketch-canvas'
 export const OBJECTS_STORAGE_KEY = 'im-sd-objects'
@@ -16,7 +16,16 @@ export const PALETTE_COLORS: string[] = [
 export const COMMON_DEFAULT = {
   canvasBackgroundColor: '#ffffff',
   selectedColor: '#000000',
-  userMode: 'select' as UserMode
+  userMode: 'select' as UserMode,
+  shapeType: 'fill' as ShapeType,
+  strokeWidth: {
+    pencil: 1,
+    highlighter: 20,
+    eraser: 10,
+    circle: 0,
+    square: 0,
+    triangle: 0
+  }
 }
 
 export const CANVAS_OBJECT_DEFAULT: Omit<CanvasObject, 'id' | 'type'> = {

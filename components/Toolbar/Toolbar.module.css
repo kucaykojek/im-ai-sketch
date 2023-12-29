@@ -12,7 +12,7 @@
 }
 .toolGroup::before {
   @apply hidden absolute w-6 h-6 left-11 top-1/2 -translate-y-1/2 opacity-30;
-  content: url("data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTAuMjExIDcuMTU1Yy0uMTQxLS4xMDgtLjMtLjE1Ny0uNDU2LS4xNTctLjM4OSAwLS43NTUuMzA2LS43NTUuNzQ5djguNTAxYzAgLjQ0NS4zNjcuNzUuNzU1Ljc1LjE1NyAwIC4zMTYtLjA1LjQ1Ny0uMTU5IDEuNTU0LTEuMjAzIDQuMTk5LTMuMjUyIDUuNDk4LTQuMjU4LjE4NC0uMTQyLjI5LS4zNi4yOS0uNTkyIDAtLjIzLS4xMDctLjQ0OS0uMjkxLS41OTEtMS4yOTktMS4wMDItMy45NDUtMy4wNDQtNS40OTgtNC4yNDN6Ii8+PC9zdmc+");
+  content: url('data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTAuMjExIDcuMTU1Yy0uMTQxLS4xMDgtLjMtLjE1Ny0uNDU2LS4xNTctLjM4OSAwLS43NTUuMzA2LS43NTUuNzQ5djguNTAxYzAgLjQ0NS4zNjcuNzUuNzU1Ljc1LjE1NyAwIC4zMTYtLjA1LjQ1Ny0uMTU5IDEuNTU0LTEuMjAzIDQuMTk5LTMuMjUyIDUuNDk4LTQuMjU4LjE4NC0uMTQyLjI5LS4zNi4yOS0uNTkyIDAtLjIzLS4xMDctLjQ0OS0uMjkxLS41OTEtMS4yOTktMS4wMDItMy45NDUtMy4wNDQtNS40OTgtNC4yNDN6Ii8+PC9zdmc+');
 }
 .toolGroupActive::before {
   @apply block;
@@ -28,4 +28,13 @@
 }
 .toolGroupActive::before {
   @apply block;
+}
+
+/* BEGIN: tool options style */
+.toolOptions {
+  @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-6 py-2 bg-white rounded-lg flex items-center justify-center space-x-4 transition-all ease-in-out min-h-12;
+}
+
+.toolOptionsActive {
+  @apply bottom-20;
 }
