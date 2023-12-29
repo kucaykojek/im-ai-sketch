@@ -6,12 +6,12 @@ import isShapeBasedType from './isShapeBasedType'
 export default function saveObjectsToStorage(obj: CanvasObject[]) {
   if (localStorage) {
     // Cleanup empty objects
-    const filteredObjets = obj.filter(
+    const filteredObjects = obj.filter(
       (val) =>
         (isLineBasedType(val.type) && val.freeDrawPoints.length > 1) ||
         (isShapeBasedType(val.type) && val.width > 0 && val.height > 8)
     )
 
-    localStorage.setItem(OBJECTS_STORAGE_KEY, JSON.stringify(filteredObjets))
+    localStorage.setItem(OBJECTS_STORAGE_KEY, JSON.stringify(filteredObjects))
   }
 }

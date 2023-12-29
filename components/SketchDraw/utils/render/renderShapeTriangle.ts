@@ -24,7 +24,9 @@ export default function renderShapeTriangle({
   }
 
   context.save()
-  context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  if (!!backgroundColorHex) {
+    context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  }
   context.strokeStyle = hexToRgba({
     hex: strokeColorHex,
     opacity: strokeWidth ? opacity : 0
@@ -35,7 +37,10 @@ export default function renderShapeTriangle({
   context.lineTo(triangle.x2, triangle.y2)
   context.lineTo(triangle.x3, triangle.y3)
   context.closePath()
-  context.fill()
+
+  if (!!backgroundColorHex) {
+    context.fill()
+  }
   context.stroke()
   context.restore()
 }

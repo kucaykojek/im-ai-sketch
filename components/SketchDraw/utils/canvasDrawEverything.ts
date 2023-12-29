@@ -7,7 +7,6 @@ import type {
 } from '../data/types'
 import getControlPoints from './getControlPoints'
 import hexToRgba from './hexToRgba'
-import isHexLight from './isHexLight'
 import renderFreeDrawing from './render/renderFreeDrawing'
 import renderImage from './render/renderImage'
 import renderSVGIcon from './render/renderSVGIcon'
@@ -134,7 +133,7 @@ export default function canvasDrawEverything({
 
       canvasOverlayContext.lineWidth = 2
       canvasOverlayContext.strokeStyle = hexToRgba({
-        hex: isHexLight(canvasBackgroundColor) ? '#000000' : '#ffffff',
+        hex: '#ffc40c',
         opacity: 80
       })
       canvasOverlayContext.strokeRect(
@@ -145,7 +144,7 @@ export default function canvasDrawEverything({
       )
       canvasOverlayContext.setLineDash([0, 0])
       canvasOverlayContext.fillStyle = hexToRgba({
-        hex: isHexLight(canvasBackgroundColor) ? '#000000' : '#ffffff',
+        hex: '#ffc40c',
         opacity: 100
       })
       ;[

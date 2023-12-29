@@ -41,7 +41,7 @@
   @apply invisible w-0 h-0 opacity-0;
 }
 .backgroundPicker {
-  @apply inline-flex w-10 h-10 items-center justify-center hover:bg-neutral-100 rounded;
+  @apply inline-flex w-10 h-10 items-center justify-center bg-neutral-100 hover:bg-neutral-200 rounded cursor-pointer;
 }
 .backgroundPicker svg {
   @apply w-7 h-7 shrink-0;

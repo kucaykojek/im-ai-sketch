@@ -259,7 +259,7 @@ export default function SketchDraw() {
               : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
           strokeColorHex:
             shapeType === 'outline'
               ? selectedColor
@@ -284,7 +284,7 @@ export default function SketchDraw() {
               : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
           strokeColorHex:
             shapeType === 'outline'
               ? selectedColor
@@ -311,7 +311,7 @@ export default function SketchDraw() {
               : 0,
           opacity: 100,
           borderRadius: 0,
-          backgroundColorHex: shapeType === 'fill' ? selectedColor : '',
+          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
           strokeColorHex:
             shapeType === 'outline'
               ? selectedColor

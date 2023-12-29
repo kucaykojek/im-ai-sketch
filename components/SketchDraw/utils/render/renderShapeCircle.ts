@@ -15,7 +15,11 @@ export default function renderShapeCircle({
   context: CanvasRenderingContext2D
 } & Omit<ShapeObject, 'type'>): void {
   context.save()
-  context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+
+  if (!!backgroundColorHex) {
+    context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  }
+
   context.strokeStyle = hexToRgba({
     hex: strokeColorHex,
     opacity: strokeWidth ? opacity : 0
@@ -33,7 +37,9 @@ export default function renderShapeCircle({
     2 * Math.PI
   )
 
-  context.fill()
+  if (!!backgroundColorHex) {
+    context.fill()
+  }
   context.stroke()
   context.restore()
 }

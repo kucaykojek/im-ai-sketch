@@ -15,7 +15,9 @@ export default function renderShapeSquare({
 }: {
   context: CanvasRenderingContext2D
 } & Omit<ShapeObject, 'type'>): void {
-  context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  if (!!backgroundColorHex) {
+    context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  }
   context.strokeStyle = hexToRgba({ hex: strokeColorHex, opacity })
 
   const halfStrokeWidth = strokeWidth / 2
@@ -26,7 +28,9 @@ export default function renderShapeSquare({
   const radius = Math.min(adjustedWidth / 2, adjustedHeight / 2, borderRadius)
 
   if (radius === 0) {
-    context.fillRect(x, y, width, height)
+    if (!!backgroundColorHex) {
+      context.fillRect(x, y, width, height)
+    }
     context.beginPath()
     if (halfStrokeWidth) {
       context.lineWidth = halfStrokeWidth
@@ -75,7 +79,7 @@ export default function renderShapeSquare({
     if (strokeWidth > 0) {
       context.stroke()
     }
-    context.fill()
+
     context.closePath()
   }
 }
