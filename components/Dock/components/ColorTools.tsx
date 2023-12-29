@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Tools, useSketchDrawContext } from '@/components/SketchDraw'
 import { cn } from '@/libs/utils'
 
-import style from '../Toolbar.module.css'
+import style from '../Dock.module.css'
 
 const ColorTools = () => {
   const [isActive, setIsActive] = useState(true)

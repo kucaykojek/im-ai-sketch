@@ -3,11 +3,11 @@
 import Image from 'next/image'
 import React from 'react'
 
-import style from './Toolbar.module.css'
+import style from './Dock.module.css'
 import { ColorTools, FreeDrawTools, ShapeTools } from './components'
 import ToolOptions from './components/ToolOptions'
 
-const Toolbar = () => {
+const Dock = () => {
   return (
     <>
       <ToolOptions />
@@ -32,4 +32,4 @@ const Toolbar = () => {
   )
 }
 
-export default Toolbar
+export default Dock

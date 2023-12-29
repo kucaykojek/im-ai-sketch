@@ -1,5 +1,6 @@
 'use client'
 
+import Dock from '@/components/Dock'
 import GenerationResult, {
   GenerationAdditionalTools
 } from '@/components/GenerationResult'
@@ -7,11 +8,13 @@ import SketchDraw, {
   SketchDrawAdditionalTools,
   SketchDrawProvider
 } from '@/components/SketchDraw'
-import Toolbar from '@/components/Toolbar'
+import Topbar from '@/components/Topbar'
 
 export default function Home() {
   return (
     <SketchDrawProvider>
+      <Topbar />
+
       <main>
         <div className="drawing-wrapper">
           <div className="additional-tool-wrapper">
@@ -26,7 +29,8 @@ export default function Home() {
           </div>
         </div>
       </main>
-      <Toolbar />
+
+      <Dock />
     </SketchDrawProvider>
   )
 }

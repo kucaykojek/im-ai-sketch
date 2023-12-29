@@ -8,7 +8,7 @@ import isLineBasedType from '@/components/SketchDraw/utils/isLineBasedType'
 import isShapeBasedType from '@/components/SketchDraw/utils/isShapeBasedType'
 import { cn } from '@/libs/utils'
 
-import style from '../Toolbar.module.css'
+import style from '../Dock.module.css'
 
 const ToolOptions = () => {
   const { userMode } = useUserMode()

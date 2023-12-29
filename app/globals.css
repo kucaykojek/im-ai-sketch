@@ -23,7 +23,7 @@ html {
 }
 
 main {
-  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto overflow-visible pt-20;
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto overflow-visible py-20;
 }
 main .drawing-wrapper,
 main .result-wrapper {

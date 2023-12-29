@@ -538,7 +538,8 @@ export default function SketchDraw() {
       ref={containerRef}
       className="relative h-full overflow-hidden rounded-xl bg-white"
       style={{
-        cursor: getCursorFromModes({ userMode, actionMode })
+        cursor: getCursorFromModes({ userMode, actionMode }),
+        backgroundColor: canvasBackgroundColor
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}

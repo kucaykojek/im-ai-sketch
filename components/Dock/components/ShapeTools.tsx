@@ -1,14 +1,14 @@
 'use client'
 
-import { AudioWaveformIcon } from 'lucide-react'
+import { ShapesIcon } from 'lucide-react'
 import { useState } from 'react'
 
 import { Tools, useSketchDrawContext } from '@/components/SketchDraw'
 import { cn } from '@/libs/utils'
 
-import style from '../Toolbar.module.css'
+import style from '../Dock.module.css'
 
-const FreeDrawTools = () => {
+const ShapeTools = () => {
   const [isActive, setIsActive] = useState(true)
   const { canvasRef } = useSketchDrawContext()
 
@@ -17,20 +17,20 @@ const FreeDrawTools = () => {
       <button
         className={cn(
           style.toolGroupButton,
-          '!text-branding-pink hover:!bg-branding-pink hover:!text-white',
-          isActive && '!bg-branding-pink !text-white'
+          '!text-branding-cyan hover:!bg-branding-cyan hover:!text-white',
+          isActive && '!bg-branding-cyan !text-white'
         )}
         title="Freehand"
         onClick={() => setIsActive(!isActive)}
       >
-        <AudioWaveformIcon />
+        <ShapesIcon />
       </button>
       <div className={style.toolItems}>
         {canvasRef ? (
           <>
-            <Tools.Pencil />
-            <Tools.Highlighter />
-            <Tools.Eraser />
+            <Tools.Square />
+            <Tools.Circle />
+            <Tools.Triangle />
           </>
         ) : (
           <div className="animate-pulse rounded-lg bg-neutral-300 h-8 w-32"></div>
@@ -40,4 +40,4 @@ const FreeDrawTools = () => {
   )
 }
 
-export default FreeDrawTools
+export default ShapeTools

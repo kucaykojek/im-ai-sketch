@@ -1,0 +1,6 @@
+.topbar {
+  @apply fixed top-0 left-0 w-full h-14 bg-white shadow;
+}
+.topbarContainer {
+  @apply relative flex items-center h-full w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto;
+}
