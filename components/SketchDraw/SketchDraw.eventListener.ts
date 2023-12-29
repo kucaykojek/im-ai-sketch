@@ -7,12 +7,10 @@ import useActiveObjectId from './store/useActiveObjectId'
 import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
 import useContainerSize from './store/useContainerSize'
-import useScrollPosition from './store/useScrollPosition'
 import useUserMode from './store/useUserMode'
 
 export default function SketchDrawEventListeners() {
-  const { containerRef, canvasRef, initCanvas, drawEverything } =
-    useSketchDrawContext()
+  const { containerRef, initCanvas, drawEverything } = useSketchDrawContext()
 
   const { activeObjectId } = useActiveObjectId()
   const { userMode, setUserMode } = useUserMode()
@@ -20,7 +18,6 @@ export default function SketchDrawEventListeners() {
     useCanvasWorkingSize()
   const { setContainerSize } = useContainerSize()
   const { deleteCanvasObject } = useCanvasObjects()
-  const { updateScrollPosition } = useScrollPosition()
 
   // Set initial window size
   useEffect(() => {
@@ -55,23 +52,7 @@ export default function SketchDrawEventListeners() {
     }
   }, [setContainerSize, initCanvas, drawEverything])
 
-  // Wheel event
-  useEffect(() => {
-    const onWheel = (event: WheelEvent) => {
-      updateScrollPosition({
-        deltaX: event.deltaX * -1,
-        deltaY: event.deltaY * -1
-      })
-    }
-
-    document.body?.addEventListener('wheel', onWheel)
-    return () => {
-      document.body?.removeEventListener('wheel', onWheel)
-    }
-  }, [canvasRef, updateScrollPosition])
-
   // Pointerdown event
-
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
       const wasCanvasClick = (event.target as HTMLElement)?.id === CANVAS_ID

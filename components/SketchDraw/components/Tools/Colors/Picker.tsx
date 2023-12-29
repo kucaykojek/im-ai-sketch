@@ -1,11 +1,12 @@
 import { ChangeEvent } from 'react'
 
+import useSketchDrawContext from '../../../SketchDraw.context'
 import useSelectedColor from '../../../store/useSelectedColor'
 import mergeClass from '../../../utils/mergeClass'
 import style from '../Tools.module.css'
 
 const Picker = () => {
-  const disabled = false
+  const { canvasRef } = useSketchDrawContext()
   const { setSelectedColor } = useSelectedColor()
 
   const handleChange = (e: ChangeEvent) => {
@@ -16,13 +17,13 @@ const Picker = () => {
   return (
     <label
       htmlFor="colorPicker"
-      className={mergeClass(style.colorPicker, disabled && 'opacity-50')}
+      className={mergeClass(style.colorPicker, !canvasRef && 'opacity-50')}
     >
       <input
         id="colorPicker"
         type="color"
         onChange={handleChange}
-        disabled={disabled}
+        disabled={!canvasRef}
       />
     </label>
   )

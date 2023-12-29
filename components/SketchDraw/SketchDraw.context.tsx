@@ -16,7 +16,7 @@ import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
 import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
 import useContainerSize from './store/useContainerSize'
-import useScrollPosition from './store/useScrollPosition'
+import useUserMode from './store/useUserMode'
 import canvasDrawEverything from './utils/canvasDrawEverything'
 import canvasInit from './utils/canvasInit'
 
@@ -48,9 +48,9 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
   const { activeObjectId } = useActiveObjectId()
   const { canvasObjects } = useCanvasObjects()
   const { actionMode } = useActionMode()
+  const { userMode } = useUserMode()
   const { canvasWorkingSize } = useCanvasWorkingSize()
   const { containerSize } = useContainerSize()
-  const { scrollPosition } = useScrollPosition()
 
   const canvasBackgroundColor = useCanvasBackgroundColor(
     (state) => state.canvasBackgroundColor
@@ -100,8 +100,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       canvasObjects,
       activeObjectId,
       actionMode,
+      userMode,
       zoom,
-      scrollPosition,
       containerSize
     })
   }, [
@@ -110,8 +110,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
     canvasObjects,
     activeObjectId,
     actionMode,
+    userMode,
     zoom,
-    scrollPosition,
     containerSize
   ])
 

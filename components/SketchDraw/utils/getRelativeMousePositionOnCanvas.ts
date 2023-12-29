@@ -1,31 +1,34 @@
-import type { CanvasWorkingSize, ScrollPosition } from '../data/types'
-
 export default function getRelativeMousePositionOnCanvas({
   windowMouseX,
   windowMouseY,
-  canvasWorkingSize,
-  scrollPosition,
+  canvas,
   zoom
 }: {
   windowMouseX: number
   windowMouseY: number
-  canvasWorkingSize: CanvasWorkingSize
-  scrollPosition: ScrollPosition
+  canvas: HTMLCanvasElement
   zoom: number
 }): {
   relativeMouseX: number
   relativeMouseY: number
 } {
+  const {
+    left: canvasLeft,
+    top: canvasTop,
+    width: canvasWidth,
+    height: canvasHeight
+  } = canvas.getBoundingClientRect()
+
   const zoomRatio = zoom / 100
 
-  const canvasNewWidth = canvasWorkingSize.width * zoomRatio
-  const canvasNewHeight = canvasWorkingSize.height * zoomRatio
+  const canvasNewWidth = canvasWidth * zoomRatio
+  const canvasNewHeight = canvasHeight * zoomRatio
 
-  const gutterX = (canvasWorkingSize.width - canvasNewWidth) / 2
-  const gutterY = (canvasWorkingSize.height - canvasNewHeight) / 2
+  const gutterX = (canvasWidth - canvasNewWidth) / 2
+  const gutterY = (canvasHeight - canvasNewHeight) / 2
 
-  const relativeMouseX = (windowMouseX - scrollPosition.x - gutterX) / zoomRatio
-  const relativeMouseY = (windowMouseY - scrollPosition.y - gutterY) / zoomRatio
+  const relativeMouseX = (windowMouseX - gutterX) / zoomRatio - canvasLeft
+  const relativeMouseY = (windowMouseY - gutterY) / zoomRatio - canvasTop
 
   return {
     relativeMouseX,

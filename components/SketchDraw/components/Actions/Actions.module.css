@@ -4,3 +4,6 @@
 .action svg {
   @apply w-5 h-5;
 }
+.actionActive {
+  @apply bg-primary;
+}

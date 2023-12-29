@@ -3,9 +3,10 @@ import type {
   ActionMode,
   CanvasObject,
   CanvasWorkingSize,
-  ScrollPosition
+  UserMode
 } from '../data/types'
 import getControlPoints from './getControlPoints'
+import hexToRgba from './hexToRgba'
 import renderFreeDrawing from './render/renderFreeDrawing'
 import renderImage from './render/renderImage'
 import renderSVGIcon from './render/renderSVGIcon'
@@ -22,8 +23,8 @@ export default function canvasDrawEverything({
   canvasObjects,
   activeObjectId,
   actionMode,
+  userMode,
   zoom,
-  scrollPosition,
   containerSize
 }: {
   canvas: HTMLCanvasElement | null
@@ -33,8 +34,8 @@ export default function canvasDrawEverything({
   canvasObjects: CanvasObject[]
   activeObjectId: string | null
   actionMode: ActionMode
+  userMode: UserMode
   zoom: number
-  scrollPosition: ScrollPosition
   containerSize: { width: number; height: number }
 }) {
   if (!canvas || !context) {
@@ -89,24 +90,29 @@ export default function canvasDrawEverything({
     (object) => object.id === activeObjectId
   )
 
-  const canvasContext = (
-    document.getElementById(CANVAS_ID) as HTMLCanvasElement
+  const canvasOverlayContext = (
+    document.getElementById(`${CANVAS_ID}-overlay`) as HTMLCanvasElement
   )?.getContext('2d')
 
-  if (canvasContext) {
-    canvasContext.clearRect(0, 0, containerSize.width, containerSize.height)
+  if (canvasOverlayContext) {
+    canvasOverlayContext.clearRect(
+      0,
+      0,
+      containerSize.width,
+      containerSize.height
+    )
 
-    if (activeObject && actionMode?.type !== 'isDrawing') {
+    if (
+      activeObject &&
+      actionMode?.type !== 'isDrawing' &&
+      userMode === 'select'
+    ) {
       const zoomRatio = zoom / 100
 
       // We adjust here and then multiply by zoomRatio to make the controls go outside the canvas
       const positionAdjustment = {
-        x:
-          scrollPosition.x +
-          (canvasWorkingSize.width - canvasWorkingSize.width * zoomRatio) / 2,
-        y:
-          scrollPosition.y +
-          (canvasWorkingSize.height - canvasWorkingSize.height * zoomRatio) / 2
+        x: (canvasWorkingSize.width - canvasWorkingSize.width * zoomRatio) / 2,
+        y: (canvasWorkingSize.height - canvasWorkingSize.height * zoomRatio) / 2
       }
 
       // Draw controls
@@ -125,16 +131,22 @@ export default function canvasDrawEverything({
         zoom
       })
 
-      canvasContext.lineWidth = 2
-      canvasContext.strokeStyle = '#ff0000' // red
-      canvasContext.strokeRect(
+      canvasOverlayContext.lineWidth = 2
+      canvasOverlayContext.strokeStyle = hexToRgba({
+        hex: '#ffc40c',
+        opacity: 80
+      })
+      canvasOverlayContext.strokeRect(
         position.x * zoomRatio + positionAdjustment.x,
         position.y * zoomRatio + positionAdjustment.y,
         position.width * zoomRatio,
         position.height * zoomRatio
       )
-      canvasContext.setLineDash([0, 0])
-      canvasContext.fillStyle = '#ff0000'
+      canvasOverlayContext.setLineDash([0, 0])
+      canvasOverlayContext.fillStyle = hexToRgba({
+        hex: '#ffc40c',
+        opacity: 100
+      })
       ;[
         topLeftBox,
         topCenterBox,
@@ -145,7 +157,7 @@ export default function canvasDrawEverything({
         bottomCenterBox,
         bottomRightBox
       ].forEach((box) => {
-        canvasContext.fillRect(
+        canvasOverlayContext.fillRect(
           box.x * zoomRatio + positionAdjustment.x,
           box.y * zoomRatio + positionAdjustment.y,
           box.width * zoomRatio,

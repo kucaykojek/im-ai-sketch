@@ -1,10 +1,11 @@
+import useSketchDrawContext from '../../../SketchDraw.context'
 import { PALETTE_COLORS } from '../../../data/constants'
 import useSelectedColor from '../../../store/useSelectedColor'
 import mergeClass from '../../../utils/mergeClass'
 import style from '../Tools.module.css'
 
 const Palette = () => {
-  const disabled = false
+  const { canvasRef } = useSketchDrawContext()
   const { selectedColor, setSelectedColor } = useSelectedColor()
 
   const handleClick = (color: string) => {
@@ -22,7 +23,7 @@ const Palette = () => {
             selectedColor === color && style.paletteActive
           )}
           style={{ backgroundColor: color }}
-          disabled={disabled}
+          disabled={!canvasRef}
           onClick={() => handleClick(color)}
         ></button>
       ))}

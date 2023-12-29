@@ -1,23 +1,25 @@
 import { ChangeEvent } from 'react'
 
+import useSketchDrawContext from '../../../SketchDraw.context'
 import useCanvasBackgroundColor from '../../../store/useCanvasBackgroundColor'
 import mergeClass from '../../../utils/mergeClass'
 import style from '../Tools.module.css'
 
 const Background = () => {
-  const disabled = false
+  const { canvasRef } = useSketchDrawContext()
   const { canvasBackgroundColor, setCanvasBackgroundColor } =
     useCanvasBackgroundColor()
 
   const handleChange = (e: ChangeEvent) => {
     const color = (e.target as HTMLInputElement).value
     setCanvasBackgroundColor(color)
+    canvasRef.current!.style.background = color
   }
 
   return (
     <label
       htmlFor="backgroundPicker"
-      className={mergeClass(style.backgroundPicker, disabled && 'opacity-50')}
+      className={mergeClass(style.backgroundPicker, !canvasRef && 'opacity-50')}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +45,7 @@ const Background = () => {
         id="backgroundPicker"
         type="color"
         onChange={handleChange}
-        disabled={disabled}
+        disabled={!canvasRef}
       />
     </label>
   )

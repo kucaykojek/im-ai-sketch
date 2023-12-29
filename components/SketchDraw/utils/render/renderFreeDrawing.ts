@@ -26,6 +26,7 @@ export default function renderFreeDrawing({
   freeDrawPoints.forEach((point, index) => {
     const realX = x - positionFromDrawingPoints.x + point.x
     const realY = y - positionFromDrawingPoints.y + point.y
+
     if (index === 0) {
       context.moveTo(realX, realY)
     } else {

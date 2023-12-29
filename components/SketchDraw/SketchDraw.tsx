@@ -14,7 +14,6 @@ import useActiveObjectId from './store/useActiveObjectId'
 import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
 import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
-import useScrollPosition from './store/useScrollPosition'
 import useSelectedColor from './store/useSelectedColor'
 import useUserMode from './store/useUserMode'
 import generateUniqueId from './utils/generateUniqueId'
@@ -52,7 +51,6 @@ export default function SketchDraw() {
 
   const { canvasBackgroundColor } = useCanvasBackgroundColor()
   const { canvasWorkingSize } = useCanvasWorkingSize()
-  const { scrollPosition, updateScrollPosition } = useScrollPosition()
   const { userMode, setUserMode } = useUserMode()
   const { actionMode, setActionMode } = useActionMode()
   const { selectedColor } = useSelectedColor()
@@ -85,8 +83,7 @@ export default function SketchDraw() {
     const relativeMousePosition = getRelativeMousePositionOnCanvas({
       windowMouseX: clientX,
       windowMouseY: clientY,
-      canvasWorkingSize,
-      scrollPosition,
+      canvas: canvasRef.current!,
       zoom
     })
 
@@ -125,6 +122,7 @@ export default function SketchDraw() {
             }
           })
         }
+
         if (!isResizing) {
           const clickedObjects = canvasObjects.filter((canvasObject) => {
             return isCursorWithinRectangle({
@@ -359,8 +357,7 @@ export default function SketchDraw() {
     const relativeMousePosition = getRelativeMousePositionOnCanvas({
       windowMouseX: clientX,
       windowMouseY: clientY,
-      canvasWorkingSize,
-      scrollPosition,
+      canvas: canvasRef.current!,
       zoom
     })
 
@@ -391,11 +388,6 @@ export default function SketchDraw() {
               deltaY: movementY / (zoom / 100)
             },
             canvasWorkingSize
-          })
-        } else if (actionMode.type === 'isPanning') {
-          updateScrollPosition({
-            deltaX: movementX,
-            deltaY: movementY
           })
         }
         break
@@ -471,7 +463,6 @@ export default function SketchDraw() {
             height: dimensions.height
           })
         }
-        setUserMode('select')
         drawEverything()
         break
       }
@@ -504,6 +495,12 @@ export default function SketchDraw() {
       onTouchMove={onPointerMove}
       onTouchEnd={onPointerUp}
     >
+      <canvas
+        id={`${id}-overlay`}
+        width={canvasWorkingSize.width}
+        height={canvasWorkingSize.height}
+        className="absolute top-0 left-0 z-50"
+      />
       <canvas
         id={id}
         ref={canvasRef}
