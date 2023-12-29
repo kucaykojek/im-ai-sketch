@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { useState } from 'react'
 import React from 'react'
 
-import { Tools } from '@/components/SketchDrawer'
-import { useSketchDrawerContext } from '@/components/SketchDrawer/SketchDrawer.context'
+import { Tools } from '@/components/SketchDraw'
 import { cn } from '@/libs/utils'
 
+import { useSketchDrawContext } from '../SketchDraw'
 import style from './Toolbar.module.css'
 
 const Toolbar = () => {
@@ -16,7 +16,7 @@ const Toolbar = () => {
   const [isFreehandActive, setIsFreehandActive] = useState(true)
   const [isColorActive, setIsColorActive] = useState(true)
 
-  const { instance } = useSketchDrawerContext()
+  const { canvasRef } = useSketchDrawContext()
 
   return (
     <div className={style.toolbarWrapper}>
@@ -48,7 +48,7 @@ const Toolbar = () => {
             <ShapesIcon />
           </button>
           <div className={style.toolItems}>
-            {instance ? (
+            {canvasRef ? (
               <>
                 <Tools.Square />
                 <Tools.Circle />
@@ -78,7 +78,7 @@ const Toolbar = () => {
             <AudioWaveformIcon />
           </button>
           <div className={style.toolItems}>
-            {instance ? (
+            {canvasRef ? (
               <>
                 <Tools.Pencil />
                 <Tools.Highlighter />
@@ -109,7 +109,7 @@ const Toolbar = () => {
             <PaletteIcon />
           </button>
           <div className={style.toolItems}>
-            {instance ? (
+            {canvasRef ? (
               <>
                 <Tools.Palette />
                 <Tools.Picker />
@@ -120,7 +120,7 @@ const Toolbar = () => {
           </div>
         </div>
 
-        {instance ? (
+        {canvasRef ? (
           <Tools.Background />
         ) : (
           <div className="animate-pulse rounded-full bg-neutral-300 h-8 w-8"></div>

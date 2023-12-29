@@ -2,21 +2,21 @@
 
 import { DownloadIcon, RefreshCcwIcon, Wand2Icon } from 'lucide-react'
 
-import { useSketchDrawerContext } from '@/components/SketchDrawer/SketchDrawer.context'
+import { useSketchDrawContext } from '@/components/SketchDraw'
 
 const GenerationAdditionalTools = () => {
-  const { instance } = useSketchDrawerContext()
+  const { canvasRef } = useSketchDrawContext()
 
   return (
     <>
-      {!instance &&
+      {!canvasRef &&
         Array.from(new Array(3)).map((_, index) => (
           <div
             key={`generation-additional-tool-${index}`}
             className="animate-pulse rounded bg-neutral-300 h-8 w-8"
           ></div>
         ))}
-      {instance && (
+      {canvasRef && (
         <>
           <button disabled>
             <Wand2Icon />

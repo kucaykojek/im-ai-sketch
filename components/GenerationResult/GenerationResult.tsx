@@ -1,7 +1,5 @@
-import { useSketchDrawerContext } from '@/components/SketchDrawer/SketchDrawer.context'
-
 const GenerationResult = () => {
-  const { counter } = useSketchDrawerContext()
+  const counter = { drawing: 0, object: 0 }
 
   return (
     <div className="h-full bg-white overflow-hidden rounded-xl flex flex-col items-center justify-center text-neutral-300 uppercase font-medium tracking-widest">

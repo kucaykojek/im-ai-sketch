@@ -3,19 +3,24 @@
 import GenerationResult, {
   GenerationAdditionalTools
 } from '@/components/GenerationResult'
-import SketchDrawer, { DrawerAdditionalTools } from '@/components/SketchDrawer'
-import SketchDrawerProvider from '@/components/SketchDrawer/SketchDrawer.context'
+import SketchDraw, {
+  SketchDrawAdditionalTools,
+  SketchDrawProvider
+} from '@/components/SketchDraw'
+// import SketchDrawer, { DrawerAdditionalTools } from '@/components/SketchDrawer'
+// import SketchDrawerProvider from '@/components/SketchDrawer/SketchDrawer.context'
 import Toolbar from '@/components/Toolbar'
 
 export default function Home() {
   return (
-    <SketchDrawerProvider>
+    <SketchDrawProvider>
       <main>
         <div className="drawing-wrapper">
           <div className="additional-tool-wrapper">
-            <DrawerAdditionalTools />
+            <SketchDrawAdditionalTools />
           </div>
-          <SketchDrawer />
+          {/* <SketchDrawer /> */}
+          <SketchDraw />
         </div>
         <div className="result-wrapper">
           <GenerationResult />
@@ -25,6 +30,6 @@ export default function Home() {
         </div>
       </main>
       <Toolbar />
-    </SketchDrawerProvider>
+    </SketchDrawProvider>
   )
 }
