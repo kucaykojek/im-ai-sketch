@@ -1,7 +1,7 @@
 'use client'
 
 import useSketchDrawerContext from './SketchDraw.context'
-import { Download, Redo, Select, Undo } from './components/Actions'
+import { Delete, Download, Redo, Select, Undo } from './components/Actions'
 
 const SketchDrawAdditionalTools = () => {
   const { canvasRef } = useSketchDrawerContext()
@@ -20,6 +20,7 @@ const SketchDrawAdditionalTools = () => {
           <Select />
           <Undo />
           <Redo />
+          <Delete />
           <Download />
         </>
       )}

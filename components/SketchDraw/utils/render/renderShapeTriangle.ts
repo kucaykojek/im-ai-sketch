@@ -10,72 +10,32 @@ export default function renderShapeTriangle({
   backgroundColorHex,
   strokeColorHex,
   strokeWidth,
-  opacity,
-  borderRadius
+  opacity
 }: {
   context: CanvasRenderingContext2D
 } & Omit<ShapeObject, 'type'>): void {
-  context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
-  context.strokeStyle = hexToRgba({ hex: strokeColorHex, opacity })
-
-  const halfStrokeWidth = strokeWidth / 2
-  const adjustedX = x + halfStrokeWidth
-  const adjustedY = y + halfStrokeWidth
-  const adjustedWidth = Math.max(0, width - strokeWidth)
-  const adjustedHeight = Math.max(0, height - strokeWidth)
-  const radius = Math.min(adjustedWidth / 2, adjustedHeight / 2, borderRadius)
-
-  if (radius === 0) {
-    context.fillRect(x, y, width, height)
-    context.beginPath()
-    if (halfStrokeWidth) {
-      context.lineWidth = halfStrokeWidth
-      context.strokeRect(
-        x + halfStrokeWidth / 2,
-        y + halfStrokeWidth / 2,
-        width - halfStrokeWidth,
-        height - halfStrokeWidth
-      )
-    }
-  } else {
-    context.beginPath()
-    context.lineWidth = strokeWidth
-    context.moveTo(adjustedX + radius, adjustedY)
-    context.lineTo(adjustedX + adjustedWidth - radius, adjustedY)
-    context.quadraticCurveTo(
-      adjustedX + adjustedWidth,
-      adjustedY,
-      adjustedX + adjustedWidth,
-      adjustedY + radius
-    )
-    context.lineTo(
-      adjustedX + adjustedWidth,
-      adjustedY + adjustedHeight - radius
-    )
-    context.quadraticCurveTo(
-      adjustedX + adjustedWidth,
-      adjustedY + adjustedHeight,
-      adjustedX + adjustedWidth - radius,
-      adjustedY + adjustedHeight
-    )
-    context.lineTo(adjustedX + radius, adjustedY + adjustedHeight)
-    context.quadraticCurveTo(
-      adjustedX,
-      adjustedY + adjustedHeight,
-      adjustedX,
-      adjustedY + adjustedHeight - radius
-    )
-    context.lineTo(adjustedX, adjustedY + radius)
-    context.quadraticCurveTo(
-      adjustedX,
-      adjustedY,
-      adjustedX + radius,
-      adjustedY
-    )
-    if (strokeWidth > 0) {
-      context.stroke()
-    }
-    context.fill()
-    context.closePath()
+  const triangle = {
+    x1: x + width / 2,
+    y1: y,
+    x2: x,
+    y2: y + height,
+    x3: x + width,
+    y3: y + height
   }
+
+  context.save()
+  context.fillStyle = hexToRgba({ hex: backgroundColorHex, opacity })
+  context.strokeStyle = hexToRgba({
+    hex: strokeColorHex,
+    opacity: strokeWidth ? opacity : 0
+  })
+  context.lineWidth = strokeWidth
+  context.beginPath()
+  context.moveTo(triangle.x1, triangle.y1)
+  context.lineTo(triangle.x2, triangle.y2)
+  context.lineTo(triangle.x3, triangle.y3)
+  context.closePath()
+  context.fill()
+  context.stroke()
+  context.restore()
 }

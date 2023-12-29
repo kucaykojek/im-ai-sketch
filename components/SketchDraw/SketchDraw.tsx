@@ -20,9 +20,11 @@ import generateUniqueId from './utils/generateUniqueId'
 import getControlPoints from './utils/getControlPoints'
 import getCursorFromModes from './utils/getCursorFromModes'
 import getDimensionsFromFreeDraw from './utils/getDimensionsFromFreeDraw'
+import getObjectColor from './utils/getObjectColor'
 import getRelativeMousePositionOnCanvas from './utils/getRelativeMousePositionOnCanvas'
 import isCursorWithinRectangle from './utils/isCursorWithinRectangle'
 import isHexLight from './utils/isHexLight'
+import saveObjectsToStorage from './utils/saveObjectsToStorage'
 
 type PointerOrTouchEvent = PointerEvent<HTMLElement> | TouchEvent<HTMLElement>
 
@@ -53,7 +55,7 @@ export default function SketchDraw() {
   const { canvasWorkingSize } = useCanvasWorkingSize()
   const { userMode, setUserMode } = useUserMode()
   const { actionMode, setActionMode } = useActionMode()
-  const { selectedColor } = useSelectedColor()
+  const { selectedColor, setSelectedColor } = useSelectedColor()
 
   const zoom = 100
 
@@ -104,6 +106,7 @@ export default function SketchDraw() {
             canvasObject: activeObject,
             zoom
           })
+
           Object.entries(boxes).forEach(([boxName, box]) => {
             const isWithinBounds = isCursorWithinRectangle({
               x: box.x,
@@ -113,6 +116,7 @@ export default function SketchDraw() {
               relativeMouseX: initialDrawingPositionRef.current.x,
               relativeMouseY: initialDrawingPositionRef.current.y
             })
+
             if (isWithinBounds) {
               isResizing = true
               setActionMode({
@@ -134,6 +138,7 @@ export default function SketchDraw() {
               relativeMouseY: initialDrawingPositionRef.current.y
             })
           })
+
           const clickedObject = clickedObjects[clickedObjects.length - 1]
           const wasClickInsideWorkingCanvas = isCursorWithinRectangle({
             x: 0,
@@ -145,9 +150,21 @@ export default function SketchDraw() {
           })
           const shouldClearSelection =
             !wasClickInsideWorkingCanvas && clickedObject?.id !== activeObjectId
-          setActiveObjectId(
-            shouldClearSelection ? null : clickedObject?.id || null
-          )
+
+          if (!shouldClearSelection && clickedObject?.id) {
+            setActiveObjectId(clickedObject?.id)
+
+            const canvasObject = canvasObjects.find(
+              (canvasObject) => canvasObject.id === clickedObject?.id
+            )
+
+            if (canvasObject && getObjectColor(canvasObject)) {
+              setSelectedColor(getObjectColor(canvasObject) as string)
+            }
+          } else {
+            setActiveObjectId(clickedObject?.id || null)
+          }
+
           if (clickedObject) {
             setUserMode('select')
             setActionMode({ type: 'isMoving' })
@@ -477,6 +494,8 @@ export default function SketchDraw() {
         break
       }
     }
+
+    saveObjectsToStorage(canvasObjects)
   }
 
   return (

@@ -69,7 +69,6 @@ export default function SketchDrawEventListeners() {
   }, [setUserMode, userMode])
 
   // Keydown event
-
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const isInputFocused = ['input', 'textarea'].includes(
@@ -88,7 +87,6 @@ export default function SketchDrawEventListeners() {
   }, [activeObjectId, deleteCanvasObject])
 
   // Beforeunload event
-
   useEffect(() => {
     const onBeforeUnload = () => {
       return confirm('Are you sure?')
@@ -101,7 +99,6 @@ export default function SketchDrawEventListeners() {
   }, [])
 
   // Gesturestart event
-
   useEffect(() => {
     const onGestureStart = (event: Event) => {
       event.preventDefault()

@@ -6,7 +6,7 @@ const Redo = () => {
   const handleRedoClick = () => {}
 
   return (
-    <button className={style.action} onClick={handleRedoClick}>
+    <button disabled className={style.action} onClick={handleRedoClick}>
       <Redo2Icon />
     </button>
   )

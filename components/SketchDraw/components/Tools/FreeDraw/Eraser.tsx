@@ -14,7 +14,7 @@ const ToolsEraser = () => {
           style.tool,
           userMode === 'eraser' && style.toolActive
         )}
-        title="Eraser"
+        title="Eraser/Masking"
         disabled={disabled}
         onClick={() => handleClick('eraser')}
       >

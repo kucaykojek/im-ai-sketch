@@ -6,7 +6,7 @@ const Undo = () => {
   const handleUndoClick = () => {}
 
   return (
-    <button className={style.action} onClick={handleUndoClick}>
+    <button disabled className={style.action} onClick={handleUndoClick}>
       <Undo2Icon />
     </button>
   )

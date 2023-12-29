@@ -2,18 +2,32 @@ import { ChangeEvent } from 'react'
 
 import useSketchDrawContext from '../../../SketchDraw.context'
 import useCanvasBackgroundColor from '../../../store/useCanvasBackgroundColor'
+import useCanvasObjects from '../../../store/useCanvasObjects'
 import mergeClass from '../../../utils/mergeClass'
+import saveBackgroundToStorage from '../../../utils/saveBackgroundToStorage'
 import style from '../Tools.module.css'
 
 const Background = () => {
   const { canvasRef } = useSketchDrawContext()
   const { canvasBackgroundColor, setCanvasBackgroundColor } =
     useCanvasBackgroundColor()
+  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
 
   const handleChange = (e: ChangeEvent) => {
     const color = (e.target as HTMLInputElement).value
     setCanvasBackgroundColor(color)
     canvasRef.current!.style.background = color
+
+    // Change eraser color to same as bg color
+    const eraserObjects = canvasObjects.filter((obj) => obj.type === 'eraser')
+    if (eraserObjects.length > 0) {
+      eraserObjects.forEach((obj) => {
+        updateCanvasObject(obj.id, { strokeColorHex: color })
+      })
+    }
+
+    // Save background to localStorage
+    saveBackgroundToStorage(color)
   }
 
   return (

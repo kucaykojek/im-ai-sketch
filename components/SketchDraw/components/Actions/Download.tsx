@@ -6,7 +6,7 @@ const Download = () => {
   const handleDownloadClick = () => {}
 
   return (
-    <button className={style.action} onClick={handleDownloadClick}>
+    <button disabled className={style.action} onClick={handleDownloadClick}>
       <DownloadIcon />
     </button>
   )

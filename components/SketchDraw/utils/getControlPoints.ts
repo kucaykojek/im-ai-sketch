@@ -24,7 +24,7 @@ export default function getControlPoints({
   bottomCenterBox: Point
   bottomRightBox: Point
 } {
-  const MAS_SIZE = 20 / (zoom / 100)
+  const MAS_SIZE = 10 / (zoom / 100)
   const objectMinSize = Math.min(canvasObject.width, canvasObject.height)
   const SIZE = Math.min(objectMinSize / 4, MAS_SIZE)
   const HALF = SIZE / 2
