@@ -3,9 +3,8 @@
 import { useEffect, useState } from 'react'
 
 import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
-
-import isObjectPointBasedType from '../SketchDraw/utils/isObjectPointBasedType'
-import isObjectShapeBasedType from '../SketchDraw/utils/isObjectShapeBasedType'
+import isObjectPointBasedType from '@/components/SketchDraw/utils/isObjectPointBasedType'
+import isObjectShapeBasedType from '@/components/SketchDraw/utils/isObjectShapeBasedType'
 
 const GenerationResult = () => {
   const [stringSize, setStringSize] = useState(0)

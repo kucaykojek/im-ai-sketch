@@ -38,17 +38,17 @@ export default function Home() {
             <GenerationActions.Regenerate />
             <hr />
             <Image
-              src="https://placehold.co/100x100/png"
+              src="https://placehold.co/50x50/png"
               alt=""
-              width="100"
-              height="100"
+              width="50"
+              height="50"
               className="w-8 h-8 rounded border-2 border-primary"
             />
             <Image
-              src="https://placehold.co/100x100/png"
+              src="https://placehold.co/50x50/png"
               alt=""
-              width="100"
-              height="100"
+              width="50"
+              height="50"
               className="w-8 h-8 rounded"
             />
             <GenerationActions.Download />

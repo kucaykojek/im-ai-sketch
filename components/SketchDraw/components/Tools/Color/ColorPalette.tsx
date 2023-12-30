@@ -1,4 +1,3 @@
-import useCanvasObjectColor from '@/components/SketchDraw/store/useCanvasObjectColor'
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import { PALETTE_COLORS } from '@/sketch-draw/data/constants'
@@ -9,6 +8,7 @@ import useSquareOptions from '@/sketch-draw/store/object/useSquareOptions'
 import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
 import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
 import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
+import useCanvasObjectColor from '@/sketch-draw/store/useCanvasObjectColor'
 import useUserMode from '@/sketch-draw/store/useUserMode'
 import { cn } from '@/sketch-draw/utils/common'
 
