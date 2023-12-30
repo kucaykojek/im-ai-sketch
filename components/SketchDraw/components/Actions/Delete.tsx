@@ -1,13 +1,14 @@
 import { Trash2Icon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvasObjects from '../../store/useCanvasObjects'
-import mergeClass from '../../utils/mergeClass'
-import saveObjectsToStorage from '../../utils/saveObjectsToStorage'
+import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
+import mergeClass from '@/sketch-draw/utils/mergeClass'
+import saveObjectsToStorage from '@/sketch-draw/utils/saveObjectsToStorage'
+
 import style from './Actions.module.css'
 
 const Delete = () => {
-  const { canvasRef } = useSketchDrawContext()
+  const { isReady } = useSketchDrawContext()
   const { resetCanvasObjects } = useCanvasObjects()
 
   const handleDeleteClick = () => {
@@ -20,9 +21,10 @@ const Delete = () => {
 
   return (
     <button
+      type="button"
       title="Clear Canvas"
       className={mergeClass(style.action, 'text-red-500')}
-      disabled={!canvasRef}
+      disabled={!isReady}
       onClick={handleDeleteClick}
     >
       <Trash2Icon />

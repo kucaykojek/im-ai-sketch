@@ -1,23 +1,28 @@
-import Palette from './Color/Palette'
-import Picker from './Color/Picker'
-import Eraser from './FreeDraw/Eraser'
-import Highlighter from './FreeDraw/Highlighter'
-import Pencil from './FreeDraw/Pencil'
-import Image from './Other/Image'
-import Text from './Other/Text'
-import Circle from './Shape/Circle'
-import Square from './Shape/Square'
-import Triangle from './Shape/Triangle'
+import Circle, { CircleOptions } from './Circle'
+import ColorPalette from './Color'
+import Eraser, { EraserOptions } from './Eraser'
+import Highlighter, { HighlighterOptions } from './Highlighter'
+import Image from './Image'
+import Pencil, { PencilOptions } from './Pencil'
+import Square, { SquareOptions } from './Square'
+import Text, { TextOptions } from './Text'
+import Triangle, { TriangleOptions } from './Triangle'
 
 export {
   Eraser,
+  EraserOptions,
   Highlighter,
+  HighlighterOptions,
   Pencil,
+  PencilOptions,
   Circle,
+  CircleOptions,
   Square,
+  SquareOptions,
   Triangle,
-  Palette,
-  Picker,
+  TriangleOptions,
+  ColorPalette,
   Image,
-  Text
+  Text,
+  TextOptions
 }

@@ -7,7 +7,8 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef
+  useRef,
+  useState
 } from 'react'
 
 import { BG_STORAGE_KEY, OBJECTS_STORAGE_KEY } from './data/constants'
@@ -22,6 +23,7 @@ import canvasDrawEverything from './utils/canvasDrawEverything'
 import canvasInit from './utils/canvasInit'
 
 interface SketchDrawContextType {
+  isReady: boolean
   containerRef: MutableRefObject<HTMLDivElement | null>
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
   contextRef: MutableRefObject<CanvasRenderingContext2D | null>
@@ -30,6 +32,7 @@ interface SketchDrawContextType {
 }
 
 const initialState: SketchDrawContextType = {
+  isReady: false,
   containerRef: createRef(),
   canvasRef: createRef(),
   contextRef: createRef(),
@@ -40,6 +43,7 @@ const initialState: SketchDrawContextType = {
 const SketchDrawContext = createContext<SketchDrawContextType>(initialState)
 
 export function SketchDrawProvider({ children }: { children: ReactNode }) {
+  const [isReady, setIsReady] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null)
@@ -92,6 +96,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       canvasWidth: canvasWorkingSize.width,
       canvasHeight: canvasWorkingSize.height
     })
+
+    setIsReady(true)
   }, [canvasWorkingSize])
 
   useEffect(() => {
@@ -133,6 +139,7 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       containerRef,
       canvasRef,
       contextRef,
+      isReady,
       initCanvas,
       drawEverything
     }),

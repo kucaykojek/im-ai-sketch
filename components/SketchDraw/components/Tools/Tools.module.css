@@ -39,3 +39,25 @@
 .colorPicker input {
   @apply invisible w-0 h-0 opacity-0;
 }
+
+.toolOptions {
+  @apply relative flex items-stretch bg-white min-h-16;
+}
+.optionsWrapper {
+  @apply flex items-center py-2;
+}
+.optionsTitle {
+  @apply grow flex items-center uppercase text-sm font-semibold bg-neutral-100 text-neutral-800 px-4 space-x-3;
+}
+.optionsTitle svg {
+  @apply w-5 h-5 text-primary mr-2;
+}
+.optionsItem {
+  @apply mr-4 pl-4 flex flex-col justify-between shrink-0 grow w-max;
+}
+.optionsItem > label {
+  @apply block text-xs font-medium;
+}
+.optionsControl {
+  @apply flex h-8 items-center space-x-2;
+}

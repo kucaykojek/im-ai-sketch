@@ -36,6 +36,42 @@ export interface ScrollPosition {
 
 export type ShapeType = 'fill' | 'outline'
 
+// BEGIN: object related types
+type ShapeCommonOptions = {
+  shapeType: ShapeType
+  fillColorHex: string
+  strokeThickness: number
+  strokeColorHex: string
+}
+type FreeDrawCommonOptions = {
+  lineCap: 'butt' | 'round' | 'square'
+  lineJoin: 'miter' | 'round' | 'bevel'
+  strokeThickness: number
+  strokeColorHex: string
+  opacity: number
+}
+export type CircleOptions = ShapeCommonOptions // can extend if required. Ex: ShapeCommonOptions & { something: type }
+export type SquareOptions = ShapeCommonOptions
+export type TriangleOptions = ShapeCommonOptions
+export type EraserOptions = FreeDrawCommonOptions
+export type HighlighterOptions = FreeDrawCommonOptions
+export type PencilOptions = FreeDrawCommonOptions
+export type TextOptions = {
+  text: string
+  fontFamily: string
+  fontSize: number
+  fontColorHex: string
+}
+export type IconOptions = {
+  bgColorHex: string
+  svgPath: string
+}
+export type ImageOptions = {
+  imageUrl: string
+}
+
+// END: object related types
+
 // BEGIN: canvas related types
 export interface CanvasWorkingSize {
   width: number

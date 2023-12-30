@@ -7,6 +7,7 @@ const Redo = () => {
 
   return (
     <button
+      type="button"
       title="Redo"
       className={style.action}
       disabled

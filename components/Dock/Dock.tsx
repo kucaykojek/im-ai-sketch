@@ -3,18 +3,16 @@
 import Image from 'next/image'
 import React from 'react'
 
-import { Tools } from '@/components//SketchDraw'
-
 import style from './Dock.module.css'
-import { ColorTools, FreeDrawTools, ShapeTools } from './components'
-import ToolOptions from './components/ToolOptions'
+import DockOptionsDrawer from './DockOptionsDrawer'
+import DockTools from './DockTools'
 
 const Dock = () => {
   return (
     <>
-      <ToolOptions />
+      <DockOptionsDrawer />
 
-      <div className={style.toolbarWrapper}>
+      <div className={style.toolbar}>
         <Image
           src="/logo.webp"
           alt="designs.ai"
@@ -25,13 +23,7 @@ const Dock = () => {
         />
 
         <div className={style.toolWrapper}>
-          <FreeDrawTools />
-          <ShapeTools />
-          <ColorTools />
-          <div className="border-l flex items-center space-x-2 pl-2">
-            <Tools.Text />
-            <Tools.Image />
-          </div>
+          <DockTools />
         </div>
       </div>
     </>

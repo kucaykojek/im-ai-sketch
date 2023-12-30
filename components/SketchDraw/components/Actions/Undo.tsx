@@ -7,6 +7,7 @@ const Undo = () => {
 
   return (
     <button
+      type="button"
       title="Undo"
       className={style.action}
       disabled

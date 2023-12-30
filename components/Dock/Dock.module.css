@@ -1,4 +1,4 @@
-.toolbarWrapper {
+.toolbar {
   @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-16 py-2 bg-white rounded-t-lg flex items-center justify-center space-x-4;
 }
 .toolbarLogo {
@@ -30,11 +30,11 @@
   @apply block;
 }
 
-/* BEGIN: tool options style */
-.toolOptions {
-  @apply fixed z-40 bottom-0 left-1/2 -translate-x-1/2 px-6 py-2 bg-white rounded-lg flex items-center justify-center space-x-4 transition-all ease-in-out min-h-12 min-w-20 overflow-hidden;
+/* BEGIN: options drawer style */
+.optionsDrawer {
+  @apply fixed z-40 bottom-0 left-1/2 -translate-x-1/2 bg-white rounded-lg transition-all ease-in-out min-w-20 overflow-hidden;
 }
 
-.toolOptionsActive {
+.optionsDrawerActive {
   @apply bottom-16;
 }

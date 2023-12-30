@@ -1,3 +1,4 @@
+import { Loader2Icon } from 'lucide-react'
 import React, {
   type PointerEvent,
   type Touch,
@@ -32,7 +33,7 @@ type PointerOrTouchEvent = PointerEvent<HTMLElement> | TouchEvent<HTMLElement>
 
 export default function SketchDraw() {
   const id = CANVAS_ID
-  const { containerRef, canvasRef, contextRef, drawEverything } =
+  const { isReady, containerRef, canvasRef, contextRef, drawEverything } =
     useSketchDrawContext()
 
   const previousTouchRef = useRef<Touch | null>(null)
@@ -548,6 +549,11 @@ export default function SketchDraw() {
       onTouchMove={onPointerMove}
       onTouchEnd={onPointerUp}
     >
+      {!isReady && (
+        <div className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Loader2Icon className="w-12 h-12 animate-spin text-primary" />
+        </div>
+      )}
       <canvas
         id={`${id}-overlay`}
         width={canvasWorkingSize.width}

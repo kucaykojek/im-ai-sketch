@@ -1,15 +1,16 @@
 import { ChangeEvent } from 'react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvasBackgroundColor from '../../store/useCanvasBackgroundColor'
-import useCanvasObjects from '../../store/useCanvasObjects'
-import isHexLight from '../../utils/isHexLight'
-import mergeClass from '../../utils/mergeClass'
-import saveBackgroundToStorage from '../../utils/saveBackgroundToStorage'
+import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
+import useCanvasBackgroundColor from '@/sketch-draw/store/useCanvasBackgroundColor'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
+import isHexLight from '@/sketch-draw/utils/isHexLight'
+import mergeClass from '@/sketch-draw/utils/mergeClass'
+import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage'
+
 import style from './Actions.module.css'
 
 const Background = () => {
-  const { canvasRef } = useSketchDrawContext()
+  const { isReady, canvasRef } = useSketchDrawContext()
   const { canvasBackgroundColor, setCanvasBackgroundColor } =
     useCanvasBackgroundColor()
   const { canvasObjects, updateCanvasObject } = useCanvasObjects()
@@ -38,7 +39,7 @@ const Background = () => {
       className={mergeClass(
         style.action,
         style.actionColorPicker,
-        !canvasRef && 'opacity-50',
+        !isReady && 'opacity-50',
         isHexLight(canvasBackgroundColor)
           ? 'text-neutral-800'
           : 'text-neutral-50'
@@ -66,7 +67,7 @@ const Background = () => {
         id="backgroundPicker"
         type="color"
         onChange={handleChange}
-        disabled={!canvasRef}
+        disabled={!isReady}
       />
     </label>
   )
