@@ -16,7 +16,7 @@ const ToolsPencil = () => {
         )}
         title="Pencil"
         disabled={disabled}
-        onClick={() => handleClick('pencil')}
+        onClick={() => handleClick(userMode === 'pencil' ? 'select' : 'pencil')}
       >
         <PencilIcon className={style.toolIcon} />
       </button>

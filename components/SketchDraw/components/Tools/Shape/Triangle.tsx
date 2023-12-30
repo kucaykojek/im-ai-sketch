@@ -15,8 +15,10 @@ const ToolsTriangle = () => {
           userMode === 'triangle' && style.toolActive
         )}
         title="Triangle"
-        onClick={() => handleClick('triangle')}
         disabled={disabled}
+        onClick={() =>
+          handleClick(userMode === 'triangle' ? 'select' : 'triangle')
+        }
       >
         <TriangleIcon className={style.toolIcon} />
       </button>

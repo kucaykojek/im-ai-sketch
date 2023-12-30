@@ -16,7 +16,7 @@ const ToolsEraser = () => {
         )}
         title="Eraser/Masking"
         disabled={disabled}
-        onClick={() => handleClick('eraser')}
+        onClick={() => handleClick(userMode === 'eraser' ? 'select' : 'eraser')}
       >
         <EraserIcon className={style.toolIcon} />
       </button>

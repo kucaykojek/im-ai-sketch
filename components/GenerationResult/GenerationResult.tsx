@@ -40,7 +40,8 @@ const GenerationResult = () => {
           </strong>
         </p>
         <p>
-          String Data Size: <strong>{stringSize} bytes</strong>
+          String Data Size:{' '}
+          <strong>{stringSize > 2 ? stringSize : 0} bytes</strong>
         </p>
       </div>
     </div>

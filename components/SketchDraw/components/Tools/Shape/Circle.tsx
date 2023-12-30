@@ -15,8 +15,8 @@ const ToolsCircle = () => {
           userMode === 'circle' && style.toolActive
         )}
         title="Circle"
-        onClick={() => handleClick('circle')}
         disabled={disabled}
+        onClick={() => handleClick(userMode === 'circle' ? 'select' : 'circle')}
       >
         <CircleIcon className={style.toolIcon} />
       </button>

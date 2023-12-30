@@ -15,8 +15,8 @@ const ToolsSquare = () => {
           userMode === 'square' && style.toolActive
         )}
         title="Square"
-        onClick={() => handleClick('square')}
         disabled={disabled}
+        onClick={() => handleClick(userMode === 'square' ? 'select' : 'square')}
       >
         <SquareIcon className={style.toolIcon} />
       </button>
