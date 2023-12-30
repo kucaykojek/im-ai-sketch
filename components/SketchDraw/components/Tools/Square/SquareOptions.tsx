@@ -52,9 +52,9 @@ const SquareOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="pencil-options-color"
-              color={options.strokeColorHex}
+              color={options.fillColorHex}
               disabled={options.shapeType === 'outline'}
-              onChange={(e) => handleChange(e, 'strokeColorHex')}
+              onChange={(e) => handleChange(e, 'fillColorHex')}
             />
           </div>
         </div>
