@@ -2,7 +2,7 @@ import { MousePointerClickIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import useUserMode from '@/sketch-draw/store/useUserMode'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 import style from './Actions.module.css'
 
@@ -18,10 +18,7 @@ const Select = () => {
     <button
       type="button"
       title="Select"
-      className={mergeClass(
-        style.action,
-        userMode === 'select' && style.actionActive
-      )}
+      className={cn(style.action, userMode === 'select' && style.actionActive)}
       disabled={!isReady}
       onClick={handleSelectClick}
     >

@@ -4,8 +4,9 @@ import { ChangeEvent } from 'react'
 import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
+import { ShapeType } from '@/sketch-draw/data/types'
 import useSquareOptions from '@/sketch-draw/store/object/useSquareOptions'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const SquareOptions = () => {
   const { options, setOptions } = useSquareOptions()
@@ -13,6 +14,18 @@ const SquareOptions = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
     setOptions({ ...options, [key]: e.target.value })
   }
+
+  const handleTypeChange = (shapeType: ShapeType) => {
+    setOptions({
+      ...options,
+      shapeType,
+      strokeThickness:
+        shapeType === 'outline' && options.strokeThickness < 1
+          ? 1
+          : options.strokeThickness
+    })
+  }
+
   return (
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
@@ -26,45 +39,45 @@ const SquareOptions = () => {
             <div className="flex items-center text-xs rounded overflow-hidden">
               <button
                 type="button"
-                className={mergeClass(
+                className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
                   options.shapeType === 'fill' && '!bg-primary'
                 )}
-                onClick={() => setOptions({ ...options, shapeType: 'fill' })}
+                onClick={() => handleTypeChange('fill')}
               >
                 Fill
               </button>
               <button
                 type="button"
-                className={mergeClass(
+                className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
                   options.shapeType === 'outline' && '!bg-primary'
                 )}
-                onClick={() => setOptions({ ...options, shapeType: 'outline' })}
+                onClick={() => handleTypeChange('outline')}
               >
                 Outline
               </button>
             </div>
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Background</label>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="pencil-options-color"
+              id="square-options-fill-color"
               color={options.fillColorHex}
               disabled={options.shapeType === 'outline'}
               onChange={(e) => handleChange(e, 'fillColorHex')}
             />
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Border</label>
           <div className={style.optionsControl}>
             <SliderRange
-              id="pencil-options-stroke-thickness"
+              id="square-options-stroke-thickness"
               value={options.strokeThickness}
-              min={1}
+              min={options.shapeType === 'outline' ? 1 : 0}
               max={100}
               step={1}
               onChange={(e) => handleChange(e, 'strokeThickness')}
@@ -73,7 +86,7 @@ const SquareOptions = () => {
               {options.strokeThickness}
             </div>
             <ColorPicker
-              id="pencil-options-color"
+              id="square-options-stroke-color"
               color={options.strokeColorHex}
               onChange={(e) => handleChange(e, 'strokeColorHex')}
             />

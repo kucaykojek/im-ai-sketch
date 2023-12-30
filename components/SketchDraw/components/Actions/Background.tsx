@@ -1,10 +1,11 @@
 import { ChangeEvent } from 'react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
+import { ERASER_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
 import useCanvasBackgroundColor from '@/sketch-draw/store/useCanvasBackgroundColor'
 import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
+import { cn } from '@/sketch-draw/utils/common'
 import isHexLight from '@/sketch-draw/utils/isHexLight'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
 import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage'
 
 import style from './Actions.module.css'
@@ -24,7 +25,12 @@ const Background = () => {
     const eraserObjects = canvasObjects.filter((obj) => obj.type === 'eraser')
     if (eraserObjects.length > 0) {
       eraserObjects.forEach((obj) => {
-        updateCanvasObject(obj.id, { strokeColorHex: color })
+        updateCanvasObject(obj.id, {
+          eraserOpts: {
+            ...(obj.eraserOpts || { ...ERASER_OPTIONS_DEFAULT }),
+            strokeColorHex: color
+          }
+        })
       })
     }
 
@@ -36,7 +42,7 @@ const Background = () => {
     <label
       htmlFor="backgroundPicker"
       title="Canvas Background"
-      className={mergeClass(
+      className={cn(
         style.action,
         style.actionColorPicker,
         !isReady && 'opacity-50',

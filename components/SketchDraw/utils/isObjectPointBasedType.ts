@@ -1,6 +1,6 @@
-import { CanvasObjectType } from '../data/types'
+import { CanvasObjectType } from '@/sketch-draw/data/types'
 
-export default function isLineBasedType(
+export default function isObjectPointBasedType(
   type: Omit<CanvasObjectType, 'select'>
 ) {
   return ['pencil', 'highlighter', 'eraser'].includes(type as string)

@@ -5,7 +5,7 @@ import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import usePencilOptions from '@/sketch-draw/store/object/usePencilOptions'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const PencilOptions = () => {
   const { options, setOptions } = usePencilOptions()
@@ -36,7 +36,7 @@ const PencilOptions = () => {
             </div>
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Opacity</label>
           <div className={style.optionsControl}>
             <SliderRange
@@ -50,7 +50,7 @@ const PencilOptions = () => {
             <div className="text-xs font-medium w-4">{options.opacity}</div>
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Color</label>
           <div className={style.optionsControl}>
             <ColorPicker

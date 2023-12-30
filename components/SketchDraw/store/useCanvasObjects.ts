@@ -1,48 +1,59 @@
 import { create } from 'zustand'
 
-import { CANVAS_OBJECT_DEFAULT } from '../data/constants'
+import { CANVAS_OBJECT_DEFAULT } from '@/sketch-draw/data/constants'
 import type {
   ActionModeOption,
   CanvasObject,
   CanvasWorkingSize,
-  FreeDrawObject,
+  CircleObject,
+  EraserObject,
+  HightlighterObject,
   IconObject,
   ImageObject,
-  ShapeObject,
-  TextObject
-} from '../data/types'
-import generateUniqueId from '../utils/generateUniqueId'
-import getPositionFromDrawingPoints from '../utils/getPositionFromDrawingPoints'
+  PencilObject,
+  SquareObject,
+  TextObject,
+  TriangleObject
+} from '@/sketch-draw/data/types'
+import generateUniqueId from '@/sketch-draw/utils/generateUniqueId'
+import getPositionFromDrawingPoints from '@/sketch-draw/utils/getPositionFromDrawingPoints'
 
 function curateObjectModifications(
   newObject: CanvasObject,
   existing: CanvasObject
 ) {
   const hasNegativeSize = newObject.width < 1 || newObject.height < 1
+
   if (hasNegativeSize) {
     return existing
   }
+
   const isTextWithLessThanThreshold =
-    newObject.type === 'text' && newObject.width < newObject.fontSize
+    newObject.type === 'text' && newObject.width < newObject.textOpts!.fontSize
   return isTextWithLessThanThreshold ? existing : newObject
 }
 
 const useCanvasObjects = create<{
+  // Objects
   canvasObjects: CanvasObject[]
-  appendPencilObject: (_: Omit<FreeDrawObject, 'type'>) => void
-  appendHighlighterObject: (_: Omit<FreeDrawObject, 'type'>) => void
-  appendEraserObject: (_: Omit<FreeDrawObject, 'type'>) => void
-  appendSquareObject: (_: Omit<ShapeObject, 'type'>) => void
-  appendCircleObject: (_: Omit<ShapeObject, 'type'>) => void
-  appendTriangleObject: (_: Omit<ShapeObject, 'type'>) => void
+  resetCanvasObjects: () => void
+  reviveCanvasObjects: (_: CanvasObject[]) => void
+
+  // Spesific object
+  appendEraserObject: (_: Omit<EraserObject, 'type'>) => void
+  appendPencilObject: (_: Omit<PencilObject, 'type'>) => void
+  appendHighlighterObject: (_: Omit<HightlighterObject, 'type'>) => void
+
+  appendCircleObject: (_: Omit<CircleObject, 'type'>) => void
+  appendSquareObject: (_: Omit<SquareObject, 'type'>) => void
+  appendTriangleObject: (_: Omit<TriangleObject, 'type'>) => void
+
   appendTextObject: (_: Omit<TextObject, 'type'>) => void
   appendIconObject: (_: Omit<IconObject, 'type'>) => void
   appendImageObject: (_: Omit<ImageObject, 'type'>) => void
+
+  // Object
   updateCanvasObject: (_id: string, _obj: Partial<CanvasObject>) => void
-  appendFreeDrawPointToCanvasObject: (
-    _id: string,
-    _point: { x: number; y: number }
-  ) => void
   deleteCanvasObject: (_: string) => void
   moveCanvasObject: (_: {
     id: string
@@ -55,11 +66,30 @@ const useCanvasObjects = create<{
     delta: { deltaX: number; deltaY: number }
     canvasWorkingSize: CanvasWorkingSize
   }) => void
-  setCanvasObjectLayerIndex: (_id: string, _layerIndex: number) => void
-  resetCanvasObjects: () => void
-  reviveCanvasObjects: (_: CanvasObject[]) => void
+
+  // Helper
+  setObjectLayerIndex: (_id: string, _layerIndex: number) => void
+  appendPointToCanvasObject: (
+    _id: string,
+    _point: { x: number; y: number }
+  ) => void
 }>((set) => ({
   canvasObjects: [],
+  resetCanvasObjects: () => set(() => ({ canvasObjects: [] })),
+  reviveCanvasObjects: (obj) => set(() => ({ canvasObjects: [...obj] })),
+
+  appendEraserObject: (obj) =>
+    set((state) => ({
+      canvasObjects: [
+        ...state.canvasObjects,
+        {
+          ...CANVAS_OBJECT_DEFAULT,
+          type: 'eraser',
+          id: generateUniqueId(),
+          ...obj
+        }
+      ]
+    })),
   appendPencilObject: (obj) =>
     set((state) => ({
       canvasObjects: [
@@ -84,13 +114,14 @@ const useCanvasObjects = create<{
         }
       ]
     })),
-  appendEraserObject: (obj) =>
+
+  appendCircleObject: (obj) =>
     set((state) => ({
       canvasObjects: [
         ...state.canvasObjects,
         {
           ...CANVAS_OBJECT_DEFAULT,
-          type: 'eraser',
+          type: 'circle',
           id: generateUniqueId(),
           ...obj
         }
@@ -108,18 +139,6 @@ const useCanvasObjects = create<{
         }
       ]
     })),
-  appendCircleObject: (obj) =>
-    set((state) => ({
-      canvasObjects: [
-        ...state.canvasObjects,
-        {
-          ...CANVAS_OBJECT_DEFAULT,
-          type: 'circle',
-          id: generateUniqueId(),
-          ...obj
-        }
-      ]
-    })),
   appendTriangleObject: (obj) =>
     set((state) => ({
       canvasObjects: [
@@ -132,6 +151,7 @@ const useCanvasObjects = create<{
         }
       ]
     })),
+
   appendTextObject: (obj) =>
     set((state) => ({
       canvasObjects: [
@@ -168,6 +188,7 @@ const useCanvasObjects = create<{
         }
       ]
     })),
+
   updateCanvasObject: (id, partialObject) =>
     set((state) => ({
       canvasObjects: state.canvasObjects.map((existing) =>
@@ -179,30 +200,6 @@ const useCanvasObjects = create<{
           : existing
       )
     })),
-  appendFreeDrawPointToCanvasObject(id, point) {
-    set((state) => {
-      const { x, y } = getPositionFromDrawingPoints({
-        freeDrawPoints: [
-          ...(state.canvasObjects.find((o) => o.id === id)?.freeDrawPoints ||
-            []),
-          { x: point.x, y: point.y }
-        ]
-      })
-
-      return {
-        canvasObjects: state.canvasObjects.map((existing) =>
-          existing.id === id
-            ? {
-                ...existing,
-                x,
-                y,
-                freeDrawPoints: [...existing.freeDrawPoints, point]
-              }
-            : existing
-        )
-      }
-    })
-  },
   deleteCanvasObject: (id) =>
     set((state) => ({
       canvasObjects: state.canvasObjects.filter(
@@ -236,7 +233,7 @@ const useCanvasObjects = create<{
               y: existing.y + delta.deltaY,
               width: existing.width - delta.deltaX,
               height: existing.height - delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 const growthRatioY = delta.deltaY / existing.height
                 return {
@@ -252,7 +249,7 @@ const useCanvasObjects = create<{
               ...existing,
               y: existing.y + delta.deltaY,
               height: existing.height - delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioY = delta.deltaY / existing.height
                 return {
                   x: point.x,
@@ -268,7 +265,7 @@ const useCanvasObjects = create<{
               width: existing.width + delta.deltaX,
               y: existing.y + delta.deltaY,
               height: existing.height - delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 const growthRatioY = delta.deltaY / existing.height
                 return {
@@ -284,7 +281,7 @@ const useCanvasObjects = create<{
               ...existing,
               x: existing.x + delta.deltaX,
               width: existing.width - delta.deltaX,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 return {
                   x: point.x - (point.x - existing.x) * growthRatioX,
@@ -298,7 +295,7 @@ const useCanvasObjects = create<{
             result = {
               ...existing,
               width: existing.width + delta.deltaX,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 return {
                   x: point.x + (point.x - existing.x) * growthRatioX,
@@ -314,7 +311,7 @@ const useCanvasObjects = create<{
               x: existing.x + delta.deltaX,
               width: existing.width - delta.deltaX,
               height: existing.height + delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 const growthRatioY = delta.deltaY / existing.height
                 return {
@@ -329,7 +326,7 @@ const useCanvasObjects = create<{
             result = {
               ...existing,
               height: existing.height + delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioY = delta.deltaY / existing.height
                 return {
                   x: point.x,
@@ -345,7 +342,7 @@ const useCanvasObjects = create<{
               ...existing,
               width: existing.width + delta.deltaX,
               height: existing.height + delta.deltaY,
-              freeDrawPoints: existing.freeDrawPoints.map((point) => {
+              points: existing.points!.map((point) => {
                 const growthRatioX = delta.deltaX / existing.width
                 const growthRatioY = delta.deltaY / existing.height
                 return {
@@ -360,7 +357,8 @@ const useCanvasObjects = create<{
         return curateObjectModifications(result, existing)
       })
     })),
-  setCanvasObjectLayerIndex: (id, layerIndex) =>
+
+  setObjectLayerIndex: (id, layerIndex) =>
     set((state) => {
       if (layerIndex < 0 || layerIndex >= state.canvasObjects.length) {
         return state
@@ -377,8 +375,29 @@ const useCanvasObjects = create<{
         })
       }
     }),
-  resetCanvasObjects: () => set(() => ({ canvasObjects: [] })),
-  reviveCanvasObjects: (obj) => set(() => ({ canvasObjects: [...obj] }))
+  appendPointToCanvasObject(id, point) {
+    set((state) => {
+      const { x, y } = getPositionFromDrawingPoints({
+        points: [
+          ...(state.canvasObjects.find((o) => o.id === id)?.points || []),
+          { x: point.x, y: point.y }
+        ]
+      })
+
+      return {
+        canvasObjects: state.canvasObjects.map((existing) =>
+          existing.id === id
+            ? {
+                ...existing,
+                x,
+                y,
+                points: [...(existing.points || []), point]
+              }
+            : existing
+        )
+      }
+    })
+  }
 }))
 
 export default useCanvasObjects

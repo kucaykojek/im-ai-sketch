@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { TEXT_OPTIONS_DEFAULT } from '../../data/constants'
-import { TextOptions } from '../../data/types'
+import { TEXT_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { TextOptions } from '@/sketch-draw/data/types'
 
 const useTextOptions = create<{
   options: TextOptions

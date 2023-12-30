@@ -5,7 +5,7 @@ import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import type { UserMode } from '@/sketch-draw/data/types'
 import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
 import useUserMode from '@/sketch-draw/store/useUserMode'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const TextButton = () => {
   const { isReady } = useSketchDrawContext()
@@ -21,10 +21,7 @@ const TextButton = () => {
     <>
       <button
         type="button"
-        className={mergeClass(
-          style.tool,
-          userMode === 'text' && style.toolActive
-        )}
+        className={cn(style.tool, userMode === 'text' && style.toolActive)}
         title="Text"
         disabled={!isReady}
         onClick={() => handleClick(userMode === 'text' ? 'select' : 'text')}

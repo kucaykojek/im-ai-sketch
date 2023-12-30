@@ -1,4 +1,4 @@
-import type { ImageObject } from '../../data/types'
+import type { ImageObject } from '@/sketch-draw/data/types'
 
 export default function renderImage({
   context,
@@ -6,16 +6,12 @@ export default function renderImage({
   y,
   width,
   height,
-  opacity,
-  imageElement
+  imageOpts: opts
 }: {
   context: CanvasRenderingContext2D
 } & Omit<ImageObject, 'type'>): void {
-  context.globalAlpha = opacity / 100
-
-  if (imageElement) {
-    context.drawImage(imageElement, x, y, width, height)
+  if (opts?.imageElement) {
+    context.globalAlpha = 1 // opacity
+    context.drawImage(opts.imageElement, x, y, width, height)
   }
-
-  context.globalAlpha = 1
 }

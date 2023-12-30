@@ -1,4 +1,4 @@
-import type { CanvasObject } from '../data/types'
+import type { CanvasObject } from '@/sketch-draw/data/types'
 
 interface Point {
   x: number

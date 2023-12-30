@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
 
-import isLineBasedType from '../SketchDraw/utils/isLineBasedType'
-import isShapeBasedType from '../SketchDraw/utils/isShapeBasedType'
+import isObjectPointBasedType from '../SketchDraw/utils/isObjectPointBasedType'
+import isObjectShapeBasedType from '../SketchDraw/utils/isObjectShapeBasedType'
 
 const GenerationResult = () => {
   const [stringSize, setStringSize] = useState(0)
@@ -15,8 +15,8 @@ const GenerationResult = () => {
     const filteredObjects =
       canvasObjects.filter(
         (val) =>
-          (isLineBasedType(val.type) && val.freeDrawPoints.length > 1) ||
-          (isShapeBasedType(val.type) && val.width > 0 && val.height > 8)
+          (isObjectPointBasedType(val.type) && val.points!.length > 1) ||
+          (isObjectShapeBasedType(val.type) && val.width > 0 && val.height > 8)
       ) || ''
 
     setStringSize(new Blob([JSON.stringify(filteredObjects)]).size)
@@ -30,13 +30,19 @@ const GenerationResult = () => {
         <p>
           Shape Based Objects:{' '}
           <strong>
-            {canvasObjects?.filter((val) => isShapeBasedType(val.type))?.length}
+            {
+              canvasObjects?.filter((val) => isObjectShapeBasedType(val.type))
+                ?.length
+            }
           </strong>
         </p>
         <p>
           Line Based Objects:{' '}
           <strong>
-            {canvasObjects?.filter((val) => isLineBasedType(val.type))?.length}
+            {
+              canvasObjects?.filter((val) => isObjectPointBasedType(val.type))
+                ?.length
+            }
           </strong>
         </p>
         <p>

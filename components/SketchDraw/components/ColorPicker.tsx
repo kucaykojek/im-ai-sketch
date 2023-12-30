@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 type Props = {
   id: string
@@ -14,7 +14,7 @@ const ColorPicker = ({ id, color, disabled = false, onChange }: Props) => {
     <div>
       <label
         htmlFor={id}
-        className={mergeClass(
+        className={cn(
           'flex items-center bg-neutral-100 hover:bg-neutral-200 rounded p-1 space-x-2 w-24 cursor-pointer',
           disabled && 'opacity-50'
         )}

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { HIGHLIGHTER_OPTIONS_DEFAULT } from '../../data/constants'
-import { HighlighterOptions } from '../../data/types'
+import { HIGHLIGHTER_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { HighlighterOptions } from '@/sketch-draw/data/types'
 
 const useHighlighterOptions = create<{
   options: HighlighterOptions

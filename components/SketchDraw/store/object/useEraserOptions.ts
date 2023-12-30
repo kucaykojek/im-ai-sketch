@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { ERASER_OPTIONS_DEFAULT } from '../../data/constants'
-import { EraserOptions } from '../../data/types'
+import { ERASER_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { EraserOptions } from '@/sketch-draw/data/types'
 
 const useEraserOptions = create<{
   options: EraserOptions

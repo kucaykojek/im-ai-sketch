@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { TRIANGLE_OPTIONS_DEFAULT } from '../../data/constants'
-import { TriangleOptions } from '../../data/types'
+import { TRIANGLE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { TriangleOptions } from '@/sketch-draw/data/types'
 
 const useTriangleOptions = create<{
   options: TriangleOptions

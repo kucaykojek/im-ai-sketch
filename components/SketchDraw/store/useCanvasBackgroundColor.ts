@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import { COMMON_DEFAULT } from '../data/constants'
+import { COMMON_DEFAULT } from '@/sketch-draw/data/constants'
 
 const useCanvasBackgroundColor = create<{
   canvasBackgroundColor: string

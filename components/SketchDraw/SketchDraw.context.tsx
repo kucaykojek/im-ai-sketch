@@ -12,6 +12,7 @@ import React, {
 } from 'react'
 
 import { BG_STORAGE_KEY, OBJECTS_STORAGE_KEY } from './data/constants'
+import useEraserOptions from './store/object/useEraserOptions'
 import useActionMode from './store/useActionMode'
 import useActiveObjectId from './store/useActiveObjectId'
 import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
@@ -58,6 +59,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
     useCanvasBackgroundColor()
   const { canvasWorkingSize } = useCanvasWorkingSize()
   const { containerSize } = useContainerSize()
+  const { options: eraserOptions, setOptions: setEraserOptions } =
+    useEraserOptions()
 
   // Init canvas function
   const initCanvas = useCallback(() => {
@@ -86,6 +89,11 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       setCanvasBackgroundColor(
         localStorage.getItem(BG_STORAGE_KEY) || canvasBackgroundColor
       )
+      setEraserOptions({
+        ...eraserOptions,
+        strokeColorHex:
+          localStorage.getItem(BG_STORAGE_KEY) || canvasBackgroundColor
+      })
     }
 
     contextRef.current = context

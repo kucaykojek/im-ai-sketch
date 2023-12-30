@@ -4,7 +4,7 @@ import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
 import useUserMode from '@/sketch-draw/store/useUserMode'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const mode = 'eraser'
 
@@ -22,10 +22,7 @@ const EraserButton = () => {
     <>
       <button
         type="button"
-        className={mergeClass(
-          style.tool,
-          userMode === mode && style.toolActive
-        )}
+        className={cn(style.tool, userMode === mode && style.toolActive)}
         title="Eraser/Masking"
         disabled={!isReady}
         onClick={handleClick}

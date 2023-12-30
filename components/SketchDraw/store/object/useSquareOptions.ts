@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { SQUARE_OPTIONS_DEFAULT } from '../../data/constants'
-import { SquareOptions } from '../../data/types'
+import { SQUARE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { SquareOptions } from '@/sketch-draw/data/types'
 
 const useSquareOptions = create<{
   options: SquareOptions

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { CIRCLE_OPTIONS_DEFAULT } from '../../data/constants'
-import { CircleOptions } from '../../data/types'
+import { CIRCLE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { CircleOptions } from '@/sketch-draw/data/types'
 
 const useCircleOptions = create<{
   options: CircleOptions

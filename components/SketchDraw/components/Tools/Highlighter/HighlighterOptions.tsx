@@ -5,7 +5,7 @@ import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import useHighlighterOptions from '@/sketch-draw/store/object/useHighlighterOptions'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const HighlighterOptions = () => {
   const { options, setOptions } = useHighlighterOptions()
@@ -23,10 +23,7 @@ const HighlighterOptions = () => {
         <div className={style.optionsItem}>
           <label>Thickness</label>
           <div
-            className={mergeClass(
-              style.optionsControl,
-              'flex items-center space-x-2'
-            )}
+            className={cn(style.optionsControl, 'flex items-center space-x-2')}
           >
             <SliderRange
               id="highlighter-options-stroke-thickness"
@@ -41,13 +38,10 @@ const HighlighterOptions = () => {
             </div>
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Opacity</label>
           <div
-            className={mergeClass(
-              style.optionsControl,
-              'flex items-center space-x-2'
-            )}
+            className={cn(style.optionsControl, 'flex items-center space-x-2')}
           >
             <SliderRange
               id="highlighter-options-opacity"
@@ -60,7 +54,7 @@ const HighlighterOptions = () => {
             <div className="text-xs font-medium w-4">{options.opacity}</div>
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Color</label>
           <div className={style.optionsControl}>
             <ColorPicker

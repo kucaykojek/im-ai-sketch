@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { PENCIL_OPTIONS_DEFAULT } from '../../data/constants'
-import { PencilOptions } from '../../data/types'
+import { PENCIL_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { PencilOptions } from '@/sketch-draw/data/types'
 
 const usePencilOptions = create<{
   options: PencilOptions

@@ -1,7 +1,7 @@
 import canvasTxt from 'canvas-txt'
 
-import type { TextObject } from '../../data/types'
-import hexToRgba from '../../utils/hexToRgba'
+import type { TextObject } from '@/sketch-draw/data/types'
+import hexToRgba from '@/sketch-draw/utils/hexToRgba'
 
 export default function renderText({
   context,
@@ -9,37 +9,21 @@ export default function renderText({
   y,
   width,
   height,
-  opacity,
-  text,
-  textJustify,
-  textAlignHorizontal,
-  textAlignVertical,
-  fontColorHex,
-  fontSize,
-  fontFamily,
-  fontStyle,
-  fontVariant,
-  fontWeight,
-  fontLineHeightRatio
+  textOpts: opts
 }: {
   context: CanvasRenderingContext2D
 } & Omit<TextObject, 'type'>): void {
-  context.beginPath()
-  context.fillStyle = hexToRgba({ hex: fontColorHex, opacity })
+  if (opts) {
+    context.beginPath()
+    context.fillStyle = hexToRgba({ hex: opts.fontColorHex, opacity: 100 })
 
-  canvasTxt.debug = false
+    canvasTxt.debug = false
 
-  canvasTxt.justify = textJustify
-  canvasTxt.align = textAlignHorizontal
-  canvasTxt.vAlign = textAlignVertical
-  canvasTxt.fontSize = fontSize
-  canvasTxt.font = fontFamily
-  canvasTxt.fontStyle = fontStyle
-  canvasTxt.fontVariant = fontVariant
-  canvasTxt.fontWeight = fontWeight
-  canvasTxt.lineHeight = fontLineHeightRatio * fontSize
+    canvasTxt.fontSize = opts.fontSize
+    canvasTxt.font = opts.fontFamily
 
-  canvasTxt.drawText(context, text, x, y, width, height)
+    canvasTxt.drawText(context, opts.text, x, y, width, height)
 
-  context.closePath()
+    context.closePath()
+  }
 }

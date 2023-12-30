@@ -1,3 +1,4 @@
+import useCanvasObjectColor from '@/components/SketchDraw/store/useCanvasObjectColor'
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import { PALETTE_COLORS } from '@/sketch-draw/data/constants'
@@ -8,19 +9,14 @@ import useSquareOptions from '@/sketch-draw/store/object/useSquareOptions'
 import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
 import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
 import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import useSelectedColor from '@/sketch-draw/store/useSelectedColor'
 import useUserMode from '@/sketch-draw/store/useUserMode'
-import isObjectCanUpdateColor from '@/sketch-draw/utils/isObjectCanUpdateColor'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
-import replaceObjectColor from '@/sketch-draw/utils/replaceObjectColor'
+import { cn } from '@/sketch-draw/utils/common'
 
 const ColorPalette = () => {
   const { userMode } = useUserMode()
   const { isReady } = useSketchDrawContext()
-  const { selectedColor, setSelectedColor } = useSelectedColor()
+  const { objectColor, setObjectColor } = useCanvasObjectColor()
   const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
 
   const { options: highlighterOptions, setOptions: setHighlighterOptions } =
     useHighlighterOptions()
@@ -37,18 +33,10 @@ const ColorPalette = () => {
   const { options: textOptions, setOptions: setTextOptions } = useTextOptions()
 
   const handleSetColor = (color: string) => {
-    setSelectedColor(color)
+    setObjectColor(color)
 
+    // TODO: update color options
     if (activeObjectId) {
-      const canvasObject = canvasObjects
-        .filter((obj) => isObjectCanUpdateColor(obj.type))
-        .find((obj) => obj.id === activeObjectId)
-
-      if (canvasObject) {
-        updateCanvasObject(activeObjectId, {
-          ...replaceObjectColor(canvasObject.type, color)
-        })
-      }
     }
 
     if (!['select', 'image', 'icon'].includes(userMode)) {
@@ -114,9 +102,9 @@ const ColorPalette = () => {
           type="button"
           key={`palette-${index}`}
           title={color}
-          className={mergeClass(
+          className={cn(
             style.palette,
-            selectedColor === color && style.paletteActive
+            objectColor === color && style.paletteActive
           )}
           style={{ backgroundColor: color }}
           value={color}
@@ -127,7 +115,7 @@ const ColorPalette = () => {
 
       <label
         htmlFor="colorPicker"
-        className={mergeClass(style.colorPicker, !isReady && 'opacity-50')}
+        className={cn(style.colorPicker, !isReady && 'opacity-50')}
       >
         <input
           id="colorPicker"

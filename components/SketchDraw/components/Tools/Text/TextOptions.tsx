@@ -5,7 +5,7 @@ import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
-import mergeClass from '@/sketch-draw/utils/mergeClass'
+import { cn } from '@/sketch-draw/utils/common'
 
 const TextOptions = () => {
   const { options, setOptions } = useTextOptions()
@@ -30,7 +30,7 @@ const TextOptions = () => {
             />
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Font Color</label>
           <div className={style.optionsControl}>
             <ColorPicker
@@ -40,7 +40,7 @@ const TextOptions = () => {
             />
           </div>
         </div>
-        <div className={mergeClass(style.optionsItem, 'border-l')}>
+        <div className={cn(style.optionsItem, 'border-l')}>
           <label>Font Size</label>
           <div className={style.optionsControl}>
             <SliderRange

@@ -37,25 +37,26 @@ export interface ScrollPosition {
 export type ShapeType = 'fill' | 'outline'
 
 // BEGIN: object related types
-type ShapeCommonOptions = {
+type ShapeBasedCommonOptions = {
   shapeType: ShapeType
   fillColorHex: string
   strokeThickness: number
   strokeColorHex: string
+  opacity: number
 }
-type FreeDrawCommonOptions = {
+type PointBasedCommonOptions = {
   lineCap: 'butt' | 'round' | 'square'
   lineJoin: 'miter' | 'round' | 'bevel'
   strokeThickness: number
   strokeColorHex: string
   opacity: number
 }
-export type CircleOptions = ShapeCommonOptions // can extend if required. Ex: ShapeCommonOptions & { something: type }
-export type SquareOptions = ShapeCommonOptions
-export type TriangleOptions = ShapeCommonOptions
-export type EraserOptions = FreeDrawCommonOptions
-export type HighlighterOptions = FreeDrawCommonOptions
-export type PencilOptions = FreeDrawCommonOptions
+export type CircleOptions = ShapeBasedCommonOptions // can extend if required. Ex: ShapeCommonOptions & { something: type }
+export type SquareOptions = ShapeBasedCommonOptions
+export type TriangleOptions = ShapeBasedCommonOptions
+export type EraserOptions = PointBasedCommonOptions
+export type HighlighterOptions = PointBasedCommonOptions
+export type PencilOptions = PointBasedCommonOptions
 export type TextOptions = {
   text: string
   fontFamily: string
@@ -68,6 +69,7 @@ export type IconOptions = {
 }
 export type ImageOptions = {
   imageUrl: string
+  imageElement: HTMLImageElement | null
 }
 
 // END: object related types
@@ -78,11 +80,13 @@ export interface CanvasWorkingSize {
   height: number
 }
 
-export type CanvasObjectFreeDrawType = 'pencil' | 'highlighter' | 'eraser'
-export type CanvasObjectShapeType = 'square' | 'circle' | 'triangle'
 export type CanvasObjectType =
-  | CanvasObjectFreeDrawType
-  | CanvasObjectShapeType
+  | 'pencil'
+  | 'highlighter'
+  | 'eraser'
+  | 'square'
+  | 'circle'
+  | 'triangle'
   | 'text'
   | 'icon'
   | 'image'
@@ -97,78 +101,56 @@ export interface CanvasObject {
   height: number
   opacity: number
   // Type specific
-  backgroundColorHex: string
-  strokeColorHex: string
-  strokeWidth: number
-  borderRadius: number
-  freeDrawPoints: { x: number; y: number }[] // FreeDraw ONLY
-  text: string // Text ONLY
-  textJustify: boolean // Text ONLY
-  textAlignHorizontal: 'left' | 'center' | 'right' // Text ONLY
-  textAlignVertical: 'top' | 'middle' | 'bottom' // Text ONLY
-  fontColorHex: string // Text ONLY
-  fontSize: number // Text ONLY
-  fontFamily: string // Text ONLY
-  fontStyle: 'normal' | 'italic' | 'oblique' // Text ONLY
-  fontVariant: 'normal' | 'small-caps' // Text ONLY
-  fontWeight:
-    | 'normal'
-    | 'bold'
-    | 'bolder'
-    | 'lighter'
-    | '100'
-    | '200'
-    | '300'
-    | '400'
-    | '500'
-    | '600'
-    | '700'
-    | '800'
-    | '900' // Text ONLY
-  fontLineHeightRatio: number // Text ONLY
-  svgPath: string // Icon ONLY
-  imageUrl: string // Image ONLY
-  imageElement: HTMLImageElement | null // Image only
+  points?: { x: number; y: number }[] // Only for pencil, highlighter, and eraser
+  eraserOpts?: EraserOptions
+  pencilOpts?: PencilOptions
+  highlighterOpts?: HighlighterOptions
+  circleOpts?: CircleOptions
+  squareOpts?: SquareOptions
+  triangleOpts?: TriangleOptions
+  textOpts?: TextOptions
+  iconOpts?: IconOptions
+  imageOpts?: ImageOptions
 }
 
-type ObjectCommonProperties = Pick<
+export type CommonObjectProperties = Pick<
   CanvasObject,
-  'x' | 'y' | 'width' | 'height' | 'opacity'
+  'x' | 'y' | 'width' | 'height'
 > & { id?: string }
 
-export type ShapeObject = ObjectCommonProperties & {
-  type: CanvasObjectShapeType
-} & Pick<
-    CanvasObject,
-    'backgroundColorHex' | 'strokeColorHex' | 'strokeWidth' | 'borderRadius'
-  >
+export type EraserObject = CommonObjectProperties & {
+  type: 'eraser'
+} & Pick<CanvasObject, 'eraserOpts' | 'points'>
 
-export type FreeDrawObject = ObjectCommonProperties & {
-  type: CanvasObjectFreeDrawType
-} & Pick<CanvasObject, 'strokeColorHex' | 'strokeWidth' | 'freeDrawPoints'>
+export type PencilObject = CommonObjectProperties & {
+  type: 'pencil'
+} & Pick<CanvasObject, 'pencilOpts' | 'points'>
 
-export type TextObject = ObjectCommonProperties & {
+export type HightlighterObject = CommonObjectProperties & {
+  type: 'highlighter'
+} & Pick<CanvasObject, 'highlighterOpts' | 'points'>
+
+export type CircleObject = CommonObjectProperties & {
+  type: 'circle'
+} & Pick<CanvasObject, 'circleOpts'>
+
+export type SquareObject = CommonObjectProperties & {
+  type: 'square'
+} & Pick<CanvasObject, 'squareOpts'>
+
+export type TriangleObject = CommonObjectProperties & {
+  type: 'triangle'
+} & Pick<CanvasObject, 'triangleOpts'>
+
+export type TextObject = CommonObjectProperties & {
   type: 'text'
-} & Pick<
-    CanvasObject,
-    | 'text'
-    | 'textJustify'
-    | 'textAlignHorizontal'
-    | 'textAlignVertical'
-    | 'fontColorHex'
-    | 'fontSize'
-    | 'fontFamily'
-    | 'fontStyle'
-    | 'fontVariant'
-    | 'fontWeight'
-    | 'fontLineHeightRatio'
-  >
+} & Pick<CanvasObject, 'textOpts'>
 
-export type IconObject = ObjectCommonProperties & {
+export type IconObject = CommonObjectProperties & {
   type: 'icon'
-} & Pick<CanvasObject, 'backgroundColorHex' | 'svgPath'>
+} & Pick<CanvasObject, 'iconOpts'>
 
-export type ImageObject = ObjectCommonProperties & {
+export type ImageObject = CommonObjectProperties & {
   type: 'image'
-} & Pick<CanvasObject, 'imageUrl' | 'imageElement'>
+} & Pick<CanvasObject, 'imageOpts'>
 // END: canvas related types

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { ScrollPosition } from '../data/types'
+import type { ScrollPosition } from '@/sketch-draw/data/types'
 
 interface ScrollPositionDelta {
   deltaX: number

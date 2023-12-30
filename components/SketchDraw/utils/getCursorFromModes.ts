@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-import type { ActionMode, UserMode } from '../data/types'
+import type { ActionMode, UserMode } from '@/sketch-draw/data/types'
 
 export default function getCursorFromUserMode({
   userMode,

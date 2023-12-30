@@ -1,19 +1,22 @@
-import { CANVAS_ID } from '../data/constants'
+import { CANVAS_ID } from '@/sketch-draw/data/constants'
 import type {
   ActionMode,
   CanvasObject,
   CanvasWorkingSize,
   UserMode
-} from '../data/types'
+} from '@/sketch-draw/data/types'
+
 import getControlPoints from './getControlPoints'
 import hexToRgba from './hexToRgba'
-import renderFreeDrawing from './render/renderFreeDrawing'
+import renderCircle from './render/renderCircle'
+import renderEraser from './render/renderEraser'
+import renderHighlighter from './render/renderHighlighter'
+import renderSVGIcon from './render/renderIcon'
 import renderImage from './render/renderImage'
-import renderSVGIcon from './render/renderSVGIcon'
-import renderShapeCircle from './render/renderShapeCircle'
-import renderShapeSquare from './render/renderShapeSquare'
-import renderShapeTriangle from './render/renderShapeTriangle'
+import renderPencil from './render/renderPencil'
+import renderSquare from './render/renderSquare'
 import renderText from './render/renderText'
+import renderTriangle from './render/renderTriangle'
 
 export default function canvasDrawEverything({
   canvas,
@@ -51,22 +54,28 @@ export default function canvasDrawEverything({
   // Draw objects
   canvasObjects.forEach((object) => {
     switch (object.type) {
-      case 'pencil':
-      case 'highlighter':
       case 'eraser': {
-        renderFreeDrawing({ context, ...object })
+        renderEraser({ context, ...object })
+        break
+      }
+      case 'highlighter': {
+        renderHighlighter({ context, ...object })
+        break
+      }
+      case 'pencil': {
+        renderPencil({ context, ...object })
         break
       }
       case 'circle': {
-        renderShapeCircle({ context, ...object })
+        renderCircle({ context, ...object })
         break
       }
       case 'square': {
-        renderShapeSquare({ context, ...object })
+        renderSquare({ context, ...object })
         break
       }
       case 'triangle': {
-        renderShapeTriangle({ context, ...object })
+        renderTriangle({ context, ...object })
         break
       }
       case 'text': {

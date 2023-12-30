@@ -4,7 +4,7 @@ import type {
   ActionMode,
   ActionModeOption,
   ActionModeType
-} from '../data/types'
+} from '@/sketch-draw/data/types'
 
 const useActionMode = create<{
   actionMode: ActionMode

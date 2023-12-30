@@ -8,25 +8,27 @@ import React, {
 
 import useSketchDrawContext from './SketchDraw.context'
 import SketchDrawEventListeners from './SketchDraw.eventListener'
-import { CANVAS_ID, COMMON_DEFAULT } from './data/constants'
-import type { ActionModeOption } from './data/types'
+import { CANVAS_ID } from './data/constants'
+import type { ActionModeOption, CommonObjectProperties } from './data/types'
+import useCircleOptions from './store/object/useCircleOptions'
+import useEraserOptions from './store/object/useEraserOptions'
+import useHighlighterOptions from './store/object/useHighlighterOptions'
+import usePencilOptions from './store/object/usePencilOptions'
+import useSquareOptions from './store/object/useSquareOptions'
+import useTextOptions from './store/object/useTextOptions'
+import useTriangleOptions from './store/object/useTriangleOptions'
 import useActionMode from './store/useActionMode'
 import useActiveObjectId from './store/useActiveObjectId'
 import useCanvasBackgroundColor from './store/useCanvasBackgroundColor'
 import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
-import useSelectedColor from './store/useSelectedColor'
-import useShapeType from './store/useShapeType'
-import useStrokeWidth from './store/useStrokeWidth'
 import useUserMode from './store/useUserMode'
 import generateUniqueId from './utils/generateUniqueId'
 import getControlPoints from './utils/getControlPoints'
 import getCursorFromModes from './utils/getCursorFromModes'
-import getDimensionsFromFreeDraw from './utils/getDimensionsFromFreeDraw'
-import getObjectColor from './utils/getObjectColor'
+import getDimensionsFromPointObject from './utils/getDimensionsFromPointObject'
 import getRelativeMousePositionOnCanvas from './utils/getRelativeMousePositionOnCanvas'
 import isCursorWithinRectangle from './utils/isCursorWithinRectangle'
-import isHexLight from './utils/isHexLight'
 import saveObjectsToStorage from './utils/saveObjectsToStorage'
 
 type PointerOrTouchEvent = PointerEvent<HTMLElement> | TouchEvent<HTMLElement>
@@ -49,7 +51,7 @@ export default function SketchDraw() {
     appendSquareObject,
     appendTriangleObject,
     appendTextObject,
-    appendFreeDrawPointToCanvasObject,
+    appendPointToCanvasObject,
     moveCanvasObject,
     resizeCanvasObject
   } = useCanvasObjects()
@@ -58,9 +60,15 @@ export default function SketchDraw() {
   const { canvasWorkingSize } = useCanvasWorkingSize()
   const { userMode, setUserMode } = useUserMode()
   const { actionMode, setActionMode } = useActionMode()
-  const { selectedColor, setSelectedColor } = useSelectedColor()
-  const { strokeWidth } = useStrokeWidth()
-  const { shapeType } = useShapeType()
+
+  //
+  const { options: eraserOpts } = useEraserOptions()
+  const { options: pencilOpts } = usePencilOptions()
+  const { options: highlighterOpts } = useHighlighterOptions()
+  const { options: circleOpts } = useCircleOptions()
+  const { options: squareOpts } = useSquareOptions()
+  const { options: triangleOpts } = useTriangleOptions()
+  const { options: textOpts } = useTextOptions()
 
   const zoom = 100
 
@@ -99,6 +107,13 @@ export default function SketchDraw() {
       y: relativeMousePosition.relativeMouseY
     }
     const createdObjectId = generateUniqueId()
+    const commonObjectProperties: CommonObjectProperties = {
+      id: createdObjectId,
+      x: initialDrawingPositionRef.current.x,
+      y: initialDrawingPositionRef.current.y,
+      width: 0,
+      height: 0
+    }
 
     switch (userMode) {
       case 'icon':
@@ -163,8 +178,8 @@ export default function SketchDraw() {
               (canvasObject) => canvasObject.id === clickedObject?.id
             )
 
-            if (canvasObject && getObjectColor(canvasObject)) {
-              setSelectedColor(getObjectColor(canvasObject) as string)
+            // TODO: set Selected Options
+            if (canvasObject) {
             }
           } else {
             setActiveObjectId(clickedObject?.id || null)
@@ -182,168 +197,91 @@ export default function SketchDraw() {
       }
       case 'pencil': {
         appendPencilObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            strokeWidth['pencil'] || COMMON_DEFAULT.strokeWidth.pencil,
-          opacity: 100,
-          freeDrawPoints: [
+          ...commonObjectProperties,
+          pencilOpts,
+          points: [
             {
               x: initialDrawingPositionRef.current.x,
               y: initialDrawingPositionRef.current.y
             }
-          ],
-          strokeColorHex: selectedColor
+          ]
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'highlighter': {
         appendHighlighterObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            strokeWidth['highlighter'] ||
-            COMMON_DEFAULT.strokeWidth.highlighter,
-          opacity: 55,
-          freeDrawPoints: [
+          ...commonObjectProperties,
+          highlighterOpts,
+          points: [
             {
               x: initialDrawingPositionRef.current.x,
               y: initialDrawingPositionRef.current.y
             }
-          ],
-          strokeColorHex: selectedColor
+          ]
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'eraser': {
         appendEraserObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            strokeWidth['eraser'] || COMMON_DEFAULT.strokeWidth.eraser,
-          opacity: 100,
-          freeDrawPoints: [
+          ...commonObjectProperties,
+          eraserOpts: {
+            ...eraserOpts,
+            strokeColorHex: canvasBackgroundColor
+          },
+          points: [
             {
               x: initialDrawingPositionRef.current.x,
               y: initialDrawingPositionRef.current.y
             }
-          ],
-          strokeColorHex: canvasBackgroundColor
+          ]
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'circle': {
         appendCircleObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            shapeType === 'outline'
-              ? strokeWidth['circle'] || COMMON_DEFAULT.strokeWidth.circle || 1
-              : 0,
-          opacity: 100,
-          borderRadius: 0,
-          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
-          strokeColorHex:
-            shapeType === 'outline'
-              ? selectedColor
-              : isHexLight(selectedColor)
-                ? '#000000'
-                : '#ffffff'
+          ...commonObjectProperties,
+          circleOpts
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'square': {
         appendSquareObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            shapeType === 'outline'
-              ? strokeWidth['square'] || COMMON_DEFAULT.strokeWidth.square || 1
-              : 0,
-          opacity: 100,
-          borderRadius: 0,
-          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
-          strokeColorHex:
-            shapeType === 'outline'
-              ? selectedColor
-              : isHexLight(selectedColor)
-                ? '#000000'
-                : '#ffffff'
+          ...commonObjectProperties,
+          squareOpts
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'triangle': {
         appendTriangleObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 0,
-          height: 0,
-          strokeWidth:
-            shapeType === 'outline'
-              ? strokeWidth['triangle'] ||
-                COMMON_DEFAULT.strokeWidth.triangle ||
-                1
-              : 0,
-          opacity: 100,
-          borderRadius: 0,
-          backgroundColorHex: shapeType === 'outline' ? '' : selectedColor,
-          strokeColorHex:
-            shapeType === 'outline'
-              ? selectedColor
-              : isHexLight(selectedColor)
-                ? '#000000'
-                : '#ffffff'
+          ...commonObjectProperties,
+          triangleOpts
         })
+
         setActiveObjectId(createdObjectId)
         setActionMode({ type: 'isDrawing' })
         break
       }
       case 'text': {
         appendTextObject({
-          id: createdObjectId,
-          x: initialDrawingPositionRef.current.x,
-          y: initialDrawingPositionRef.current.y,
-          width: 200,
-          height: 100,
-          text: 'Add text',
-          textAlignHorizontal: 'center',
-          textAlignVertical: 'middle',
-          textJustify: false,
-          fontSize: 44,
-          fontFamily: 'sans-serif',
-          fontStyle: 'normal',
-          fontWeight: 'normal',
-          fontVariant: 'normal',
-          fontLineHeightRatio: 1,
-          fontColorHex: selectedColor,
-          opacity: 100
+          ...commonObjectProperties,
+          textOpts
         })
+
         setActiveObjectId(createdObjectId)
         setUserMode('select')
         setActionMode(null)
@@ -448,7 +386,7 @@ export default function SketchDraw() {
       case 'highlighter':
       case 'eraser': {
         if (activeObjectId) {
-          appendFreeDrawPointToCanvasObject(activeObjectId, {
+          appendPointToCanvasObject(activeObjectId, {
             x: finalX,
             y: finalY
           })
@@ -507,8 +445,8 @@ export default function SketchDraw() {
       case 'eraser': {
         context.closePath()
         if (activeObject) {
-          const dimensions = getDimensionsFromFreeDraw({
-            freeDrawObject: activeObject
+          const dimensions = getDimensionsFromPointObject({
+            obj: activeObject
           })
           updateCanvasObject(activeObject.id, {
             width: dimensions.width,

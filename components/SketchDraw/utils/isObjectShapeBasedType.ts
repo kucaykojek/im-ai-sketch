@@ -1,6 +1,6 @@
-import { CanvasObjectType } from '../data/types'
+import { CanvasObjectType } from '@/sketch-draw/data/types'
 
-export default function isShapeBasedType(
+export default function isObjectShapeBasedType(
   type: Omit<CanvasObjectType, 'select'>
 ) {
   return ['circle', 'square', 'triangle'].includes(type as string)

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { ICON_OPTIONS_DEFAULT } from '../../data/constants'
-import { IconOptions } from '../../data/types'
+import { ICON_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { IconOptions } from '@/sketch-draw/data/types'
 
 const useIconOptions = create<{
   options: IconOptions

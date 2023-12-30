@@ -1,15 +1,15 @@
 import svgPathBbox from 'svg-path-bbox'
 
-import type { CanvasObject, ObjectDimensions } from '../data/types'
+import type { CanvasObject, ObjectDimensions } from '@/sketch-draw/data/types'
 
 const DEFAULT_ICON_WIDTH = 100
 
-export default function getDimensionsFromSVGIconObject({
+export default function getDimensionsFromIconObject({
   iconObject,
   context,
   initialIconWidth = DEFAULT_ICON_WIDTH
 }: {
-  iconObject: Pick<CanvasObject, 'x' | 'y' | 'width' | 'height' | 'svgPath'>
+  iconObject: Pick<CanvasObject, 'x' | 'y' | 'width' | 'height' | 'iconOpts'>
   context: CanvasRenderingContext2D | null
   initialIconWidth?: number
 }): ObjectDimensions & {
@@ -35,7 +35,9 @@ export default function getDimensionsFromSVGIconObject({
     }
   }
 
-  const [svgX, svgY, svgWidth, svgHeight] = svgPathBbox(iconObject.svgPath)
+  const [svgX, svgY, svgWidth, svgHeight] = svgPathBbox(
+    iconObject.iconOpts!.svgPath
+  )
 
   const widthRatio = iconObject.width / (svgWidth - svgX)
   const heightRatio = iconObject.height / (svgHeight - svgY)

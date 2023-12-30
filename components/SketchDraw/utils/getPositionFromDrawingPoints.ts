@@ -1,15 +1,15 @@
-import type { CanvasObject } from '../data/types'
+import type { CanvasObject } from '@/sketch-draw/data/types'
 
 export default function getPositionFromDrawingPoints({
-  freeDrawPoints
+  points
 }: {
-  freeDrawPoints: CanvasObject['freeDrawPoints']
+  points: CanvasObject['points']
 }): {
   x: number
   y: number
 } {
   return {
-    x: Math.min(...freeDrawPoints.map((point) => point.x)),
-    y: Math.min(...freeDrawPoints.map((point) => point.y))
+    x: Math.min(...points!.map((point) => point.x)),
+    y: Math.min(...points!.map((point) => point.y))
   }
 }

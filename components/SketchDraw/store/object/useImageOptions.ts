@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-import { IMAGE_OPTIONS_DEFAULT } from '../../data/constants'
-import { ImageOptions } from '../../data/types'
+import { IMAGE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
+import { ImageOptions } from '@/sketch-draw/data/types'
 
 const useImageOptions = create<{
   options: ImageOptions

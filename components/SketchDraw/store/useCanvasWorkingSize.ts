@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { CanvasWorkingSize } from '../data/types'
+import type { CanvasWorkingSize } from '@/sketch-draw/data/types'
 
 const DEFAULT_CANVAS_WORKING_SIZE = {
   width: 500,
