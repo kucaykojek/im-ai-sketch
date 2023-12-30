@@ -1,4 +1,4 @@
-import { CANVAS_ID } from '@/sketch-draw/data/constants'
+import { CANVAS_ID, PRIMARY_COLOR_HEX } from '@/sketch-draw/data/constants'
 import type {
   ActionMode,
   CanvasObject,
@@ -142,7 +142,7 @@ export default function canvasDrawEverything({
 
       canvasOverlayContext.lineWidth = 2
       canvasOverlayContext.strokeStyle = hexToRgba({
-        hex: '#ffc40c',
+        hex: PRIMARY_COLOR_HEX,
         opacity: 80
       })
       canvasOverlayContext.strokeRect(
@@ -153,7 +153,7 @@ export default function canvasDrawEverything({
       )
       canvasOverlayContext.setLineDash([0, 0])
       canvasOverlayContext.fillStyle = hexToRgba({
-        hex: '#ffc40c',
+        hex: PRIMARY_COLOR_HEX,
         opacity: 100
       })
       ;[

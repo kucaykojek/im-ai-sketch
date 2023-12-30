@@ -10,7 +10,8 @@ export default function saveObjectsToStorage(obj: CanvasObject[]) {
     const filteredObjects = obj.filter(
       (val) =>
         (isObjectPointBasedType(val.type) && val.points!.length > 1) ||
-        (isObjectShapeBasedType(val.type) && val.width > 0 && val.height > 8)
+        (isObjectShapeBasedType(val.type) && val.width > 0 && val.height > 8) ||
+        val.type === 'text'
     )
 
     localStorage.setItem(OBJECTS_STORAGE_KEY, JSON.stringify(filteredObjects))

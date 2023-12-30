@@ -37,7 +37,7 @@ const PencilOptions = () => {
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
-          <label>Thickness</label>
+          <div className={style.optionsItemLabel}>Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
               id="pencil-options-stroke-thickness"
@@ -53,7 +53,7 @@ const PencilOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Opacity</label>
+          <div className={style.optionsItemLabel}>Opacity</div>
           <div className={style.optionsControl}>
             <SliderRange
               id="pencil-options-opacity"
@@ -67,7 +67,7 @@ const PencilOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Color</label>
+          <div className={style.optionsItemLabel}>Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
               id="pencil-options-color"

@@ -233,14 +233,16 @@ const useCanvasObjects = create<{
               y: existing.y + delta.deltaY,
               width: existing.width - delta.deltaX,
               height: existing.height - delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x - (point.x - existing.x) * growthRatioX,
-                  y: point.y - (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x - (point.x - existing.x) * growthRatioX,
+                      y: point.y - (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -249,13 +251,15 @@ const useCanvasObjects = create<{
               ...existing,
               y: existing.y + delta.deltaY,
               height: existing.height - delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x,
-                  y: point.y - (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x,
+                      y: point.y - (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -265,14 +269,16 @@ const useCanvasObjects = create<{
               width: existing.width + delta.deltaX,
               y: existing.y + delta.deltaY,
               height: existing.height - delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x + (point.x - existing.x) * growthRatioX,
-                  y: point.y - (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x + (point.x - existing.x) * growthRatioX,
+                      y: point.y - (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -281,13 +287,15 @@ const useCanvasObjects = create<{
               ...existing,
               x: existing.x + delta.deltaX,
               width: existing.width - delta.deltaX,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                return {
-                  x: point.x - (point.x - existing.x) * growthRatioX,
-                  y: point.y
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    return {
+                      x: point.x - (point.x - existing.x) * growthRatioX,
+                      y: point.y
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -295,13 +303,15 @@ const useCanvasObjects = create<{
             result = {
               ...existing,
               width: existing.width + delta.deltaX,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                return {
-                  x: point.x + (point.x - existing.x) * growthRatioX,
-                  y: point.y
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    return {
+                      x: point.x + (point.x - existing.x) * growthRatioX,
+                      y: point.y
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -311,14 +321,16 @@ const useCanvasObjects = create<{
               x: existing.x + delta.deltaX,
               width: existing.width - delta.deltaX,
               height: existing.height + delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x - (point.x - existing.x) * growthRatioX,
-                  y: point.y + (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x - (point.x - existing.x) * growthRatioX,
+                      y: point.y + (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -326,13 +338,15 @@ const useCanvasObjects = create<{
             result = {
               ...existing,
               height: existing.height + delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x,
-                  y: point.y + (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points!.map((point) => {
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x,
+                      y: point.y + (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }
@@ -342,14 +356,16 @@ const useCanvasObjects = create<{
               ...existing,
               width: existing.width + delta.deltaX,
               height: existing.height + delta.deltaY,
-              points: existing.points!.map((point) => {
-                const growthRatioX = delta.deltaX / existing.width
-                const growthRatioY = delta.deltaY / existing.height
-                return {
-                  x: point.x + (point.x - existing.x) * growthRatioX,
-                  y: point.y + (point.y - existing.y) * growthRatioY
-                }
-              })
+              points: existing.points
+                ? existing.points.map((point) => {
+                    const growthRatioX = delta.deltaX / existing.width
+                    const growthRatioY = delta.deltaY / existing.height
+                    return {
+                      x: point.x + (point.x - existing.x) * growthRatioX,
+                      y: point.y + (point.y - existing.y) * growthRatioY
+                    }
+                  })
+                : undefined
             }
             break
           }

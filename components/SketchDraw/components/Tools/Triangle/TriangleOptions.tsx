@@ -49,7 +49,7 @@ const TriangleOptions = () => {
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
-          <label>Type</label>
+          <div className={style.optionsItemLabel}>Type</div>
           <div className={style.optionsControl}>
             <div className="flex items-center text-xs rounded overflow-hidden">
               <button
@@ -76,7 +76,7 @@ const TriangleOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Background</label>
+          <div className={style.optionsItemLabel}>Background</div>
           <div className={style.optionsControl}>
             <ColorPicker
               id="triangle-options-fill-color"
@@ -87,7 +87,7 @@ const TriangleOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Border Thickness</label>
+          <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
               id="triangle-options-stroke-thickness"
@@ -103,7 +103,7 @@ const TriangleOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Border Color</label>
+          <div className={style.optionsItemLabel}>Border Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
               id="triangle-options-stroke-color"

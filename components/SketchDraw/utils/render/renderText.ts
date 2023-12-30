@@ -19,8 +19,15 @@ export default function renderText({
 
     canvasTxt.debug = false
 
+    canvasTxt.justify = false
+    canvasTxt.align = 'center'
+    canvasTxt.vAlign = 'middle'
     canvasTxt.fontSize = opts.fontSize
     canvasTxt.font = opts.fontFamily
+    canvasTxt.fontStyle = 'normal'
+    canvasTxt.fontVariant = 'normal'
+    canvasTxt.fontWeight = 'normal'
+    canvasTxt.lineHeight = 1 * opts.fontSize
 
     canvasTxt.drawText(context, opts.text, x, y, width, height)
 

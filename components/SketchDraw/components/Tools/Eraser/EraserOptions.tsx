@@ -20,7 +20,7 @@ const EraserOptions = () => {
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
-          <label>Thickness</label>
+          <div className={style.optionsItemLabel}>Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
               id="eraser-options-stroke-thickness"

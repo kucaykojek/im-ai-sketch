@@ -15,6 +15,7 @@ const Topbar = () => {
       <div className={style.topbarContainer}>
         <input
           type="text"
+          name="prompt"
           value={prompt}
           placeholder="Try: SpongeBob dried up in the middle of the desert"
           className="w-full outline-none border-2 border-neutral-200 focus:border-primary py-1.5 pl-4 rounded-lg"

@@ -14,6 +14,7 @@ import {
 export const CANVAS_ID: string = 'im-aisketch-canvas'
 export const OBJECTS_STORAGE_KEY = 'im-sd-objects'
 export const BG_STORAGE_KEY = 'im-sd-bg'
+export const PRIMARY_COLOR_HEX = '#ffc40c'
 
 export const PALETTE_COLORS: string[] = [
   '#000000',

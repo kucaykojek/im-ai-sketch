@@ -40,6 +40,7 @@ const TextOptions = () => {
           <div className={style.optionsControl}>
             <input
               type="text"
+              name="text"
               value={options.text}
               className="outline-none border-2 border-neutral-200 px-2 h-10 rounded focus:border-primary"
               onChange={(e) => handleChange(e, 'text')}
@@ -47,7 +48,7 @@ const TextOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Font Color</label>
+          <div className={style.optionsItemLabel}>Font Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
               id="text-options-color"
@@ -57,7 +58,7 @@ const TextOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Font Size</label>
+          <div className={style.optionsItemLabel}>Font Size</div>
           <div className={style.optionsControl}>
             <SliderRange
               id="text-options-stroke-thickness"

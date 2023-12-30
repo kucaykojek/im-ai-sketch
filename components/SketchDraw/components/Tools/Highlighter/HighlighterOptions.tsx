@@ -37,7 +37,7 @@ const HighlighterOptions = () => {
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
-          <label>Thickness</label>
+          <div className={style.optionsItemLabel}>Thickness</div>
           <div
             className={cn(style.optionsControl, 'flex items-center space-x-2')}
           >
@@ -55,7 +55,7 @@ const HighlighterOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Opacity</label>
+          <div className={style.optionsItemLabel}>Opacity</div>
           <div
             className={cn(style.optionsControl, 'flex items-center space-x-2')}
           >
@@ -71,7 +71,7 @@ const HighlighterOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Color</label>
+          <div className={style.optionsItemLabel}>Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
               id="highlighter-options-color"

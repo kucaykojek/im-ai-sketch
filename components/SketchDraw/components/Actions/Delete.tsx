@@ -16,7 +16,6 @@ const Delete = () => {
 
     // Save to local storage
     saveObjectsToStorage([])
-    saveObjectsToStorage([])
   }
 
   return (

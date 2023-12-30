@@ -55,8 +55,8 @@
 .optionsItem {
   @apply mr-4 pl-4 flex flex-col justify-between shrink-0 grow w-max;
 }
-.optionsItem > label {
-  @apply block text-xs font-medium;
+.optionsItemLabel {
+  @apply text-xs font-medium;
 }
 .optionsControl {
   @apply flex h-8 items-center space-x-2;

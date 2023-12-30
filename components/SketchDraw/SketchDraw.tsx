@@ -188,7 +188,7 @@ export default function SketchDraw() {
               (canvasObject) => canvasObject.id === clickedObject?.id
             )
 
-            // TODO: set selected options
+            // set options for selected object
             if (canvasObject) {
               setSelectedOptions(canvasObject)
             }
@@ -290,6 +290,8 @@ export default function SketchDraw() {
       case 'text': {
         appendTextObject({
           ...commonObjectProperties,
+          width: 200,
+          height: 100,
           textOpts
         })
 
