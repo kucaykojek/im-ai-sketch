@@ -1,0 +1,9 @@
+.sidebar {
+  @apply absolute bg-white rounded-lg shadow p-2 space-y-2;
+}
+.sidebar button {
+  @apply flex items-center justify-center w-8 h-8 rounded hover:bg-neutral-100 active:!bg-white disabled:text-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed outline-none cursor-pointer;
+}
+.sidebar button svg {
+  @apply w-5 h-5;
+}

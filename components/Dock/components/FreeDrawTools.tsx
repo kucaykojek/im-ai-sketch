@@ -17,8 +17,8 @@ const FreeDrawTools = () => {
       <button
         className={cn(
           style.toolGroupButton,
-          '!text-branding-pink hover:!bg-branding-pink hover:!text-white',
-          isActive && '!bg-branding-pink !text-white'
+          '!text-branding-cyan hover:!bg-branding-cyan hover:!text-white',
+          isActive && '!bg-branding-cyan !text-white'
         )}
         title="Freehand"
         onClick={() => setIsActive(!isActive)}

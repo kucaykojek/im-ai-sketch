@@ -36,12 +36,6 @@ const ColorTools = () => {
           )}
         </div>
       </div>
-
-      {canvasRef ? (
-        <Tools.Background />
-      ) : (
-        <div className="animate-pulse rounded-full bg-neutral-300 h-8 w-8"></div>
-      )}
     </>
   )
 }

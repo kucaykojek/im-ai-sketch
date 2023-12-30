@@ -1,6 +1,6 @@
-import GenerationAdditionalTools from './AdditionalTools'
 import GenerationResult from './GenerationResult'
+import * as Actions from './components/Actions'
 
-export { GenerationResult, GenerationAdditionalTools }
+export { GenerationResult, Actions }
 
 export default GenerationResult

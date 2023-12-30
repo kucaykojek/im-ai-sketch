@@ -1,9 +1,10 @@
-import Background from './Colors/Background'
-import Palette from './Colors/Palette'
-import Picker from './Colors/Picker'
+import Palette from './Color/Palette'
+import Picker from './Color/Picker'
 import Eraser from './FreeDraw/Eraser'
 import Highlighter from './FreeDraw/Highlighter'
 import Pencil from './FreeDraw/Pencil'
+import Image from './Other/Image'
+import Text from './Other/Text'
 import Circle from './Shape/Circle'
 import Square from './Shape/Square'
 import Triangle from './Shape/Triangle'
@@ -15,7 +16,8 @@ export {
   Circle,
   Square,
   Triangle,
-  Background,
   Palette,
-  Picker
+  Picker,
+  Image,
+  Text
 }

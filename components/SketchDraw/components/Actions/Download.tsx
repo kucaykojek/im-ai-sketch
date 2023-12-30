@@ -22,6 +22,7 @@ const Download = () => {
 
   return (
     <button
+      title="Download"
       disabled={!canvasRef}
       className={style.action}
       onClick={handleDownloadClick}

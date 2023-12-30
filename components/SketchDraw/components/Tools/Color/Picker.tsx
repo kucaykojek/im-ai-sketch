@@ -40,8 +40,8 @@ const Picker = () => {
       <input
         id="colorPicker"
         type="color"
-        onChange={handleChange}
         disabled={!canvasRef}
+        onChange={handleChange}
       />
     </label>
   )

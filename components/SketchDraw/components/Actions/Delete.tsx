@@ -15,12 +15,14 @@ const Delete = () => {
 
     // Save to local storage
     saveObjectsToStorage([])
+    saveObjectsToStorage([])
   }
 
   return (
     <button
-      disabled={!canvasRef}
+      title="Clear Canvas"
       className={mergeClass(style.action, 'text-red-500')}
+      disabled={!canvasRef}
       onClick={handleDeleteClick}
     >
       <Trash2Icon />
