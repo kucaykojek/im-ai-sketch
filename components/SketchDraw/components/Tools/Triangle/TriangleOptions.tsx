@@ -1,15 +1,20 @@
 import { TriangleIcon } from 'lucide-react'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import { ShapeType } from '@/sketch-draw/data/types'
 import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
+import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
 import { cn } from '@/sketch-draw/utils/common'
+import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const TriangleOptions = () => {
   const { options, setOptions } = useTriangleOptions()
+  const { activeObjectId } = useActiveObjectId()
+  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
     setOptions({ ...options, [key]: e.target.value })
@@ -25,6 +30,16 @@ const TriangleOptions = () => {
           : options.strokeThickness
     })
   }
+
+  useEffect(() => {
+    // Update canvas object
+    if (
+      !!activeObjectId &&
+      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'triangle'
+    ) {
+      updateCanvasObject(activeObjectId, { triangleOpts: options })
+    }
+  }, [options])
 
   return (
     <div className={style.toolOptions}>
@@ -72,7 +87,7 @@ const TriangleOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Border</label>
+          <label>Border Thickness</label>
           <div className={style.optionsControl}>
             <SliderRange
               id="triangle-options-stroke-thickness"
@@ -85,6 +100,11 @@ const TriangleOptions = () => {
             <div className="text-xs font-medium w-4">
               {options.strokeThickness}
             </div>
+          </div>
+        </div>
+        <div className={cn(style.optionsItem, 'border-l')}>
+          <label>Border Color</label>
+          <div className={style.optionsControl}>
             <ColorPicker
               id="triangle-options-stroke-color"
               color={options.strokeColorHex}

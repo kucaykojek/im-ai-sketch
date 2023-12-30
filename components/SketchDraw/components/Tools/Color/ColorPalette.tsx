@@ -9,14 +9,17 @@ import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
 import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
 import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
 import useCanvasObjectColor from '@/sketch-draw/store/useCanvasObjectColor'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
 import useUserMode from '@/sketch-draw/store/useUserMode'
 import { cn } from '@/sketch-draw/utils/common'
+import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const ColorPalette = () => {
   const { userMode } = useUserMode()
   const { isReady } = useSketchDrawContext()
   const { objectColor, setObjectColor } = useCanvasObjectColor()
   const { activeObjectId } = useActiveObjectId()
+  const { canvasObjects } = useCanvasObjects()
 
   const { options: highlighterOptions, setOptions: setHighlighterOptions } =
     useHighlighterOptions()
@@ -35,12 +38,14 @@ const ColorPalette = () => {
   const handleSetColor = (color: string) => {
     setObjectColor(color)
 
-    // TODO: update color options
-    if (activeObjectId) {
-    }
+    // drawing or selection
+    const objectType = activeObjectId
+      ? getCanvasObjectById(activeObjectId, canvasObjects)?.type || userMode
+      : userMode
 
-    if (!['select', 'image', 'icon'].includes(userMode)) {
-      switch (userMode) {
+    // Update tools options
+    if (!['select', 'image', 'icon'].includes(objectType)) {
+      switch (objectType) {
         case 'pencil':
           setPencilOptions({ ...pencilOptions, strokeColorHex: color })
           break
@@ -89,8 +94,6 @@ const ColorPalette = () => {
 
         default:
           break
-      }
-      if (['pencil', 'highlighter'].includes(userMode)) {
       }
     }
   }

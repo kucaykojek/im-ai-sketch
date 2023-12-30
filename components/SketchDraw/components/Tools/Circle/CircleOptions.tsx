@@ -1,15 +1,20 @@
 import { CircleIcon } from 'lucide-react'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import { ShapeType } from '@/sketch-draw/data/types'
 import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
+import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
 import { cn } from '@/sketch-draw/utils/common'
+import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const CircleOptions = () => {
   const { options, setOptions } = useCircleOptions()
+  const { activeObjectId } = useActiveObjectId()
+  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
     setOptions({ ...options, [key]: e.target.value })
@@ -25,6 +30,16 @@ const CircleOptions = () => {
           : options.strokeThickness
     })
   }
+
+  useEffect(() => {
+    // Update canvas object
+    if (
+      !!activeObjectId &&
+      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'circle'
+    ) {
+      updateCanvasObject(activeObjectId, { circleOpts: options })
+    }
+  }, [options])
 
   return (
     <div className={style.toolOptions}>
@@ -72,7 +87,7 @@ const CircleOptions = () => {
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
-          <label>Border</label>
+          <label>Border Thickness</label>
           <div className={style.optionsControl}>
             <SliderRange
               id="circle-options-stroke-thickness"
@@ -85,6 +100,11 @@ const CircleOptions = () => {
             <div className="text-xs font-medium w-4">
               {options.strokeThickness}
             </div>
+          </div>
+        </div>
+        <div className={cn(style.optionsItem, 'border-l')}>
+          <label>Border Color</label>
+          <div className={style.optionsControl}>
             <ColorPicker
               id="circle-options-stroke-color"
               color={options.strokeColorHex}

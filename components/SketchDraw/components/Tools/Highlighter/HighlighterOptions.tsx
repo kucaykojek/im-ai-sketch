@@ -1,18 +1,34 @@
 import { HighlighterIcon } from 'lucide-react'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import useHighlighterOptions from '@/sketch-draw/store/object/useHighlighterOptions'
+import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
+import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
 import { cn } from '@/sketch-draw/utils/common'
+import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const HighlighterOptions = () => {
   const { options, setOptions } = useHighlighterOptions()
+  const { activeObjectId } = useActiveObjectId()
+  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
     setOptions({ ...options, [key]: e.target.value })
   }
+
+  useEffect(() => {
+    // Update canvas object
+    if (
+      !!activeObjectId &&
+      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'highlighter'
+    ) {
+      updateCanvasObject(activeObjectId, { highlighterOpts: options })
+    }
+  }, [options])
+
   return (
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
