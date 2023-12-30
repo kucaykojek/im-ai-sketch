@@ -55,7 +55,7 @@ export default function SketchDraw() {
     appendSquareObject,
     appendTriangleObject,
     appendTextObject,
-    appendPointToCanvasObject,
+    addPointToCanvasObject,
     moveCanvasObject,
     resizeCanvasObject
   } = useCanvasObjects()
@@ -402,7 +402,7 @@ export default function SketchDraw() {
       case 'highlighter':
       case 'eraser': {
         if (activeObjectId) {
-          appendPointToCanvasObject(activeObjectId, {
+          addPointToCanvasObject(activeObjectId, {
             x: finalX,
             y: finalY
           })

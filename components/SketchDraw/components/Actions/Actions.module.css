@@ -1,5 +1,5 @@
 .action {
-  @apply flex items-center justify-center w-8 h-8 rounded hover:bg-neutral-200 active:!bg-white disabled:text-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed outline-none cursor-pointer;
+  @apply flex items-center justify-center w-8 h-8 rounded hover:bg-neutral-200 active:!bg-white disabled:text-neutral-300 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-white outline-none cursor-pointer;
 }
 .action svg {
   @apply w-5 h-5;

@@ -2,7 +2,7 @@
   @apply inline-flex items-center justify-center w-8 h-8 p-1 bg-inherit hover:bg-neutral-100 rounded outline-none;
 }
 .tool:disabled {
-  @apply cursor-not-allowed pointer-events-none text-neutral-400;
+  @apply cursor-not-allowed pointer-events-none text-neutral-300;
 }
 .toolActive {
   @apply bg-primary hover:bg-primary;

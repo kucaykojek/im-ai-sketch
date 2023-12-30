@@ -1,10 +1,9 @@
 'use client'
 
-import Image from 'next/image'
-
 import Dock from '@/components/Dock'
 import GenerationResult, {
-  Actions as GenerationActions
+  Actions as GenerationActions,
+  Thumbnails as GenerationThumbnails
 } from '@/components/GenerationResult'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import SketchDraw, {
@@ -21,12 +20,13 @@ export default function Home() {
       <main>
         <div className="drawing-wrapper">
           <Sidebar position="left">
+            <SketchActions.New />
+            <SketchActions.Background />
+            <hr />
             <SketchActions.Select />
-            <SketchActions.Undo />
-            <SketchActions.Redo />
+            <SketchActions.Duplicate />
             <SketchActions.Delete />
             <hr />
-            <SketchActions.Background />
             <SketchActions.Download />
           </Sidebar>
 
@@ -37,20 +37,8 @@ export default function Home() {
             <GenerationActions.Enhance />
             <GenerationActions.Regenerate />
             <hr />
-            <Image
-              src="https://placehold.co/50x50/png"
-              alt=""
-              width="50"
-              height="50"
-              className="w-8 h-8 rounded border-2 border-primary"
-            />
-            <Image
-              src="https://placehold.co/50x50/png"
-              alt=""
-              width="50"
-              height="50"
-              className="w-8 h-8 rounded"
-            />
+            <GenerationThumbnails />
+            <hr />
             <GenerationActions.Download />
           </Sidebar>
 

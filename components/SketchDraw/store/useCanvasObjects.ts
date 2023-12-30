@@ -54,7 +54,7 @@ const useCanvasObjects = create<{
 
   // Object
   updateCanvasObject: (_id: string, _obj: Partial<CanvasObject>) => void
-  deleteCanvasObject: (_: string) => void
+  deleteCanvasObject: (_id: string) => void
   moveCanvasObject: (_: {
     id: string
     deltaPosition: { deltaX: number; deltaY: number }
@@ -69,7 +69,7 @@ const useCanvasObjects = create<{
 
   // Helper
   setObjectLayerIndex: (_id: string, _layerIndex: number) => void
-  appendPointToCanvasObject: (
+  addPointToCanvasObject: (
     _id: string,
     _point: { x: number; y: number }
   ) => void
@@ -391,7 +391,7 @@ const useCanvasObjects = create<{
         })
       }
     }),
-  appendPointToCanvasObject(id, point) {
+  addPointToCanvasObject(id, point) {
     set((state) => {
       const { x, y } = getPositionFromDrawingPoints({
         points: [

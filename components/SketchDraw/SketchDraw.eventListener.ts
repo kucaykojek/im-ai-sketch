@@ -8,16 +8,17 @@ import useCanvasObjects from './store/useCanvasObjects'
 import useCanvasWorkingSize from './store/useCanvasWorkingSize'
 import useContainerSize from './store/useContainerSize'
 import useUserMode from './store/useUserMode'
+import saveObjectsToStorage from './utils/saveObjectsToStorage'
 
 export default function SketchDrawEventListeners() {
   const { containerRef, initCanvas, drawEverything } = useSketchDrawContext()
 
-  const { activeObjectId } = useActiveObjectId()
+  const { activeObjectId, setActiveObjectId } = useActiveObjectId()
   const { userMode, setUserMode } = useUserMode()
   const { setCanvasWorkingWidth, setCanvasWorkingHeight } =
     useCanvasWorkingSize()
   const { setContainerSize } = useContainerSize()
-  const { deleteCanvasObject } = useCanvasObjects()
+  const { canvasObjects, deleteCanvasObject } = useCanvasObjects()
 
   // Set initial window size
   useEffect(() => {
@@ -77,6 +78,14 @@ export default function SketchDrawEventListeners() {
       const deleteKeys: KeyboardEvent['key'][] = ['Backspace', 'Delete']
       if (deleteKeys.includes(event.key) && !isInputFocused && activeObjectId) {
         deleteCanvasObject(activeObjectId)
+        setActiveObjectId(null)
+
+        // BEGIN: update storage
+        const filtedCanvasObjects = canvasObjects.filter(
+          (obj) => obj.id !== activeObjectId
+        )
+        saveObjectsToStorage(filtedCanvasObjects)
+        // END: update storage
       }
     }
 
@@ -84,7 +93,7 @@ export default function SketchDrawEventListeners() {
     return () => {
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [activeObjectId, deleteCanvasObject])
+  }, [activeObjectId, canvasObjects, deleteCanvasObject, setActiveObjectId])
 
   // Beforeunload event
   useEffect(() => {

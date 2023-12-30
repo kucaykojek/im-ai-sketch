@@ -1,29 +1,42 @@
 import { Trash2Icon } from 'lucide-react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
+import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
 import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import { cn } from '@/sketch-draw/utils/common'
 import saveObjectsToStorage from '@/sketch-draw/utils/saveObjectsToStorage'
 
 import style from './Actions.module.css'
 
 const Delete = () => {
   const { isReady } = useSketchDrawContext()
-  const { resetCanvasObjects } = useCanvasObjects()
+  const { activeObjectId, setActiveObjectId } = useActiveObjectId()
+  const { canvasObjects, deleteCanvasObject } = useCanvasObjects()
+
+  const disabled = !isReady || !activeObjectId
 
   const handleDeleteClick = () => {
-    resetCanvasObjects()
+    if (!activeObjectId) {
+      return
+    }
 
-    // Save to local storage
-    saveObjectsToStorage([])
+    // BEGIN: update storage
+    // for saving to storage so don't have to listen of canvasObjects changes
+    const filtedCanvasObjects = canvasObjects.filter(
+      (obj) => obj.id !== activeObjectId
+    )
+    saveObjectsToStorage(filtedCanvasObjects)
+    // END: update storage
+
+    deleteCanvasObject(activeObjectId)
+    setActiveObjectId(null)
   }
 
   return (
     <button
       type="button"
-      title="Clear Canvas"
-      className={cn(style.action, 'text-red-500')}
-      disabled={!isReady}
+      title="Delete"
+      className={style.action}
+      disabled={disabled}
       onClick={handleDeleteClick}
     >
       <Trash2Icon />
