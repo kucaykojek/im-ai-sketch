@@ -12,7 +12,8 @@ import { CANVAS_ID } from './data/constants'
 import type {
   ActionModeOption,
   CanvasObject,
-  CommonObjectProperties
+  CommonObjectProperties,
+  ImageObject
 } from './data/types'
 import useCircleOptions from './store/object/useCircleOptions'
 import useEraserOptions from './store/object/useEraserOptions'
@@ -31,6 +32,7 @@ import generateUniqueId from './utils/generateUniqueId'
 import getControlPoints from './utils/getControlPoints'
 import getCursorFromModes from './utils/getCursorFromModes'
 import getDimensionsFromPointObject from './utils/getDimensionsFromPointObject'
+import getImageElementFromUrl from './utils/getImageElementFromUrl'
 import getRelativeMousePositionOnCanvas from './utils/getRelativeMousePositionOnCanvas'
 import isCursorWithinRectangle from './utils/isCursorWithinRectangle'
 import saveObjectsToStorage from './utils/saveObjectsToStorage'
@@ -90,6 +92,23 @@ export default function SketchDraw() {
   const activeObject = canvasObjects.find(
     (canvasObject) => canvasObject.id === activeObjectId
   )
+
+  const reviveImageElement = async (imageObject: ImageObject) => {
+    if (imageObject.id && imageObject.imageOpts?.imageUrl) {
+      const imageElement = await getImageElementFromUrl(
+        imageObject.imageOpts.imageUrl
+      )
+
+      if (imageObject.id && imageElement) {
+        updateCanvasObject(imageObject.id, {
+          imageOpts: {
+            ...imageObject.imageOpts,
+            imageElement
+          }
+        })
+      }
+    }
+  }
 
   // On pointer down
   const onPointerDown = (event: PointerOrTouchEvent) => {
@@ -189,6 +208,15 @@ export default function SketchDraw() {
               (canvasObject) => canvasObject.id === clickedObject?.id
             )
 
+            // Revive image element for better canvas draw
+            if (
+              canvasObject?.type === 'image' &&
+              !canvasObject?.imageOpts?.imageElement &&
+              !!canvasObject?.imageOpts?.imageUrl
+            ) {
+              reviveImageElement(canvasObject as ImageObject)
+            }
+
             // set options for selected object
             if (canvasObject) {
               setSelectedOptions(canvasObject)
@@ -206,6 +234,7 @@ export default function SketchDraw() {
             setActionMode({ type: 'isPanning' })
           }
         }
+
         drawEverything()
         break
       }

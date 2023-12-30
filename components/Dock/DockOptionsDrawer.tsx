@@ -2,6 +2,7 @@ import {
   CircleOptions,
   EraserOptions,
   HighlighterOptions,
+  ImageOptions,
   PencilOptions,
   SquareOptions,
   TextOptions,
@@ -35,6 +36,9 @@ const DockOptionsDrawer = () => {
       {selectedType === 'square' && <SquareOptions />}
       {selectedType === 'triangle' && <TriangleOptions />}
       {selectedType === 'text' && <TextOptions />}
+
+      {/* only upload */}
+      {selectedType === 'image' && userMode !== 'select' && <ImageOptions />}
     </div>
   )
 }

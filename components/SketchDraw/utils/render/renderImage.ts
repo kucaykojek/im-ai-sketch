@@ -1,6 +1,8 @@
 import type { ImageObject } from '@/sketch-draw/data/types'
 
-export default function renderImage({
+import getImageElementFromUrl from '../getImageElementFromUrl'
+
+export default async function renderImage({
   context,
   x,
   y,
@@ -9,9 +11,15 @@ export default function renderImage({
   imageOpts: opts
 }: {
   context: CanvasRenderingContext2D
-} & Omit<ImageObject, 'type'>): void {
-  if (opts?.imageElement) {
+} & Omit<ImageObject, 'type'>): Promise<void> {
+  if (opts?.imageUrl || opts?.imageElement) {
     context.globalAlpha = 1 // opacity
-    context.drawImage(opts.imageElement, x, y, width, height)
+
+    if (opts.imageElement) {
+      context.drawImage(opts.imageElement, x, y, width, height)
+    } else {
+      const imageElement = await getImageElementFromUrl(opts?.imageUrl)
+      context.drawImage(imageElement, x, y, width, height)
+    }
   }
 }

@@ -15,7 +15,11 @@ const GenerationResult = () => {
       canvasObjects.filter(
         (val) =>
           (isObjectPointBasedType(val.type) && val.points!.length > 1) ||
-          (isObjectShapeBasedType(val.type) && val.width > 0 && val.height > 8)
+          (isObjectShapeBasedType(val.type) &&
+            val.width > 0 &&
+            val.height > 8) ||
+          val.type === 'text' ||
+          val.type === 'image'
       ) || ''
 
     setStringSize(new Blob([JSON.stringify(filteredObjects)]).size)

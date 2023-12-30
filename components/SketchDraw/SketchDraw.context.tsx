@@ -81,14 +81,16 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
 
     // Restore from local storage
     if (localStorage) {
-      reviveCanvasObjects(
-        localStorage.getItem(OBJECTS_STORAGE_KEY)
-          ? JSON.parse(localStorage.getItem(OBJECTS_STORAGE_KEY)!)
-          : canvasObjects
-      )
+      const objectsOnStorage = localStorage.getItem(OBJECTS_STORAGE_KEY)
+
+      if (objectsOnStorage) {
+        reviveCanvasObjects(JSON.parse(objectsOnStorage))
+      }
+
       setCanvasBackgroundColor(
         localStorage.getItem(BG_STORAGE_KEY) || canvasBackgroundColor
       )
+
       setEraserOptions({
         ...eraserOptions,
         strokeColorHex:
