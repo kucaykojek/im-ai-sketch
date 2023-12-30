@@ -61,3 +61,6 @@
 .optionsControl {
   @apply flex h-8 items-center space-x-2;
 }
+.imageToolOptions {
+  @apply relative bg-white w-full;
+}

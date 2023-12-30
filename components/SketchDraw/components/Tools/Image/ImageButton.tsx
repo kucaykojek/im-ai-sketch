@@ -22,7 +22,7 @@ const ImageButton = () => {
       <button
         type="button"
         className={cn(style.tool, userMode === 'image' && style.toolActive)}
-        title="Text"
+        title="Image"
         disabled={!isReady}
         onClick={() => handleClick(userMode === 'image' ? 'select' : 'image')}
       >

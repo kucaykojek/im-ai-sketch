@@ -90,18 +90,14 @@ const ImageOptions = () => {
   }, [acceptedFiles, handleFileSelected])
 
   return (
-    <div className={style.toolOptions}>
-      <div className={style.optionsTitle}>
-        <ImageIcon />
-        Image
-      </div>
-      <div className={style.optionsWrapper}>
+    <div className={style.imageToolOptions}>
+      <div className={cn(style.optionsWrapper, 'flex-col !py-4 space-y-4')}>
         <div className={style.optionsItem}>
           <div
             {...getRootProps({ className: 'dropzone' })}
             className={cn(
-              'border-2 border-dashed rounded-lg p-2 cursor-pointer',
-              isError && 'border-red-600 text-red-600'
+              'border-2 border-dashed rounded-lg px-4 py-20 cursor-pointer w-[30rem] text-center',
+              isError && 'border-red-600 text-red-700'
             )}
           >
             <input {...getInputProps()} />
@@ -117,6 +113,10 @@ const ImageOptions = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className={cn(style.optionsTitle, 'p-4 justify-center')}>
+        <ImageIcon />
+        Image Selection
       </div>
     </div>
   )
