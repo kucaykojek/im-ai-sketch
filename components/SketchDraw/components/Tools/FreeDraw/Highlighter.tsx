@@ -16,7 +16,9 @@ const ToolsHighlighter = () => {
         )}
         title="Highlighter"
         disabled={disabled}
-        onClick={() => handleClick(userMode === 'highlighter' ? 'select' : 'highlighter')}
+        onClick={() =>
+          handleClick(userMode === 'highlighter' ? 'select' : 'highlighter')
+        }
       >
         <HighlighterIcon className={style.toolIcon} />
       </button>

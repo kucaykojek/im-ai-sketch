@@ -52,7 +52,10 @@ const ToolOptions = () => {
 
   return (
     <div className={cn(style.toolOptions, isActive && style.toolOptionsActive)}>
-      <div className="uppercase text-xs font-semibold mr-4">{userMode}{userMode === 'eraser' && ' / masking'}</div>
+      <div className="uppercase text-xs font-semibold mr-4">
+        {userMode}
+        {userMode === 'eraser' && ' / masking'}
+      </div>
       {shouldShowShapeOptions && (
         <div className="flex items-center text-sm font-medium rounded overflow-hidden">
           <button
