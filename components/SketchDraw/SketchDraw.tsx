@@ -9,7 +9,11 @@ import React, {
 import useSketchDrawContext from './SketchDraw.context'
 import SketchDrawEventListeners from './SketchDraw.eventListener'
 import { CANVAS_ID } from './data/constants'
-import type { ActionModeOption, CommonObjectProperties } from './data/types'
+import type {
+  ActionModeOption,
+  CanvasObject,
+  CommonObjectProperties
+} from './data/types'
 import useCircleOptions from './store/object/useCircleOptions'
 import useEraserOptions from './store/object/useEraserOptions'
 import useHighlighterOptions from './store/object/useHighlighterOptions'
@@ -62,13 +66,19 @@ export default function SketchDraw() {
   const { actionMode, setActionMode } = useActionMode()
 
   //
-  const { options: eraserOpts } = useEraserOptions()
-  const { options: pencilOpts } = usePencilOptions()
-  const { options: highlighterOpts } = useHighlighterOptions()
-  const { options: circleOpts } = useCircleOptions()
-  const { options: squareOpts } = useSquareOptions()
-  const { options: triangleOpts } = useTriangleOptions()
-  const { options: textOpts } = useTextOptions()
+  const { options: eraserOpts, setOptions: setEraserOptions } =
+    useEraserOptions()
+  const { options: pencilOpts, setOptions: setPencilOptions } =
+    usePencilOptions()
+  const { options: highlighterOpts, setOptions: setHighlighterOptions } =
+    useHighlighterOptions()
+  const { options: circleOpts, setOptions: setCircleOptions } =
+    useCircleOptions()
+  const { options: squareOpts, setOptions: setSquareOptions } =
+    useSquareOptions()
+  const { options: triangleOpts, setOptions: setTriangleOptions } =
+    useTriangleOptions()
+  const { options: textOpts, setOptions: setTextOptions } = useTextOptions()
 
   const zoom = 100
 
@@ -178,8 +188,9 @@ export default function SketchDraw() {
               (canvasObject) => canvasObject.id === clickedObject?.id
             )
 
-            // TODO: set Selected Options
+            // TODO: set selected options
             if (canvasObject) {
+              setSelectedOptions(canvasObject)
             }
           } else {
             setActiveObjectId(clickedObject?.id || null)
@@ -469,6 +480,36 @@ export default function SketchDraw() {
     }
 
     saveObjectsToStorage(canvasObjects)
+  }
+
+  // Helper
+  const setSelectedOptions = (obj: CanvasObject) => {
+    switch (obj.type) {
+      case 'eraser':
+        setEraserOptions(obj.eraserOpts! || eraserOpts)
+        break
+      case 'highlighter':
+        setHighlighterOptions(obj.highlighterOpts! || highlighterOpts)
+        break
+      case 'pencil':
+        setPencilOptions(obj.pencilOpts! || pencilOpts)
+        break
+      case 'circle':
+        setCircleOptions(obj.circleOpts! || circleOpts)
+        break
+      case 'square':
+        setSquareOptions(obj.squareOpts! || squareOpts)
+        break
+      case 'triangle':
+        setTriangleOptions(obj.triangleOpts! || triangleOpts)
+        break
+      case 'text':
+        setTextOptions(obj.textOpts! || textOpts)
+        break
+
+      default:
+        break
+    }
   }
 
   return (
