@@ -1,5 +1,6 @@
 'use client'
 
+import CanvasInfo from '@/components/CanvasInfo'
 import Dock from '@/components/Dock'
 import GenerationResult, {
   Actions as GenerationActions,
@@ -20,12 +21,12 @@ export default function Home() {
       <main>
         <div className="drawing-wrapper">
           <Sidebar position="left">
-            <SketchActions.New />
-            <SketchActions.Background />
-            <hr />
             <SketchActions.Select />
             <SketchActions.Duplicate />
             <SketchActions.Delete />
+            <hr />
+            <SketchActions.New />
+            <SketchActions.Background />
             <hr />
             <SketchActions.Download />
           </Sidebar>
@@ -47,6 +48,10 @@ export default function Home() {
       </main>
 
       <Dock />
+
+      {/* Debugger Components */}
+      <CanvasInfo />
+      {/* Debugger Components */}
     </SketchDrawProvider>
   )
 }

@@ -15,7 +15,7 @@ export default function saveObjectsToStorage(obj: CanvasObject[]) {
           (isObjectPointBasedType(val.type) && val.points!.length > 1) ||
           (isObjectShapeBasedType(val.type) &&
             val.width > 0 &&
-            val.height > 8) ||
+            val.height > 0) ||
           val.type === 'text' ||
           val.type === 'image'
       )

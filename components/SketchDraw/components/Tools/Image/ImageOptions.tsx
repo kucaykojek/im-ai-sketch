@@ -38,8 +38,8 @@ const ImageOptions = () => {
   const handleFileSelected = async (file: File) => {
     try {
       const result = await fileToBase64(file, {
-        width: canvasWorkingSize.width / 2,
-        height: canvasWorkingSize.height / 2
+        width: canvasWorkingSize.width,
+        height: canvasWorkingSize.height
       })
 
       if (result) {
@@ -63,8 +63,8 @@ const ImageOptions = () => {
     const createdObjectId = generateUniqueId()
     const imageObject = {
       id: createdObjectId,
-      x: canvasWorkingSize.width - width,
-      y: canvasWorkingSize.height - height,
+      x: (canvasWorkingSize.width - width) / 2, // center
+      y: (canvasWorkingSize.height - height) / 2, // center
       width: width,
       height: height,
       imageOpts: {
