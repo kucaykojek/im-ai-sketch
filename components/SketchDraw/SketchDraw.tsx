@@ -178,6 +178,7 @@ export default function SketchDraw() {
             relativeMouseX: initialDrawingPositionRef.current.x,
             relativeMouseY: initialDrawingPositionRef.current.y
           })
+
           const shouldClearSelection =
             !wasClickInsideWorkingCanvas && clickedObject?.id !== activeObjectId
 
@@ -193,7 +194,9 @@ export default function SketchDraw() {
               setSelectedOptions(canvasObject)
             }
           } else {
-            setActiveObjectId(clickedObject?.id || null)
+            setActiveObjectId(
+              shouldClearSelection ? null : clickedObject?.id || null
+            )
           }
 
           if (clickedObject) {
