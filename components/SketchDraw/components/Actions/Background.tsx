@@ -3,10 +3,10 @@ import { ChangeEvent } from 'react'
 import useSketchDrawContext from '../../SketchDraw.context'
 import useCanvasBackgroundColor from '../../store/useCanvasBackgroundColor'
 import useCanvasObjects from '../../store/useCanvasObjects'
+import isHexLight from '../../utils/isHexLight'
 import mergeClass from '../../utils/mergeClass'
 import saveBackgroundToStorage from '../../utils/saveBackgroundToStorage'
 import style from './Actions.module.css'
-import isHexLight from '../../utils/isHexLight'
 
 const Background = () => {
   const { canvasRef } = useSketchDrawContext()
@@ -39,7 +39,9 @@ const Background = () => {
         style.action,
         style.actionColorPicker,
         !canvasRef && 'opacity-50',
-        isHexLight(canvasBackgroundColor) ? 'text-neutral-800' : 'text-neutral-50'
+        isHexLight(canvasBackgroundColor)
+          ? 'text-neutral-800'
+          : 'text-neutral-50'
       )}
       style={{ backgroundColor: canvasBackgroundColor }}
     >
