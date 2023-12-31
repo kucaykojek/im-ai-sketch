@@ -51,7 +51,7 @@ const CanvasInfo = () => {
 
   return (
     <div className="fixed z-0 bottom-0 left-0 p-4">
-      <div className="font-normal text-xs text-neutral-400/70 text-right">
+      <div className="font-normal text-xs text-neutral-400/70 text-left">
         <div className="font-medium uppercase">Canvas Info</div>
         <p>
           Object:{' '}
