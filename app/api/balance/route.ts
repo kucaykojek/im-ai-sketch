@@ -1,7 +1,7 @@
 const apiKey = process.env.GETIMGAI_API_KEY
 const apiUrl = process.env.GETIMGAI_API_URL
 
-export async function POST(req: Request) {
+export async function GET() {
   if (!apiKey || !apiUrl) {
     return Response.json({
       status: 500,
@@ -9,20 +9,13 @@ export async function POST(req: Request) {
     })
   }
 
-  const { image, prompt, strength } = await req.json()
-
-  const response = await fetch(`${apiUrl}/stable-diffusion/image-to-image`, {
-    method: 'POST',
+  const response = await fetch(`${apiUrl}/account/balance`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-type': 'application/json',
       Authorization: `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      image,
-      prompt,
-      strength
-    })
+    }
   })
 
   const data = await response.json()

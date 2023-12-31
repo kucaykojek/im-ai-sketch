@@ -6,6 +6,7 @@ import GenerationResult, {
   Actions as GenerationActions,
   Thumbnails as GenerationThumbnails
 } from '@/components/GenerationResult'
+import GenerationInfo from '@/components/ResultInfo'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import SketchDraw, {
   Actions as SketchActions,
@@ -51,6 +52,7 @@ export default function Home() {
 
       {/* Debugger Components */}
       <CanvasInfo />
+      <GenerationInfo />
       {/* Debugger Components */}
     </SketchDrawProvider>
   )
