@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import useActionMode from '@/components/SketchDraw/store/useActionMode'
 import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
 import isObjectPointBasedType from '@/components/SketchDraw/utils/isObjectPointBasedType'
 import isObjectShapeBasedType from '@/components/SketchDraw/utils/isObjectShapeBasedType'
+import useAISketchStore from '@/store/ai-sketch.store'
 
 const CanvasInfo = () => {
   const [metadata, setMetadata] = useState({
@@ -14,6 +17,10 @@ const CanvasInfo = () => {
     image: 0,
     size: 0
   })
+  const { generating, payload, resultImage, setResultImage, setGenerating } =
+    useAISketchStore()
+  const { canvasRef } = useSketchDrawContext()
+  const { actionMode } = useActionMode()
   const { canvasObjects } = useCanvasObjects()
 
   useEffect(() => {
@@ -48,6 +55,47 @@ const CanvasInfo = () => {
       size: size > 2 ? size : 0
     })
   }, [canvasObjects])
+
+  // TEST GENERATE IMAGE -->
+  useEffect(() => {
+    if (!actionMode && canvasRef.current) {
+      generateImages(
+        canvasRef.current.toDataURL('image/jpeg').split(';base64,')[1]
+      )
+    }
+  }, [actionMode])
+
+  const generateImages = async (sourceImage: string) => {
+    if (generating || !payload.prompt || !!resultImage) {
+      return
+    }
+
+    setGenerating(true)
+
+    try {
+      const generate = await fetch('/api/generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...payload,
+          image: sourceImage
+        })
+      })
+
+      const {
+        data: { image }
+      } = await generate.json()
+
+      setResultImage(image)
+      if (localStorage) {
+        localStorage.setItem('im-aisketch-result', image)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setGenerating(false)
+    }
+  }
+  // <-- TEST GENERATE IMAGE
 
   return (
     <div className="fixed z-0 bottom-0 right-0 p-4">

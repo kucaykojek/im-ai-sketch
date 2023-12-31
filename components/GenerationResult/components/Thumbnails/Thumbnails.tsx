@@ -4,13 +4,17 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { cn } from '@/libs/utils'
+import useAISketchStore from '@/store/ai-sketch.store'
 
 const Thumbnails = () => {
   const [activeIndex, setActiveIndex] = useState(0)
+  const { resultImage } = useAISketchStore()
 
   // Result placeholder
   const resultImages = [
-    'https://placehold.co/50x50/png',
+    resultImage
+      ? `data:image/png;base64, ${resultImage}`
+      : 'https://placehold.co/50x50/png',
     'https://placehold.co/50x50/png',
     'https://placehold.co/50x50/png'
   ]
