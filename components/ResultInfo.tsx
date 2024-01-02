@@ -20,7 +20,7 @@ const GenerationInfo = () => {
 
   useEffect(() => {
     fetchBalance()
-  }, [resultImages, fetchBalance])
+  }, [resultImages])
 
   return (
     <div className="fixed z-0 bottom-0 right-0 p-4">

@@ -1,5 +1,5 @@
 .toolbar {
-  @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-16 py-2 bg-white rounded-t-lg flex items-center justify-center space-x-4;
+  @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-16 py-2 bg-white rounded-t-lg flex items-center justify-center space-x-4 shadow;
 }
 .toolbarLogo {
   @apply h-4 w-auto mr-4 shrink-0;
@@ -32,7 +32,7 @@
 
 /* BEGIN: options drawer style */
 .optionsDrawer {
-  @apply fixed z-40 bottom-0 left-1/2 -translate-x-1/2 bg-white rounded-lg transition-all ease-in-out min-w-20 overflow-hidden;
+  @apply fixed z-40 bottom-0 left-1/2 -translate-x-1/2 bg-white rounded-lg transition-all ease-in-out min-w-20 overflow-hidden shadow;
 }
 
 .optionsDrawerActive {
