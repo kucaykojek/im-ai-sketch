@@ -4,22 +4,12 @@ import { useDropzone } from 'react-dropzone'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
-import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
-import useCanvasWorkingSize from '@/components/SketchDraw/store/useCanvasWorkingSize'
-import useUserMode from '@/components/SketchDraw/store/useUserMode'
-import { cn } from '@/components/SketchDraw/utils/common'
-import fileToBase64 from '@/components/SketchDraw/utils/fileToBase64'
-import generateUniqueId from '@/components/SketchDraw/utils/generateUniqueId'
-import getImageElementFromUrl from '@/components/SketchDraw/utils/getImageElementFromUrl'
-import saveObjectsToStorage from '@/components/SketchDraw/utils/saveObjectsToStorage'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn, fileToBase64 } from '@/components/SketchDraw/utils/common'
 
 const ImageOptions = () => {
   const { isReady } = useSketchDrawContext()
-  const { canvasObjects, appendImageObject } = useCanvasObjects()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { setUserMode } = useUserMode()
-  const { canvasWorkingSize } = useCanvasWorkingSize()
+  const { canvasOptions } = useCanvas()
 
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
     useDropzone({
@@ -38,8 +28,8 @@ const ImageOptions = () => {
   const handleFileSelected = async (file: File) => {
     try {
       const result = await fileToBase64(file, {
-        width: canvasWorkingSize.width,
-        height: canvasWorkingSize.height
+        width: canvasOptions.width || 0,
+        height: canvasOptions.height || 0
       })
 
       if (result) {
@@ -51,36 +41,15 @@ const ImageOptions = () => {
   }
 
   const pushImageObject = async ({
-    image: imageUrl,
-    width,
-    height
+    image: _imageUrl,
+    width: _w,
+    height: _h
   }: {
     image: string
     width: number
     height: number
   }) => {
-    const imageElement = await getImageElementFromUrl(imageUrl)
-    const createdObjectId = generateUniqueId()
-    const imageObject = {
-      id: createdObjectId,
-      x: (canvasWorkingSize.width - width) / 2, // center
-      y: (canvasWorkingSize.height - height) / 2, // center
-      width: width,
-      height: height,
-      imageOpts: {
-        imageUrl,
-        imageElement
-      }
-    }
-
-    appendImageObject(imageObject)
-    setActiveObjectId(createdObjectId)
-    setUserMode('select')
-
-    const clonedCanvasObjects = [...canvasObjects]
-    clonedCanvasObjects.push({ ...imageObject, type: 'image', opacity: 100 })
-
-    saveObjectsToStorage(clonedCanvasObjects)
+    // TODO:
   }
 
   useEffect(() => {

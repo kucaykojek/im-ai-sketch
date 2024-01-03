@@ -1,12 +1,11 @@
 import Circle, { CircleOptions } from './Circle'
 import ColorPalette from './Color'
 import Highlighter, { HighlighterOptions } from './Highlighter'
+import Image, { ImageOptions } from './Image'
 import Pencil, { PencilOptions } from './Pencil'
 import Rectangle, { RectangleOptions } from './Rectangle'
+import Text, { TextOptions } from './Text'
 import Triangle, { TriangleOptions } from './Triangle'
-
-// import Image, { ImageOptions } from './Image'
-// import Text, { TextOptions } from './Text'
 
 export {
   Highlighter,
@@ -19,5 +18,9 @@ export {
   RectangleOptions,
   Triangle,
   TriangleOptions,
-  ColorPalette
+  ColorPalette,
+  Image,
+  ImageOptions,
+  Text,
+  TextOptions
 }

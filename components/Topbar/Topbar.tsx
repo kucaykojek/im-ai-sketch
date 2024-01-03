@@ -77,6 +77,13 @@ const Topbar = () => {
   const handleClear = () => {
     form.setValue('prompt', '')
     setPayload({ ...payload, prompt: '' })
+
+    if (localStorage) {
+      localStorage.setItem(
+        GENERATION_PAYLOAD_KEYS,
+        JSON.stringify({ ...payload, prompt: '' })
+      )
+    }
   }
 
   return (

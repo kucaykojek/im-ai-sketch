@@ -115,8 +115,8 @@ const DockTools = () => {
       <div className="border-l flex items-center space-x-2 pl-2">
         {isReady ? (
           <>
-            {/* <SketchDrawTool.Text />
-            <SketchDrawTool.Image /> */}
+            <SketchDrawTool.Text />
+            <SketchDrawTool.Image />
           </>
         ) : (
           <>

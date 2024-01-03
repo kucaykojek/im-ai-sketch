@@ -1,33 +1,18 @@
 import { TypeIcon } from 'lucide-react'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent } from 'react'
 
 import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
 import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useTextOptions from '@/components/SketchDraw/store/object/useTextOptions'
-import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
-import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
 import { cn } from '@/components/SketchDraw/utils/common'
-import getCanvasObjectById from '@/components/SketchDraw/utils/getCanvasObjectById'
 
 const TextOptions = () => {
-  const { options, setOptions } = useTextOptions()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
+  // TODO:
+  const options = { text: 'hello', fontColorHex: '#000000', fontSize: 10 }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
-    setOptions({ ...options, [key]: e.target.value })
+    console.info(e, key)
   }
-
-  useEffect(() => {
-    // Update canvas object
-    if (
-      !!activeObjectId &&
-      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'text'
-    ) {
-      updateCanvasObject(activeObjectId, { textOpts: options })
-    }
-  }, [options])
 
   return (
     <div className={style.toolOptions}>

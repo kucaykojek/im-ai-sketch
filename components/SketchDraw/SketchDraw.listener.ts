@@ -99,6 +99,8 @@ export default function SketchDrawListener() {
       if (
         ['circle', 'rectangle', 'triangle', 'text'].includes(activeTool || '')
       ) {
+        fabric.Object.prototype.selectable = false
+
         const canvasMouseDown = (e: fabric.IEvent) => {
           startDrawing(e)
         }
@@ -109,6 +111,7 @@ export default function SketchDrawListener() {
 
         const canvasMouseUp = () => {
           stopDrawing()
+          fabric.Object.prototype.selectable = true
 
           if (canvas) {
             canvas.off('mouse:down').off('mouse:move').off('mouse:up')
