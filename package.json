@@ -21,6 +21,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.49.2",
     "react-tooltip": "^5.25.1",
     "svg-path-bbox": "^1.2.4",
     "svgpath": "^2.6.0",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/canvas-txt": "^3.0.4",
+    "@types/fabric": "^5.3.6",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",

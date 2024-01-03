@@ -1,24 +1,26 @@
 import { ChangeEvent } from 'react'
 
 type Props = {
-  id: string
+  id?: string
   step: number
   min?: number
   max?: number
   disabled?: boolean
-  value: number
+  value?: number
   onChange: (_: ChangeEvent<HTMLInputElement>) => void
 }
 
-const SliderRange = ({
-  id,
-  step,
-  min,
-  max,
-  disabled = false,
-  value,
-  onChange
-}: Props) => {
+const SliderRange = (props: Props) => {
+  const {
+    id,
+    step,
+    min,
+    max,
+    disabled = false,
+    value,
+    onChange,
+    ...otherProps
+  } = props
   return (
     <>
       <input
@@ -31,6 +33,7 @@ const SliderRange = ({
         disabled={disabled}
         className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
         onChange={onChange}
+        {...otherProps}
       />
     </>
   )

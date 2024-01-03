@@ -1,18 +1,18 @@
-import { HighlighterIcon } from 'lucide-react'
+import { SquareIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
+import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const tool = 'highlighter'
+const tool = 'rectangle'
 
-const HighlighterButton = () => {
+const RectangleButton = () => {
   const { isReady } = useSketchDrawContext()
   const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
-  const { resetOptions } = useHighlighterOptions()
+  const { resetOptions } = useRectangleOptions()
 
   const isActive =
     activeTool === tool ||
@@ -23,9 +23,13 @@ const HighlighterButton = () => {
     setActiveTool(isActive ? null : tool)
     resetOptions()
 
-    if (canvas && canvas.getActiveObjects().length) {
-      canvas.discardActiveObject()
-      canvas.requestRenderAll()
+    if (canvas) {
+      canvas.isDrawingMode = false
+
+      if (canvas.getActiveObjects().length) {
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+      }
     }
   }
 
@@ -34,14 +38,14 @@ const HighlighterButton = () => {
       <button
         type="button"
         className={cn(style.tool, isActive && style.toolActive)}
-        title="Highlighter"
+        title="Rectangle"
         disabled={!isReady}
         onClick={handleClick}
       >
-        <HighlighterIcon className={style.toolIcon} />
+        <SquareIcon className={style.toolIcon} />
       </button>
     </>
   )
 }
 
-export default HighlighterButton
+export default RectangleButton

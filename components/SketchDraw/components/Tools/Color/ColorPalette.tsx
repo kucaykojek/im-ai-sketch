@@ -1,97 +1,70 @@
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { PALETTE_COLORS } from '@/sketch-draw/data/constants'
-import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
-import useHighlighterOptions from '@/sketch-draw/store/object/useHighlighterOptions'
-import usePencilOptions from '@/sketch-draw/store/object/usePencilOptions'
-import useSquareOptions from '@/sketch-draw/store/object/useSquareOptions'
-import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
-import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjectColor from '@/sketch-draw/store/useCanvasObjectColor'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
-import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { PALETTE_COLORS } from '@/components/SketchDraw/data/constants'
+import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
+import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
+import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
+import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
 const ColorPalette = () => {
-  const { userMode } = useUserMode()
   const { isReady } = useSketchDrawContext()
-  const { objectColor, setObjectColor } = useCanvasObjectColor()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects } = useCanvasObjects()
+  const { activeTool, selectedObjects } = useCanvas()
 
-  const { options: highlighterOptions, setOptions: setHighlighterOptions } =
-    useHighlighterOptions()
   const { options: pencilOptions, setOptions: setPencilOptions } =
     usePencilOptions()
+  const { options: highlighterOptions, setOptions: setHighlighterOptions } =
+    useHighlighterOptions()
 
   const { options: circleOptions, setOptions: setCircleOptions } =
     useCircleOptions()
-  const { options: squareOptions, setOptions: setSquareOptions } =
-    useSquareOptions()
+  const { options: rectangleOptions, setOptions: setRectangleOptions } =
+    useRectangleOptions()
   const { options: triangleOptions, setOptions: setTriangleOptions } =
     useTriangleOptions()
 
-  const { options: textOptions, setOptions: setTextOptions } = useTextOptions()
+  const selectedType =
+    getSelectedType(selectedObjects?.[0]) || activeTool || 'select'
 
   const handleSetColor = (color: string) => {
-    setObjectColor(color)
-
-    // drawing or selection
-    const objectType = activeObjectId
-      ? getCanvasObjectById(activeObjectId, canvasObjects)?.type || userMode
-      : userMode
-
-    // Update tools options
-    if (!['select', 'image', 'icon'].includes(objectType)) {
-      switch (objectType) {
+    if (!['select', 'image', 'icon'].includes(selectedType)) {
+      switch (selectedType) {
         case 'pencil':
-          setPencilOptions({ ...pencilOptions, strokeColorHex: color })
+          setPencilOptions({
+            ...pencilOptions,
+            color: color
+          })
           break
         case 'highlighter':
           setHighlighterOptions({
             ...highlighterOptions,
-            strokeColorHex: color
+            color: color + 55
           })
           break
         case 'circle':
           setCircleOptions({
             ...circleOptions,
-            fillColorHex:
-              circleOptions.shapeType === 'fill'
-                ? color
-                : circleOptions.fillColorHex,
-            strokeColorHex: color
+            fill: color,
+            stroke: color
           })
           break
-        case 'square':
-          setSquareOptions({
-            ...squareOptions,
-            fillColorHex:
-              squareOptions.shapeType === 'fill'
-                ? color
-                : squareOptions.fillColorHex,
-            strokeColorHex: color
+        case 'rectangle':
+          setRectangleOptions({
+            ...rectangleOptions,
+            fill: color,
+            stroke: color
           })
           break
         case 'triangle':
           setTriangleOptions({
             ...triangleOptions,
-            fillColorHex:
-              triangleOptions.shapeType === 'fill'
-                ? color
-                : triangleOptions.fillColorHex,
-            strokeColorHex: color
+            fill: color,
+            stroke: color
           })
           break
-        case 'text':
-          setTextOptions({
-            ...textOptions,
-            fontColorHex: color
-          })
-          break
-
         default:
           break
       }
@@ -105,10 +78,7 @@ const ColorPalette = () => {
           type="button"
           key={`palette-${index}`}
           title={color}
-          className={cn(
-            style.palette,
-            objectColor === color && style.paletteActive
-          )}
+          className={cn(style.palette, false && style.paletteActive)}
           style={{ backgroundColor: color }}
           value={color}
           disabled={!isReady}

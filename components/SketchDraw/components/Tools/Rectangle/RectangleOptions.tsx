@@ -1,4 +1,4 @@
-import { TriangleIcon } from 'lucide-react'
+import { SquareIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
 import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
@@ -6,12 +6,12 @@ import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
 import type { ShapeObject } from '@/components/SketchDraw/data/types'
-import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
+import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 
-const TriangleOptions = () => {
-  const { options, setOptions } = useTriangleOptions()
+const RectangleOptions = () => {
+  const { options, setOptions } = useRectangleOptions()
   const { canvas, selectedObjects } = useCanvas()
 
   const handleChangeOptions = (key: any, value: any) => {
@@ -37,7 +37,7 @@ const TriangleOptions = () => {
   }
 
   useEffect(() => {
-    if (selectedObjects?.[0]?.type === 'triangle') {
+    if (selectedObjects?.[0]?.type === 'rectangle') {
       setOptions({
         fill: (selectedObjects[0] as ShapeObject).fill,
         stroke: (selectedObjects[0] as ShapeObject).stroke,
@@ -51,7 +51,7 @@ const TriangleOptions = () => {
       // Change objects based on options
       canvas
         .getActiveObjects()
-        .filter((obj) => obj.type === 'triangle')
+        .filter((obj) => obj.type === 'rectangle')
         .forEach((obj) => {
           obj.set({ ...options })
         })
@@ -63,8 +63,8 @@ const TriangleOptions = () => {
   return (
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
-        <TriangleIcon />
-        Triangle
+        <SquareIcon />
+        Square
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
@@ -142,4 +142,4 @@ const TriangleOptions = () => {
   )
 }
 
-export default TriangleOptions
+export default RectangleOptions

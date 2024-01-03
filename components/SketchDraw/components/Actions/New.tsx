@@ -1,26 +1,24 @@
 import { FileIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import { COMMON_DEFAULT } from '@/sketch-draw/data/constants'
-import useCanvasBackgroundColor from '@/sketch-draw/store/useCanvasBackgroundColor'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage'
-import saveObjectsToStorage from '@/sketch-draw/utils/saveObjectsToStorage'
-
+import useSketchDrawContext from '../../SketchDraw.context'
+import { CANVAS_DEFAULT } from '../../data/constants'
+import useCanvas from '../../store/useCanvas'
+import saveBackgroundToStorage from '../../utils/saveBackgroundToStorage'
 import style from './Actions.module.css'
 
 const New = () => {
   const { isReady } = useSketchDrawContext()
-  const { resetCanvasObjects } = useCanvasObjects()
-  const { setCanvasBackgroundColor } = useCanvasBackgroundColor()
+  const { canvas, setCanvasOptions } = useCanvas()
 
   const handleNewClick = () => {
-    resetCanvasObjects()
-    setCanvasBackgroundColor(COMMON_DEFAULT.canvasBackgroundColor)
+    const color = CANVAS_DEFAULT.background
+    setCanvasOptions({ backgroundColor: color })
+    saveBackgroundToStorage(color)
 
-    // Save to local storage
-    saveObjectsToStorage([])
-    saveBackgroundToStorage(COMMON_DEFAULT.canvasBackgroundColor)
+    if (canvas) {
+      canvas.setBackgroundColor(color, () => {})
+      canvas.clear()
+    }
   }
 
   return (

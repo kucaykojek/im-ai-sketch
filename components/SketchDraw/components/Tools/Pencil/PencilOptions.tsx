@@ -1,33 +1,51 @@
 import { PencilIcon } from 'lucide-react'
-import { ChangeEvent, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import ColorPicker from '@/sketch-draw/components/ColorPicker'
-import SliderRange from '@/sketch-draw/components/SliderRange'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import usePencilOptions from '@/sketch-draw/store/object/usePencilOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import { cn } from '@/sketch-draw/utils/common'
-import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
+import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
+import SliderRange from '@/components/SketchDraw/components/SliderRange'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { PENCIL_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
+import { PencilObject } from '@/components/SketchDraw/data/types'
+import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
+import { isPencilObject } from '@/components/SketchDraw/utils/object'
 
 const PencilOptions = () => {
   const { options, setOptions } = usePencilOptions()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
+  const { canvas, selectedObjects } = useCanvas()
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
-    setOptions({ ...options, [key]: e.target.value })
+  const handleChangeOptions = (key: any, value: any) => {
+    setOptions({ ...options, [key]: value })
   }
 
   useEffect(() => {
-    // Update canvas object
-    if (
-      !!activeObjectId &&
-      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'pencil'
-    ) {
-      updateCanvasObject(activeObjectId, { pencilOpts: options })
+    if (isPencilObject(selectedObjects?.[0])) {
+      setOptions({
+        ...PENCIL_OPTIONS_DEFAULT,
+        color:
+          (selectedObjects[0] as PencilObject).stroke ||
+          PENCIL_OPTIONS_DEFAULT.color,
+        width:
+          (selectedObjects[0] as PencilObject).strokeWidth ||
+          PENCIL_OPTIONS_DEFAULT.width
+      })
     }
-  }, [options])
+  }, [selectedObjects])
+
+  useEffect(() => {
+    if (canvas && selectedObjects.length > 0) {
+      // Change objects based on options
+      canvas
+        .getActiveObjects()
+        .filter((obj) => isPencilObject(obj))
+        .forEach((obj) => {
+          obj.set({ stroke: options.color, strokeWidth: options.width })
+        })
+
+      canvas.requestRenderAll()
+    }
+  }, [canvas, selectedObjects, options])
 
   return (
     <div className={style.toolOptions}>
@@ -41,29 +59,15 @@ const PencilOptions = () => {
           <div className={style.optionsControl}>
             <SliderRange
               id="pencil-options-stroke-thickness"
-              value={options.strokeThickness}
+              value={options.width}
               min={1}
               max={100}
               step={1}
-              onChange={(e) => handleChange(e, 'strokeThickness')}
+              onChange={(e) =>
+                handleChangeOptions('width', Number(e.target.value))
+              }
             />
-            <div className="text-xs font-medium w-4">
-              {options.strokeThickness}
-            </div>
-          </div>
-        </div>
-        <div className={cn(style.optionsItem, 'border-l')}>
-          <div className={style.optionsItemLabel}>Opacity</div>
-          <div className={style.optionsControl}>
-            <SliderRange
-              id="pencil-options-opacity"
-              value={options.opacity}
-              min={1}
-              max={100}
-              step={1}
-              onChange={(e) => handleChange(e, 'opacity')}
-            />
-            <div className="text-xs font-medium w-4">{options.opacity}</div>
+            <div className="text-xs font-medium w-4">{options.width}</div>
           </div>
         </div>
         <div className={cn(style.optionsItem, 'border-l')}>
@@ -71,8 +75,8 @@ const PencilOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="pencil-options-color"
-              color={options.strokeColorHex}
-              onChange={(e) => handleChange(e, 'strokeColorHex')}
+              color={options.color}
+              onChange={(e) => handleChangeOptions('color', e.target.value)}
             />
           </div>
         </div>

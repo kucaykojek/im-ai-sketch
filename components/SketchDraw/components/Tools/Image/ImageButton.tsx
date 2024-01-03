@@ -1,30 +1,23 @@
 import { ImageIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import type { UserMode } from '@/sketch-draw/data/types'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const ImageButton = () => {
+  const disabled = true
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
 
-  const handleClick = (mode: UserMode) => {
-    setUserMode(mode)
-    setActiveObjectId(null)
-  }
+  const handleClick = () => {}
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === 'image' && style.toolActive)}
+        className={cn(style.tool, !disabled && style.toolActive)}
         title="Image"
-        disabled={!isReady}
-        onClick={() => handleClick(userMode === 'image' ? 'select' : 'image')}
+        disabled={disabled || !isReady}
+        onClick={handleClick}
       >
         <ImageIcon className={style.toolIcon} />
       </button>

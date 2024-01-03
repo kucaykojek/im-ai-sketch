@@ -1,13 +1,18 @@
 import { NextResponse } from 'next/server'
 
 const apiUrl = process.env.API_URL
+const disableGeneration = true
 
 export async function POST(req: Request) {
+  const headers = new Headers()
+  headers.set('Content-Type', 'image/*')
+
   if (!apiUrl) {
-    return Response.json({
-      status: 500,
-      message: 'No key or url on the server'
-    })
+    return new NextResponse(null, { status: 500, headers })
+  }
+
+  if (disableGeneration) {
+    return new NextResponse(null, { status: 500, headers })
   }
 
   const { image, prompt, strength } = await req.json()
@@ -31,10 +36,6 @@ export async function POST(req: Request) {
   })
 
   const blob = await response.blob()
-
-  const headers = new Headers()
-
-  headers.set('Content-Type', 'image/*')
 
   return new NextResponse(blob, { status: 200, headers })
 }

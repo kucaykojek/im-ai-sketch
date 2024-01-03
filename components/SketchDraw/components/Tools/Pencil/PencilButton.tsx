@@ -1,32 +1,39 @@
 import { PencilIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { PENCIL_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import usePencilOptions from '@/sketch-draw/store/object/usePencilOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const mode = 'pencil'
+const tool = 'pencil'
 
 const PencilButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
-  const { setOptions } = usePencilOptions()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { resetOptions } = usePencilOptions()
+
+  const isActive =
+    activeTool === tool ||
+    (selectedObjects.length === 1 &&
+      getSelectedType(selectedObjects?.[0]) === tool)
 
   const handleClick = () => {
-    setUserMode(userMode === mode ? 'select' : mode)
-    setActiveObjectId(null)
-    setOptions(PENCIL_OPTIONS_DEFAULT)
+    setActiveTool(isActive ? null : tool)
+    resetOptions()
+
+    if (canvas && canvas.getActiveObjects().length) {
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+    }
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === mode && style.toolActive)}
+        className={cn(style.tool, isActive && style.toolActive)}
         title="Pencil"
         disabled={!isReady}
         onClick={handleClick}

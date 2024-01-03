@@ -1,32 +1,43 @@
 import { CircleIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { CIRCLE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const mode = 'circle'
+const tool = 'circle'
 
 const CircleButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
-  const { setOptions } = useCircleOptions()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { resetOptions } = useCircleOptions()
+
+  const isActive =
+    activeTool === tool ||
+    (selectedObjects.length === 1 &&
+      getSelectedType(selectedObjects?.[0]) === tool)
 
   const handleClick = () => {
-    setUserMode(userMode === mode ? 'select' : mode)
-    setActiveObjectId(null)
-    setOptions(CIRCLE_OPTIONS_DEFAULT)
+    setActiveTool(isActive ? null : tool)
+    resetOptions()
+
+    if (canvas) {
+      canvas.isDrawingMode = false
+
+      if (canvas.getActiveObjects().length) {
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+      }
+    }
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === mode && style.toolActive)}
+        className={cn(style.tool, isActive && style.toolActive)}
         title="Circle"
         disabled={!isReady}
         onClick={handleClick}

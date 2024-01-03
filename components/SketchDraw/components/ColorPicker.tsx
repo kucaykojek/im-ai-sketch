@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-import { cn } from '@/sketch-draw/utils/common'
+import { cn } from '../utils/common'
 
 type Props = {
   id: string

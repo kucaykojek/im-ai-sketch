@@ -2,62 +2,41 @@
 
 import { useEffect, useState } from 'react'
 
-import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
-import isObjectPointBasedType from '@/components/SketchDraw/utils/isObjectPointBasedType'
-import isObjectShapeBasedType from '@/components/SketchDraw/utils/isObjectShapeBasedType'
+import useCanvas from './SketchDraw/store/useCanvas'
 
 const CanvasInfo = () => {
   const [metadata, setMetadata] = useState({
-    line: 0,
-    shape: 0,
-    text: 0,
-    image: 0,
+    objects: 0,
     size: 0
   })
-  const { canvasObjects } = useCanvasObjects()
+
+  const { canvas } = useCanvas()
 
   useEffect(() => {
-    const filteredObjects =
-      canvasObjects.filter(
-        (val) =>
-          (isObjectPointBasedType(val.type) && val.points!.length > 1) ||
-          (isObjectShapeBasedType(val.type) &&
-            val.width > 0 &&
-            val.height > 0) ||
-          val.type === 'text' ||
-          val.type === 'image'
-      ) || []
+    if (canvas) {
+      const calcualteObjectMeta = () => {
+        setMetadata({
+          objects: canvas.getObjects().length,
+          size: new Blob([JSON.stringify(canvas.getObjects())]).size
+        })
+      }
 
-    const shape = filteredObjects.filter((val) =>
-      isObjectShapeBasedType(val.type)
-    ).length
-    const line = filteredObjects.filter((val) =>
-      isObjectPointBasedType(val.type)
-    ).length
-    const text = filteredObjects.filter((val) => val.type === 'text').length
-    const image = filteredObjects.filter((val) => val.type === 'image').length
-    const size = new Blob([
-      filteredObjects.length ? JSON.stringify(filteredObjects) : ''
-    ]).size
+      canvas.on('object:added', calcualteObjectMeta)
+      canvas.on('object:removed', calcualteObjectMeta)
 
-    setMetadata({
-      line,
-      shape,
-      text,
-      image,
-      size: size > 2 ? size : 0
-    })
-  }, [canvasObjects])
+      return () => {
+        canvas.off('object:added', calcualteObjectMeta)
+        canvas.off('object:removed', calcualteObjectMeta)
+      }
+    }
+  }, [canvas])
 
   return (
     <div className="fixed z-0 bottom-0 left-0 p-4">
       <div className="font-normal text-xs text-neutral-400/70 text-left">
         <div className="font-medium uppercase">Canvas Info</div>
         <p>
-          Object:{' '}
-          <strong>
-            {metadata.shape + metadata.line + metadata.text + metadata.image}
-          </strong>
+          Object: <strong>{metadata.objects}</strong>
         </p>
         <p>
           Data Size: <strong>{metadata.size} bytes</strong>

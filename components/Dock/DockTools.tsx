@@ -34,8 +34,7 @@ const DockTools = () => {
       icon: <AudioWaveformIcon />,
       tools: [
         <SketchDrawTool.Pencil key="pencil-tools" />,
-        <SketchDrawTool.Highlighter key="highlighter-tools" />,
-        <SketchDrawTool.Eraser key="eraser-tools" />
+        <SketchDrawTool.Highlighter key="highlighter-tools" />
       ]
     },
     {
@@ -48,7 +47,7 @@ const DockTools = () => {
       },
       icon: <ShapesIcon />,
       tools: [
-        <SketchDrawTool.Square key="square-tools" />,
+        <SketchDrawTool.Rectangle key="square-tools" />,
         <SketchDrawTool.Circle key="circle-tools" />,
         <SketchDrawTool.Triangle key="triangle-tools" />
       ]

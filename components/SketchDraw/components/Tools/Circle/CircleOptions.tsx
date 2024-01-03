@@ -1,45 +1,64 @@
 import { CircleIcon } from 'lucide-react'
-import { ChangeEvent, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import ColorPicker from '@/sketch-draw/components/ColorPicker'
-import SliderRange from '@/sketch-draw/components/SliderRange'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { ShapeType } from '@/sketch-draw/data/types'
-import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import { cn } from '@/sketch-draw/utils/common'
-import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
+import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
+import SliderRange from '@/components/SketchDraw/components/SliderRange'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
+import type { ShapeObject } from '@/components/SketchDraw/data/types'
+import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const CircleOptions = () => {
   const { options, setOptions } = useCircleOptions()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
+  const { canvas, selectedObjects } = useCanvas()
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
-    setOptions({ ...options, [key]: e.target.value })
+  const handleChangeOptions = (key: any, value: any) => {
+    setOptions({ ...options, [key]: value })
   }
 
-  const handleTypeChange = (shapeType: ShapeType) => {
-    setOptions({
-      ...options,
-      shapeType,
-      strokeThickness:
-        shapeType === 'outline' && options.strokeThickness < 1
-          ? 1
-          : options.strokeThickness
-    })
+  const handleTypeChange = (shapeType: 'fill' | 'outline') => {
+    if (shapeType === 'outline') {
+      setOptions({
+        ...options,
+        fill: 'transparent',
+        strokeWidth: Number(options.strokeWidth) || 1
+      })
+    }
+
+    if (shapeType === 'fill') {
+      setOptions({
+        ...options,
+        fill:
+          options.fill === 'transparent' ? OBJECT_DEFAULT.color : options.fill
+      })
+    }
   }
 
   useEffect(() => {
-    // Update canvas object
-    if (
-      !!activeObjectId &&
-      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'circle'
-    ) {
-      updateCanvasObject(activeObjectId, { circleOpts: options })
+    if (selectedObjects?.[0]?.type === 'circle') {
+      setOptions({
+        fill: (selectedObjects[0] as ShapeObject).fill,
+        stroke: (selectedObjects[0] as ShapeObject).stroke,
+        strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
+      })
     }
-  }, [options])
+  }, [selectedObjects])
+
+  useEffect(() => {
+    if (canvas && selectedObjects.length > 0) {
+      // Change objects based on options
+      canvas
+        .getActiveObjects()
+        .filter((obj) => obj.type === 'circle')
+        .forEach((obj) => {
+          obj.set({ ...options })
+        })
+
+      canvas.requestRenderAll()
+    }
+  }, [canvas, selectedObjects, options])
 
   return (
     <div className={style.toolOptions}>
@@ -56,7 +75,7 @@ const CircleOptions = () => {
                 type="button"
                 className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
-                  options.shapeType === 'fill' && '!bg-primary'
+                  options.fill !== 'transparent' && '!bg-primary'
                 )}
                 onClick={() => handleTypeChange('fill')}
               >
@@ -66,7 +85,7 @@ const CircleOptions = () => {
                 type="button"
                 className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
-                  options.shapeType === 'outline' && '!bg-primary'
+                  options.fill === 'transparent' && '!bg-primary'
                 )}
                 onClick={() => handleTypeChange('outline')}
               >
@@ -79,10 +98,14 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Background</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="circle-options-fill-color"
-              color={options.fillColorHex}
-              disabled={options.shapeType === 'outline'}
-              onChange={(e) => handleChange(e, 'fillColorHex')}
+              id="square-options-fill-color"
+              color={
+                options.fill === 'transparent'
+                  ? OBJECT_DEFAULT.color
+                  : (options.fill as string)
+              }
+              disabled={options.fill === 'transparent'}
+              onChange={(e) => handleChangeOptions('fill', e.target.value)}
             />
           </div>
         </div>
@@ -90,15 +113,17 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
-              id="circle-options-stroke-thickness"
-              value={options.strokeThickness}
-              min={options.shapeType === 'outline' ? 1 : 0}
+              id="square-options-stroke-width"
+              value={options.strokeWidth || 0}
+              min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
               step={1}
-              onChange={(e) => handleChange(e, 'strokeThickness')}
+              onChange={(e) =>
+                handleChangeOptions('strokeWidth', Number(e.target.value))
+              }
             />
             <div className="text-xs font-medium w-4">
-              {options.strokeThickness}
+              {options.strokeWidth || 0}
             </div>
           </div>
         </div>
@@ -106,9 +131,9 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Border Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="circle-options-stroke-color"
-              color={options.strokeColorHex}
-              onChange={(e) => handleChange(e, 'strokeColorHex')}
+              id="square-options-stroke-color"
+              color={options.stroke!}
+              onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />
           </div>
         </div>

@@ -1,8 +1,7 @@
 import { DownloadIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import generateUniqueId from '@/sketch-draw/utils/generateUniqueId'
-
+import useSketchDrawContext from '../../SketchDraw.context'
+import { generateUniqueId } from '../../utils/common'
 import style from './Actions.module.css'
 
 const Download = () => {

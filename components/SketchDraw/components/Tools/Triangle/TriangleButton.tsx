@@ -1,32 +1,43 @@
 import { TriangleIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { TRIANGLE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const mode = 'triangle'
+const tool = 'triangle'
 
 const TriangleButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
-  const { setOptions } = useTriangleOptions()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { resetOptions } = useTriangleOptions()
+
+  const isActive =
+    activeTool === tool ||
+    (selectedObjects.length === 1 &&
+      getSelectedType(selectedObjects?.[0]) === tool)
 
   const handleClick = () => {
-    setUserMode(userMode === mode ? 'select' : mode)
-    setActiveObjectId(null)
-    setOptions(TRIANGLE_OPTIONS_DEFAULT)
+    setActiveTool(isActive ? null : tool)
+    resetOptions()
+
+    if (canvas) {
+      canvas.isDrawingMode = false
+
+      if (canvas.getActiveObjects().length) {
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+      }
+    }
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === mode && style.toolActive)}
+        className={cn(style.tool, isActive && style.toolActive)}
         title="Triangle"
         disabled={!isReady}
         onClick={handleClick}
