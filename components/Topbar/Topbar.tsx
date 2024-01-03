@@ -74,6 +74,11 @@ const Topbar = () => {
     generateImage({ ...payload, strength })
   }
 
+  const handleClear = () => {
+    form.setValue('prompt', '')
+    setPayload({ ...payload, prompt: '' })
+  }
+
   return (
     <div className={style.topbar}>
       <form
@@ -97,7 +102,7 @@ const Topbar = () => {
         />
         <div className="flex items-center absolute right-4 top-0 h-full space-x-3">
           {showClear && (
-            <button onClick={() => setPayload({ ...payload, prompt: '' })}>
+            <button onClick={handleClear}>
               <XIcon className="w-6 h-6 text-neutral-400 hover:text-primary" />
             </button>
           )}

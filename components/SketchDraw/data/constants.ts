@@ -42,6 +42,16 @@ export const PENCIL_OPTIONS_DEFAULT: Pick<
   strokeLineJoin: 'round'
 }
 
+export const SPRAY_OPTIONS_DEFAULT: Pick<
+  PencilOptions,
+  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+> = {
+  color: OBJECT_DEFAULT.color,
+  width: 30,
+  strokeLineCap: 'round',
+  strokeLineJoin: 'round'
+}
+
 export const HIGHLIGHTER_OPTIONS_DEFAULT: Pick<
   HighlighterOptions,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'

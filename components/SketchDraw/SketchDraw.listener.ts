@@ -10,7 +10,6 @@ import useRectangleOptions from './store/object/useRectangleOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
-import { isPencilObject } from './utils/object'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
@@ -97,7 +96,9 @@ export default function SketchDrawListener() {
 
   useEffect(() => {
     if (canvas) {
-      if (['circle', 'rectangle', 'triangle'].includes(activeTool || '')) {
+      if (
+        ['circle', 'rectangle', 'triangle', 'text'].includes(activeTool || '')
+      ) {
         const canvasMouseDown = (e: fabric.IEvent) => {
           startDrawing(e)
         }
@@ -123,7 +124,11 @@ export default function SketchDrawListener() {
           canvas.off('mouse:move', canvasMouseMove)
           canvas.off('mouse:up', canvasMouseUp)
         }
-      } else if (['pencil', 'highlighter'].includes(activeTool || '')) {
+      } else if (
+        ['pencil', 'spray', 'highlighter'].includes(activeTool || '')
+      ) {
+        canvas.isDrawingMode = true
+
         switch (activeTool) {
           case 'pencil':
             canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
@@ -132,8 +137,6 @@ export default function SketchDrawListener() {
             canvas.freeDrawingBrush.strokeLineCap = pencilOptions.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
               pencilOptions.strokeLineJoin
-
-            canvas.isDrawingMode = true
             break
           case 'highlighter':
             canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
@@ -143,8 +146,6 @@ export default function SketchDrawListener() {
               highlighterOptions.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
               highlighterOptions.strokeLineJoin
-
-            canvas.isDrawingMode = true
             break
         }
       } else {

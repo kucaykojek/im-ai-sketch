@@ -28,14 +28,11 @@ const DockOptionsDrawer = () => {
     >
       {isActive && (
         <>
-          {/* {selectedType === 'eraser' && <EraserOptions />} */}
           {selectedType === 'highlighter' && <HighlighterOptions />}
           {selectedType === 'pencil' && <PencilOptions />}
           {selectedType === 'circle' && <CircleOptions />}
           {selectedType === 'rectangle' && <RectangleOptions />}
           {selectedType === 'triangle' && <TriangleOptions />}
-          {/* {selectedType === 'text' && <TextOptions />}
-      {selectedType === 'image' && <ImageOptions />} */}
         </>
       )}
     </div>

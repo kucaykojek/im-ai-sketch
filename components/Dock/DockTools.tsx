@@ -35,7 +35,6 @@ const DockTools = () => {
       tools: [
         <SketchDrawTool.Pencil key="pencil-tools" />,
         <SketchDrawTool.Highlighter key="highlighter-tools" />
-        // <SketchDrawTool.Eraser key="eraser-tools" />
       ]
     },
     {
