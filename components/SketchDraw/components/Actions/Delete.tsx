@@ -1,22 +1,28 @@
 import { Trash2Icon } from 'lucide-react'
 
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-
+import useSketchDrawContext from '../../SketchDraw.context'
+import useCanvas from '../../store/useCanvas'
 import style from './Actions.module.css'
 
 const Delete = () => {
   const { isReady } = useSketchDrawContext()
-  const { activeObject, setActiveObject } = useCanvas()
+  const { canvas, selectedObjects } = useCanvas()
 
-  const disabled = !isReady || !activeObject
-
-  const handleDeleteClick = () => {
-    if (!activeObject) {
+  const handleClick = () => {
+    if (!canvas) {
       return
     }
 
-    setActiveObject(null)
+    if (selectedObjects.length === 0) {
+      return
+    }
+
+    canvas.getActiveObjects().forEach((obj) => {
+      canvas.remove(obj)
+    })
+
+    canvas.discardActiveObject()
+    canvas.requestRenderAll()
   }
 
   return (
@@ -24,8 +30,8 @@ const Delete = () => {
       type="button"
       title="Delete"
       className={style.action}
-      disabled={disabled}
-      onClick={handleDeleteClick}
+      disabled={!isReady || selectedObjects.length === 0}
+      onClick={handleClick}
     >
       <Trash2Icon />
     </button>

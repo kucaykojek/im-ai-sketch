@@ -1,9 +1,9 @@
 import { EraserIcon } from 'lucide-react'
 import { ChangeEvent } from 'react'
 
-import SliderRange from '@/sketch-draw/components/SliderRange'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import useEraserOptions from '@/sketch-draw/store/object/useEraserOptions'
+import SliderRange from '@/components/SketchDraw/components/SliderRange'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useEraserOptions from '@/components/SketchDraw/store/object/useEraserOptions'
 
 const EraserOptions = () => {
   const { options, setOptions } = useEraserOptions()

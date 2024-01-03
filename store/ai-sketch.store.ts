@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type Payload = {
+export type Payload = {
   image: string
   prompt: string
   strength: number

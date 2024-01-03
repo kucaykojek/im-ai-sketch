@@ -12,7 +12,7 @@ import React, {
   useState
 } from 'react'
 
-import { BG_STORAGE_KEY } from './data/constants'
+import { BG_STORAGE_KEY, PRIMARY_COLOR_HEX } from './data/constants'
 import type { Canvas } from './data/types'
 import useCanvas from './store/useCanvas'
 
@@ -63,6 +63,11 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
     }
 
     if (!canvas) {
+      fabric.Object.prototype.transparentCorners = false
+      fabric.Object.prototype.borderColor = PRIMARY_COLOR_HEX
+      fabric.Object.prototype.cornerColor = PRIMARY_COLOR_HEX
+      fabric.Object.prototype.cornerStyle = 'circle'
+
       setCanvas(new fabric.Canvas(canvasRef.current, canvasOptions))
     } else {
       canvas.setBackgroundColor(canvasOptions.backgroundColor!, () => {})

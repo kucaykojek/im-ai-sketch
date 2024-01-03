@@ -1,12 +1,12 @@
 import { TypeIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { TEXT_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { TEXT_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
+import useTextOptions from '@/components/SketchDraw/store/object/useTextOptions'
+import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
+import useUserMode from '@/components/SketchDraw/store/useUserMode'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const mode = 'text'
 

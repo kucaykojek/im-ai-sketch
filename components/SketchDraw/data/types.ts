@@ -1,7 +1,7 @@
 import { fabric } from 'fabric'
 
 // BEGIN: canvas related types
-type CanvasActiveObject = fabric.Rect | null
+type CanvasObject = fabric.Object
 type CanvasActiveTool =
   | 'pencil'
   | 'highlighter'
@@ -17,7 +17,7 @@ type CanvasActiveTool =
 export type Canvas = {
   canvas: fabric.Canvas | null
   canvasOptions: fabric.ICanvasOptions
-  activeObject: CanvasActiveObject
+  selectedObjects: CanvasObject[]
   activeTool: CanvasActiveTool
 }
 export type CircleOptions = fabric.ICircleOptions

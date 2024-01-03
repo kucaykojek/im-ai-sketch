@@ -21,7 +21,7 @@ export {
   RectangleOptions,
   Triangle,
   TriangleOptions,
-  ColorPalette,
+  ColorPalette
   // Image,
   // ImageOptions,
   // Text,

@@ -1,11 +1,9 @@
 import { ChangeEvent } from 'react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import useCanvas from '@/sketch-draw/store/useCanvas'
-import { cn } from '@/sketch-draw/utils/common'
-import isHexLight from '@/sketch-draw/utils/isHexLight'
-import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage'
-
+import useSketchDrawContext from '../../SketchDraw.context'
+import useCanvas from '../../store/useCanvas'
+import { cn, isHexLight } from '../../utils/common'
+import saveBackgroundToStorage from '../../utils/saveBackgroundToStorage'
 import style from './Actions.module.css'
 
 const Background = () => {

@@ -49,8 +49,8 @@ const DockTools = () => {
       icon: <ShapesIcon />,
       tools: [
         <SketchDrawTool.Rectangle key="square-tools" />,
-        // <SketchDrawTool.Circle key="circle-tools" />,
-        // <SketchDrawTool.Triangle key="triangle-tools" />
+        <SketchDrawTool.Circle key="circle-tools" />,
+        <SketchDrawTool.Triangle key="triangle-tools" />
       ]
     },
     {

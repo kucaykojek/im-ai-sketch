@@ -1,11 +1,11 @@
 import { ImageIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import type { UserMode } from '@/sketch-draw/data/types'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
-import { cn } from '@/sketch-draw/utils/common'
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import type { UserMode } from '@/components/SketchDraw/data/types'
+import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
+import useUserMode from '@/components/SketchDraw/store/useUserMode'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const ImageButton = () => {
   const { isReady } = useSketchDrawContext()

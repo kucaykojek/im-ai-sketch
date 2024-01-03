@@ -3,15 +3,20 @@ import { useEffect } from 'react'
 
 import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
+import useCircleOptions from './store/object/useCircleOptions'
+import useRectangleOptions from './store/object/useRectangleOptions'
+import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
-  const { activeTool, setCanvasOptions, setActiveObject } = useCanvas()
-  const { initDraw } = useSketchDrawHandler()
-
+  const { activeTool, setCanvasOptions, setSelectedObjects } = useCanvas()
+  const { startDrawing, updateDrawing, stopDrawing } = useSketchDrawHandler()
   const { setContainerSize } = useContainerSize()
+  const { options: circleOptions } = useCircleOptions()
+  const { options: rectangleOptions } = useRectangleOptions()
+  const { options: triangleOptions } = useTriangleOptions()
 
   // BEGIN: window/document events
   useEffect(() => {
@@ -47,39 +52,90 @@ export default function SketchDrawListener() {
       window.removeEventListener('resize', onResize)
     }
   }, [setContainerSize, initCanvas])
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isInputFocused = ['input', 'textarea'].includes(
+        document.activeElement?.localName || ''
+      )
+      const deleteKeys: KeyboardEvent['key'][] = ['Backspace', 'Delete']
+
+      if (
+        !!canvas &&
+        deleteKeys.includes(event.key) &&
+        !isInputFocused &&
+        canvas.getActiveObjects().length > 0
+      ) {
+        canvas.getActiveObjects().forEach((obj) => canvas.remove(obj))
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [canvas])
+
+  useEffect(() => {
+    const onBeforeUnload = () => {
+      return confirm('Are you sure?')
+    }
+
+    window.addEventListener('onbeforeunload', onBeforeUnload)
+    return () => {
+      window.removeEventListener('onbeforeunload', onBeforeUnload)
+    }
+  }, [])
   // END: window/document events
 
-  // BEGIN: canvas events
-  const canvasMouseDown = (e: fabric.IEvent) => {
-    console.log('canvasMouseDown', e)
-    setActiveObject(e.target || null)
-  }
+  useEffect(() => {
+    if (canvas && activeTool !== null) {
+      const canvasMouseDown = (e: fabric.IEvent) => {
+        startDrawing(e)
+      }
 
-  const canvasMouseMove = (e: fabric.IEvent) => {
-    // console.log('canvasMouseMove', e)
+      const canvasMouseMove = (e: fabric.IEvent) => {
+        updateDrawing(e)
+      }
 
-    // Drawing new
-    if (!!activeTool) {
-      initDraw()
+      const canvasMouseUp = () => {
+        stopDrawing()
+
+        if (canvas) {
+          canvas.off('mouse:down').off('mouse:move').off('mouse:up')
+        }
+      }
+
+      canvas.on('mouse:down', canvasMouseDown)
+      canvas.on('mouse:move', canvasMouseMove)
+      canvas.on('mouse:up', canvasMouseUp)
+
+      return () => {
+        canvas.off('mouse:down', canvasMouseDown)
+        canvas.off('mouse:move', canvasMouseMove)
+        canvas.off('mouse:up', canvasMouseUp)
+      }
     }
-  }
-
-  const canvasMouseUp = (e: fabric.IEvent) => {
-    console.log('canvasMouseUp', e)
-    setActiveObject(e.target || null)
-  }
-  // BEGIN: canvas events
+  }, [canvas, activeTool, circleOptions, rectangleOptions, triangleOptions])
 
   useEffect(() => {
     if (canvas) {
-      canvas!.on('mouse:down', canvasMouseDown)
-      canvas!.on('mouse:move', canvasMouseMove)
-      canvas!.on('mouse:up', canvasMouseUp)
+      const canvasObjectSelection = (e: fabric.IEvent) => {
+        if (canvas) {
+          setSelectedObjects(e.selected || [])
+        }
+      }
+
+      canvas.on('selection:created', canvasObjectSelection)
+      canvas.on('selection:updated', canvasObjectSelection)
+      canvas.on('selection:cleared', canvasObjectSelection)
 
       return () => {
-        canvas!.off('mouse:down', canvasMouseDown)
-        canvas!.off('mouse:move', canvasMouseMove)
-        canvas!.off('mouse:up', canvasMouseUp)
+        canvas.off('selection:created', canvasObjectSelection)
+        canvas.off('selection:updated', canvasObjectSelection)
+        canvas.off('selection:cleared', canvasObjectSelection)
       }
     }
   }, [canvas])

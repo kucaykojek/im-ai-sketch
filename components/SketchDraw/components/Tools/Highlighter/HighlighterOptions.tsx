@@ -1,14 +1,14 @@
 import { HighlighterIcon } from 'lucide-react'
 import { ChangeEvent, useEffect } from 'react'
 
-import ColorPicker from '@/sketch-draw/components/ColorPicker'
-import SliderRange from '@/sketch-draw/components/SliderRange'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import useHighlighterOptions from '@/sketch-draw/store/object/useHighlighterOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import { cn } from '@/sketch-draw/utils/common'
-import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
+import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
+import SliderRange from '@/components/SketchDraw/components/SliderRange'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
+import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
+import useCanvasObjects from '@/components/SketchDraw/store/useCanvasObjects'
+import { cn } from '@/components/SketchDraw/utils/common'
+import getCanvasObjectById from '@/components/SketchDraw/utils/getCanvasObjectById'
 
 const HighlighterOptions = () => {
   const { options, setOptions } = useHighlighterOptions()

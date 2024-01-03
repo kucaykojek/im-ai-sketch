@@ -1,11 +1,6 @@
 import {
   CircleOptions,
-  EraserOptions,
-  HighlighterOptions,
-  ImageOptions,
-  PencilOptions,
   RectangleOptions,
-  TextOptions,
   TriangleOptions
 } from '@/components/SketchDraw/components/Tools'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
@@ -14,11 +9,12 @@ import { cn } from '@/libs/utils'
 import style from './Dock.module.css'
 
 const DockOptionsDrawer = () => {
-  const { activeObject } = useCanvas()
+  const { activeTool, selectedObjects } = useCanvas()
 
-  const selectedType = activeObject?.type
+  const selectedType =
+    selectedObjects.length === 1 ? selectedObjects?.[0]?.type : activeTool
 
-  const isActive = !!selectedType && selectedType !== 'select'
+  const isActive = !!selectedType
 
   return (
     <div
@@ -26,11 +22,11 @@ const DockOptionsDrawer = () => {
     >
       {/* {selectedType === 'eraser' && <EraserOptions />}
       {selectedType === 'highlighter' && <HighlighterOptions />}
-      {selectedType === 'pencil' && <PencilOptions />}
-      {selectedType === 'circle' && <CircleOptions />} */}
+      {selectedType === 'pencil' && <PencilOptions />} */}
+      {selectedType === 'circle' && <CircleOptions />}
       {selectedType === 'rectangle' && <RectangleOptions />}
-      {/* {selectedType === 'triangle' && <TriangleOptions />}
-      {selectedType === 'text' && <TextOptions />}
+      {selectedType === 'triangle' && <TriangleOptions />}
+      {/* {selectedType === 'text' && <TextOptions />}
       {selectedType === 'image' && <ImageOptions />} */}
     </div>
   )

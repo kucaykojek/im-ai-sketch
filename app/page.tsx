@@ -1,11 +1,11 @@
 'use client'
 
-// import CanvasInfo from '@/components/CanvasInfo'
+import CanvasInfo from '@/components/CanvasInfo'
 import Dock from '@/components/Dock'
-import GenerationResult, {
+import GenerateImage, {
   Actions as GenerationActions,
   Thumbnails as GenerationThumbnails
-} from '@/components/GenerationResult'
+} from '@/components/GenerateImage'
 import GenerationInfo from '@/components/ResultInfo'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import SketchDraw, {
@@ -44,14 +44,14 @@ export default function Home() {
             <GenerationActions.Download />
           </Sidebar>
 
-          <GenerationResult />
+          <GenerateImage />
         </div>
       </main>
 
       <Dock />
 
       {/* Debugger Components */}
-      {/* <CanvasInfo /> */}
+      <CanvasInfo />
       <GenerationInfo />
       {/* Debugger Components */}
     </SketchDrawProvider>

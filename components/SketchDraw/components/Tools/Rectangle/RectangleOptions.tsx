@@ -1,38 +1,63 @@
 import { SquareIcon } from 'lucide-react'
-import { ChangeEvent, useEffect } from 'react'
+import { useEffect } from 'react'
 
+import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
+import SliderRange from '@/components/SketchDraw/components/SliderRange'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
 import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import ColorPicker from '@/sketch-draw/components/ColorPicker'
-import SliderRange from '@/sketch-draw/components/SliderRange'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { cn } from '@/sketch-draw/utils/common'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const RectangleOptions = () => {
   const { options, setOptions } = useRectangleOptions()
-  const { canvas, activeObject, setActiveObject } = useCanvas()
+  const { canvas, selectedObjects } = useCanvas()
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
-    setOptions({ ...options, [key]: e.target.value })
+  const handleChangeOptions = (key: any, value: any) => {
+    setOptions({ ...options, [key]: value })
   }
 
   const handleTypeChange = (shapeType: 'fill' | 'outline') => {
-    setOptions({
-      ...options,
-      fill: shapeType === 'outline' ? 'transparent' : options.fill,
-      strokeWidth:
-        shapeType === 'outline' && options.strokeWidth! < 1
-          ? 1
-          : options.strokeWidth
-    })
+    if (shapeType === 'outline') {
+      setOptions({
+        ...options,
+        fill: 'transparent',
+        strokeWidth: Number(options.strokeWidth) || 1
+      })
+    }
+
+    if (shapeType === 'fill') {
+      setOptions({
+        ...options,
+        fill:
+          options.fill === 'transparent' ? OBJECT_DEFAULT.color : options.fill
+      })
+    }
   }
 
   useEffect(() => {
-    // Update canvas object
-    if (activeObject?.type === 'rectangle') {
-      // setActiveObject()
+    if (selectedObjects.length === 1) {
+      setOptions({
+        fill: selectedObjects[0].fill,
+        stroke: selectedObjects[0].stroke,
+        strokeWidth: selectedObjects[0].strokeWidth
+      })
     }
-  }, [options, activeObject?.type])
+  }, [selectedObjects])
+
+  useEffect(() => {
+    if (canvas && selectedObjects.length > 0) {
+      // Change objects based on options
+      canvas
+        .getActiveObjects()
+        .filter((obj) => obj.type === 'rectangle')
+        .forEach((obj) => {
+          obj.set({ ...options })
+        })
+
+      canvas.requestRenderAll()
+    }
+  }, [canvas, selectedObjects, options])
 
   return (
     <div className={style.toolOptions}>
@@ -73,9 +98,13 @@ const RectangleOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="square-options-fill-color"
-              color={options.fill as string}
+              color={
+                options.fill === 'transparent'
+                  ? OBJECT_DEFAULT.color
+                  : (options.fill as string)
+              }
               disabled={options.fill === 'transparent'}
-              onChange={(e) => handleChange(e, 'fill')}
+              onChange={(e) => handleChangeOptions('fill', e.target.value)}
             />
           </div>
         </div>
@@ -88,7 +117,9 @@ const RectangleOptions = () => {
               min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
               step={1}
-              onChange={(e) => handleChange(e, 'strokeWidth')}
+              onChange={(e) =>
+                handleChangeOptions('strokeWidth', Number(e.target.value))
+              }
             />
             <div className="text-xs font-medium w-4">
               {options.strokeWidth || 0}
@@ -101,7 +132,7 @@ const RectangleOptions = () => {
             <ColorPicker
               id="square-options-stroke-color"
               color={options.stroke!}
-              onChange={(e) => handleChange(e, 'stroke')}
+              onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />
           </div>
         </div>

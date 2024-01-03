@@ -22,7 +22,7 @@ export const CANVAS_DEFAULT = {
   }
 }
 
-const OBJECT_DEFAULT = {
+export const OBJECT_DEFAULT = {
   color: '#000000'
 }
 

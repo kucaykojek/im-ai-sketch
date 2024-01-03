@@ -1,29 +1,35 @@
 import { SquareIcon } from 'lucide-react'
 
+import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
+import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { cn } from '@/sketch-draw/utils/common'
+import { cn } from '@/components/SketchDraw/utils/common'
 
 const tool = 'rectangle'
 
 const RectangleButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { activeObject, activeTool, setActiveTool } = useCanvas()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { resetOptions } = useRectangleOptions()
+
+  const isActive = activeTool === tool || selectedObjects?.[0]?.type === tool
 
   const handleClick = () => {
-    setActiveTool(activeTool === tool ? null : tool)
+    setActiveTool(isActive ? null : tool)
+    resetOptions()
+
+    if (canvas && canvas.getActiveObjects().length) {
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+    }
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(
-          style.tool,
-          (activeObject?.type === tool || activeTool === tool) &&
-            style.toolActive
-        )}
+        className={cn(style.tool, isActive && style.toolActive)}
         title="Rectangle"
         disabled={!isReady}
         onClick={handleClick}
