@@ -2,31 +2,38 @@ import { PencilIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { PENCIL_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
 import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
-import useActiveObjectId from '@/components/SketchDraw/store/useActiveObjectId'
-import useUserMode from '@/components/SketchDraw/store/useUserMode'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const mode = 'pencil'
+const tool = 'pencil'
 
 const PencilButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
-  const { setOptions } = usePencilOptions()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { resetOptions } = usePencilOptions()
+
+  const isActive =
+    activeTool === tool ||
+    (selectedObjects.length === 1 &&
+      getSelectedType(selectedObjects?.[0]) === tool)
 
   const handleClick = () => {
-    setUserMode(userMode === mode ? 'select' : mode)
-    setActiveObjectId(null)
-    setOptions(PENCIL_OPTIONS_DEFAULT)
+    setActiveTool(isActive ? null : tool)
+    resetOptions()
+
+    if (canvas && canvas.getActiveObjects().length) {
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+    }
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === mode && style.toolActive)}
+        className={cn(style.tool, isActive && style.toolActive)}
         title="Pencil"
         disabled={!isReady}
         onClick={handleClick}

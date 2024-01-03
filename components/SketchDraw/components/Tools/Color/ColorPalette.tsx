@@ -2,14 +2,22 @@ import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { PALETTE_COLORS } from '@/components/SketchDraw/data/constants'
 import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
+import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
 import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
+import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
 const ColorPalette = () => {
   const { isReady } = useSketchDrawContext()
   const { activeTool, selectedObjects } = useCanvas()
+
+  const { options: pencilOptions, setOptions: setPencilOptions } =
+    usePencilOptions()
+  const { options: highlighterOptions, setOptions: setHighlighterOptions } =
+    useHighlighterOptions()
 
   const { options: circleOptions, setOptions: setCircleOptions } =
     useCircleOptions()
@@ -19,12 +27,23 @@ const ColorPalette = () => {
     useTriangleOptions()
 
   const selectedType =
-    (selectedObjects.length === 1 ? selectedObjects?.[0]?.type : activeTool) ||
-    'select'
+    getSelectedType(selectedObjects?.[0]) || activeTool || 'select'
 
   const handleSetColor = (color: string) => {
     if (!['select', 'image', 'icon'].includes(selectedType)) {
       switch (selectedType) {
+        case 'pencil':
+          setPencilOptions({
+            ...pencilOptions,
+            color: color
+          })
+          break
+        case 'highlighter':
+          setHighlighterOptions({
+            ...highlighterOptions,
+            color: color + 55
+          })
+          break
         case 'circle':
           setCircleOptions({
             ...circleOptions,

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 const apiUrl = process.env.API_URL
-const disableGeneration = false
+const disableGeneration = true
 
 export async function POST(req: Request) {
   const headers = new Headers()

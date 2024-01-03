@@ -4,16 +4,21 @@ import { useEffect } from 'react'
 import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
 import useCircleOptions from './store/object/useCircleOptions'
+import useHighlighterOptions from './store/object/useHighlighterOptions'
+import usePencilOptions from './store/object/usePencilOptions'
 import useRectangleOptions from './store/object/useRectangleOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
+import { isPencilObject } from './utils/object'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
   const { activeTool, setCanvasOptions, setSelectedObjects } = useCanvas()
   const { startDrawing, updateDrawing, stopDrawing } = useSketchDrawHandler()
   const { setContainerSize } = useContainerSize()
+  const { options: pencilOptions } = usePencilOptions()
+  const { options: highlighterOptions } = useHighlighterOptions()
   const { options: circleOptions } = useCircleOptions()
   const { options: rectangleOptions } = useRectangleOptions()
   const { options: triangleOptions } = useTriangleOptions()
@@ -91,34 +96,70 @@ export default function SketchDrawListener() {
   // END: window/document events
 
   useEffect(() => {
-    if (canvas && activeTool !== null) {
-      const canvasMouseDown = (e: fabric.IEvent) => {
-        startDrawing(e)
-      }
-
-      const canvasMouseMove = (e: fabric.IEvent) => {
-        updateDrawing(e)
-      }
-
-      const canvasMouseUp = () => {
-        stopDrawing()
-
-        if (canvas) {
-          canvas.off('mouse:down').off('mouse:move').off('mouse:up')
+    if (canvas) {
+      if (['circle', 'rectangle', 'triangle'].includes(activeTool || '')) {
+        const canvasMouseDown = (e: fabric.IEvent) => {
+          startDrawing(e)
         }
-      }
 
-      canvas.on('mouse:down', canvasMouseDown)
-      canvas.on('mouse:move', canvasMouseMove)
-      canvas.on('mouse:up', canvasMouseUp)
+        const canvasMouseMove = (e: fabric.IEvent) => {
+          updateDrawing(e)
+        }
 
-      return () => {
-        canvas.off('mouse:down', canvasMouseDown)
-        canvas.off('mouse:move', canvasMouseMove)
-        canvas.off('mouse:up', canvasMouseUp)
+        const canvasMouseUp = () => {
+          stopDrawing()
+
+          if (canvas) {
+            canvas.off('mouse:down').off('mouse:move').off('mouse:up')
+          }
+        }
+
+        canvas.on('mouse:down', canvasMouseDown)
+        canvas.on('mouse:move', canvasMouseMove)
+        canvas.on('mouse:up', canvasMouseUp)
+
+        return () => {
+          canvas.off('mouse:down', canvasMouseDown)
+          canvas.off('mouse:move', canvasMouseMove)
+          canvas.off('mouse:up', canvasMouseUp)
+        }
+      } else if (['pencil', 'highlighter'].includes(activeTool || '')) {
+        switch (activeTool) {
+          case 'pencil':
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
+            canvas.freeDrawingBrush.color = pencilOptions.color
+            canvas.freeDrawingBrush.width = pencilOptions.width
+            canvas.freeDrawingBrush.strokeLineCap = pencilOptions.strokeLineCap
+            canvas.freeDrawingBrush.strokeLineJoin =
+              pencilOptions.strokeLineJoin
+
+            canvas.isDrawingMode = true
+            break
+          case 'highlighter':
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
+            canvas.freeDrawingBrush.color = highlighterOptions.color
+            canvas.freeDrawingBrush.width = highlighterOptions.width
+            canvas.freeDrawingBrush.strokeLineCap =
+              highlighterOptions.strokeLineCap
+            canvas.freeDrawingBrush.strokeLineJoin =
+              highlighterOptions.strokeLineJoin
+
+            canvas.isDrawingMode = true
+            break
+        }
+      } else {
+        canvas.isDrawingMode = false
       }
     }
-  }, [canvas, activeTool, circleOptions, rectangleOptions, triangleOptions])
+  }, [
+    canvas,
+    activeTool,
+    pencilOptions,
+    highlighterOptions,
+    circleOptions,
+    rectangleOptions,
+    triangleOptions
+  ])
 
   useEffect(() => {
     if (canvas) {

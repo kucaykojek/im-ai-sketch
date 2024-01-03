@@ -1,4 +1,10 @@
-import { CircleOptions, RectangleOptions, TriangleOptions } from './types'
+import {
+  CircleOptions,
+  HighlighterOptions,
+  PencilOptions,
+  RectangleOptions,
+  TriangleOptions
+} from './types'
 
 export const CANVAS_ID: string = 'im-aisketch-canvas'
 export const OBJECTS_STORAGE_KEY = 'im-aisketch-objects'
@@ -24,6 +30,26 @@ export const CANVAS_DEFAULT = {
 
 export const OBJECT_DEFAULT = {
   color: '#000000'
+}
+
+export const PENCIL_OPTIONS_DEFAULT: Pick<
+  PencilOptions,
+  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+> = {
+  color: OBJECT_DEFAULT.color,
+  width: 2,
+  strokeLineCap: 'round',
+  strokeLineJoin: 'round'
+}
+
+export const HIGHLIGHTER_OPTIONS_DEFAULT: Pick<
+  HighlighterOptions,
+  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+> = {
+  color: OBJECT_DEFAULT.color + 55,
+  width: 20,
+  strokeLineCap: 'butt',
+  strokeLineJoin: 'round'
 }
 
 export const CIRCLE_OPTIONS_DEFAULT: CircleOptions = {

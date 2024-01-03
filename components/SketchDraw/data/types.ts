@@ -1,7 +1,16 @@
 import { fabric } from 'fabric'
 
 // BEGIN: canvas related types
-type CanvasObject = fabric.Object
+export type PencilObject = Pick<fabric.Object, 'type' | 'name'> &
+  PencilOptions &
+  fabric.IPathOptions
+export type HighlighterObject = Pick<fabric.Object, 'type' | 'name'> &
+  HighlighterOptions &
+  fabric.IPathOptions
+export type ShapeObject = fabric.Object
+
+export type CanvasObject = ShapeObject | PencilObject | HighlighterObject
+
 type CanvasActiveTool =
   | 'pencil'
   | 'highlighter'
@@ -23,3 +32,11 @@ export type Canvas = {
 export type CircleOptions = fabric.ICircleOptions
 export type RectangleOptions = fabric.IRectOptions
 export type TriangleOptions = fabric.ITriangleOptions
+export type PencilOptions = Pick<
+  fabric.BaseBrush,
+  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+>
+export type HighlighterOptions = Pick<
+  fabric.BaseBrush,
+  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+>

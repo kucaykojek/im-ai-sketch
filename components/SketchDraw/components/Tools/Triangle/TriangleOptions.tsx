@@ -5,6 +5,7 @@ import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
 import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
+import type { ShapeObject } from '@/components/SketchDraw/data/types'
 import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
@@ -36,11 +37,11 @@ const TriangleOptions = () => {
   }
 
   useEffect(() => {
-    if (selectedObjects.length === 1) {
+    if (selectedObjects?.[0]?.type === 'triangle') {
       setOptions({
-        fill: selectedObjects[0].fill,
-        stroke: selectedObjects[0].stroke,
-        strokeWidth: selectedObjects[0].strokeWidth
+        fill: (selectedObjects[0] as ShapeObject).fill,
+        stroke: (selectedObjects[0] as ShapeObject).stroke,
+        strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
       })
     }
   }, [selectedObjects])
