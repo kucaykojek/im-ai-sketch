@@ -1,25 +1,17 @@
+import useSquareOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
 import { PALETTE_COLORS } from '@/sketch-draw/data/constants'
 import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
 import useHighlighterOptions from '@/sketch-draw/store/object/useHighlighterOptions'
 import usePencilOptions from '@/sketch-draw/store/object/usePencilOptions'
-import useSquareOptions from '@/sketch-draw/store/object/useSquareOptions'
 import useTextOptions from '@/sketch-draw/store/object/useTextOptions'
 import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjectColor from '@/sketch-draw/store/useCanvasObjectColor'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import useUserMode from '@/sketch-draw/store/useUserMode'
 import { cn } from '@/sketch-draw/utils/common'
 import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const ColorPalette = () => {
-  const { userMode } = useUserMode()
   const { isReady } = useSketchDrawContext()
-  const { objectColor, setObjectColor } = useCanvasObjectColor()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects } = useCanvasObjects()
 
   const { options: highlighterOptions, setOptions: setHighlighterOptions } =
     useHighlighterOptions()
@@ -36,66 +28,63 @@ const ColorPalette = () => {
   const { options: textOptions, setOptions: setTextOptions } = useTextOptions()
 
   const handleSetColor = (color: string) => {
-    setObjectColor(color)
-
-    // drawing or selection
-    const objectType = activeObjectId
-      ? getCanvasObjectById(activeObjectId, canvasObjects)?.type || userMode
-      : userMode
-
-    // Update tools options
-    if (!['select', 'image', 'icon'].includes(objectType)) {
-      switch (objectType) {
-        case 'pencil':
-          setPencilOptions({ ...pencilOptions, strokeColorHex: color })
-          break
-        case 'highlighter':
-          setHighlighterOptions({
-            ...highlighterOptions,
-            strokeColorHex: color
-          })
-          break
-        case 'circle':
-          setCircleOptions({
-            ...circleOptions,
-            fillColorHex:
-              circleOptions.shapeType === 'fill'
-                ? color
-                : circleOptions.fillColorHex,
-            strokeColorHex: color
-          })
-          break
-        case 'square':
-          setSquareOptions({
-            ...squareOptions,
-            fillColorHex:
-              squareOptions.shapeType === 'fill'
-                ? color
-                : squareOptions.fillColorHex,
-            strokeColorHex: color
-          })
-          break
-        case 'triangle':
-          setTriangleOptions({
-            ...triangleOptions,
-            fillColorHex:
-              triangleOptions.shapeType === 'fill'
-                ? color
-                : triangleOptions.fillColorHex,
-            strokeColorHex: color
-          })
-          break
-        case 'text':
-          setTextOptions({
-            ...textOptions,
-            fontColorHex: color
-          })
-          break
-
-        default:
-          break
-      }
-    }
+    // setObjectColor(color)
+    // // drawing or selection
+    // const objectType = activeObjectId
+    //   ? getCanvasObjectById(activeObjectId, canvasObjects)?.type || userMode
+    //   : userMode
+    // // Update tools options
+    // if (!['select', 'image', 'icon'].includes(objectType)) {
+    //   switch (objectType) {
+    //     case 'pencil':
+    //       setPencilOptions({ ...pencilOptions, strokeColorHex: color })
+    //       break
+    //     case 'highlighter':
+    //       setHighlighterOptions({
+    //         ...highlighterOptions,
+    //         strokeColorHex: color
+    //       })
+    //       break
+    //     case 'circle':
+    //       setCircleOptions({
+    //         ...circleOptions,
+    //         fillColorHex:
+    //           circleOptions.shapeType === 'fill'
+    //             ? color
+    //             : circleOptions.fillColorHex,
+    //         strokeColorHex: color
+    //       })
+    //       break
+    //     case 'square':
+    //       setSquareOptions({
+    //         ...squareOptions,
+    //         fillColorHex:
+    //           squareOptions.shapeType === 'fill'
+    //             ? color
+    //             : squareOptions.fillColorHex,
+    //         strokeColorHex: color
+    //       })
+    //       break
+    //     case 'triangle':
+    //       setTriangleOptions({
+    //         ...triangleOptions,
+    //         fillColorHex:
+    //           triangleOptions.shapeType === 'fill'
+    //             ? color
+    //             : triangleOptions.fillColorHex,
+    //         strokeColorHex: color
+    //       })
+    //       break
+    //     case 'text':
+    //       setTextOptions({
+    //         ...textOptions,
+    //         fontColorHex: color
+    //       })
+    //       break
+    //     default:
+    //       break
+    //   }
+    // }
   }
 
   return (
@@ -105,10 +94,7 @@ const ColorPalette = () => {
           type="button"
           key={`palette-${index}`}
           title={color}
-          className={cn(
-            style.palette,
-            objectColor === color && style.paletteActive
-          )}
+          className={cn(style.palette, false && style.paletteActive)}
           style={{ backgroundColor: color }}
           value={color}
           disabled={!isReady}

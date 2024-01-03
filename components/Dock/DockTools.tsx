@@ -33,9 +33,9 @@ const DockTools = () => {
       },
       icon: <AudioWaveformIcon />,
       tools: [
-        <SketchDrawTool.Pencil key="pencil-tools" />,
-        <SketchDrawTool.Highlighter key="highlighter-tools" />,
-        <SketchDrawTool.Eraser key="eraser-tools" />
+        // <SketchDrawTool.Pencil key="pencil-tools" />,
+        // <SketchDrawTool.Highlighter key="highlighter-tools" />,
+        // <SketchDrawTool.Eraser key="eraser-tools" />
       ]
     },
     {
@@ -48,9 +48,9 @@ const DockTools = () => {
       },
       icon: <ShapesIcon />,
       tools: [
-        <SketchDrawTool.Square key="square-tools" />,
-        <SketchDrawTool.Circle key="circle-tools" />,
-        <SketchDrawTool.Triangle key="triangle-tools" />
+        <SketchDrawTool.Rectangle key="square-tools" />,
+        // <SketchDrawTool.Circle key="circle-tools" />,
+        // <SketchDrawTool.Triangle key="triangle-tools" />
       ]
     },
     {
@@ -116,8 +116,8 @@ const DockTools = () => {
       <div className="border-l flex items-center space-x-2 pl-2">
         {isReady ? (
           <>
-            <SketchDrawTool.Text />
-            <SketchDrawTool.Image />
+            {/* <SketchDrawTool.Text />
+            <SketchDrawTool.Image /> */}
           </>
         ) : (
           <>

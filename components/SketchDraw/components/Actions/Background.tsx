@@ -1,9 +1,7 @@
 import { ChangeEvent } from 'react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import { ERASER_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import useCanvasBackgroundColor from '@/sketch-draw/store/useCanvasBackgroundColor'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
+import useCanvas from '@/sketch-draw/store/useCanvas'
 import { cn } from '@/sketch-draw/utils/common'
 import isHexLight from '@/sketch-draw/utils/isHexLight'
 import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage'
@@ -11,30 +9,13 @@ import saveBackgroundToStorage from '@/sketch-draw/utils/saveBackgroundToStorage
 import style from './Actions.module.css'
 
 const Background = () => {
-  const { isReady, canvasRef } = useSketchDrawContext()
-  const { canvasBackgroundColor, setCanvasBackgroundColor } =
-    useCanvasBackgroundColor()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
+  const { isReady } = useSketchDrawContext()
+  const { canvasOptions, setCanvasOptions } = useCanvas()
 
   const handleChange = (e: ChangeEvent) => {
     const color = (e.target as HTMLInputElement).value
-    setCanvasBackgroundColor(color)
-    canvasRef.current!.style.background = color
 
-    // Change eraser color to same as bg color
-    const eraserObjects = canvasObjects.filter((obj) => obj.type === 'eraser')
-    if (eraserObjects.length > 0) {
-      eraserObjects.forEach((obj) => {
-        updateCanvasObject(obj.id, {
-          eraserOpts: {
-            ...(obj.eraserOpts || { ...ERASER_OPTIONS_DEFAULT }),
-            strokeColorHex: color
-          }
-        })
-      })
-    }
-
-    // Save background to localStorage
+    setCanvasOptions({ backgroundColor: color })
     saveBackgroundToStorage(color)
   }
 
@@ -46,11 +27,11 @@ const Background = () => {
         style.action,
         style.actionColorPicker,
         !isReady && 'opacity-50',
-        isHexLight(canvasBackgroundColor)
+        isHexLight(canvasOptions.backgroundColor as string)
           ? 'text-neutral-800'
           : 'text-neutral-50'
       )}
-      style={{ backgroundColor: canvasBackgroundColor }}
+      style={{ backgroundColor: canvasOptions.backgroundColor as string }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

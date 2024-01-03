@@ -6,14 +6,12 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import useActionMode from '@/components/SketchDraw/store/useActionMode'
 import useAISketchStore, {
   GENERATION_RESULT_KEYS
 } from '@/store/ai-sketch.store'
 
 const GenerationResult = () => {
   const { canvasRef } = useSketchDrawContext()
-  const { actionMode } = useActionMode()
   const {
     payload,
     generating,
@@ -38,13 +36,13 @@ const GenerationResult = () => {
     }
   }, [])
 
-  useEffect(() => {
-    if (!actionMode && canvasRef.current) {
-      generateImages(
-        canvasRef.current.toDataURL('image/jpeg').split(';base64,')[1]
-      )
-    }
-  }, [actionMode])
+  // useEffect(() => {
+  //   if (!something && canvasRef.current) {
+  //     generateImages(
+  //       canvasRef.current.toDataURL('image/jpeg').split(';base64,')[1]
+  //     )
+  //   }
+  // }, [something])
 
   const generateImages = debounce(async (sourceImage: string) => {
     if (generating || !payload.prompt) {

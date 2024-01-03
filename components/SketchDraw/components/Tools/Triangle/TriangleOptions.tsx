@@ -1,45 +1,38 @@
 import { TriangleIcon } from 'lucide-react'
 import { ChangeEvent, useEffect } from 'react'
 
+import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import ColorPicker from '@/sketch-draw/components/ColorPicker'
 import SliderRange from '@/sketch-draw/components/SliderRange'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { ShapeType } from '@/sketch-draw/data/types'
-import useTriangleOptions from '@/sketch-draw/store/object/useTriangleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
 import { cn } from '@/sketch-draw/utils/common'
-import getCanvasObjectById from '@/sketch-draw/utils/getCanvasObjectById'
 
 const TriangleOptions = () => {
   const { options, setOptions } = useTriangleOptions()
-  const { activeObjectId } = useActiveObjectId()
-  const { canvasObjects, updateCanvasObject } = useCanvasObjects()
+  const { canvas, activeObject, setActiveObject } = useCanvas()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, key: any) => {
     setOptions({ ...options, [key]: e.target.value })
   }
 
-  const handleTypeChange = (shapeType: ShapeType) => {
+  const handleTypeChange = (shapeType: 'fill' | 'outline') => {
     setOptions({
       ...options,
-      shapeType,
-      strokeThickness:
-        shapeType === 'outline' && options.strokeThickness < 1
+      fill: shapeType === 'outline' ? 'transparent' : options.fill,
+      strokeWidth:
+        shapeType === 'outline' && options.strokeWidth! < 1
           ? 1
-          : options.strokeThickness
+          : options.strokeWidth
     })
   }
 
   useEffect(() => {
     // Update canvas object
-    if (
-      !!activeObjectId &&
-      getCanvasObjectById(activeObjectId, canvasObjects)?.type === 'triangle'
-    ) {
-      updateCanvasObject(activeObjectId, { triangleOpts: options })
+    if (activeObject?.type === 'triangle') {
+      // setActiveObject()
     }
-  }, [options])
+  }, [options, activeObject?.type])
 
   return (
     <div className={style.toolOptions}>
@@ -56,7 +49,7 @@ const TriangleOptions = () => {
                 type="button"
                 className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
-                  options.shapeType === 'fill' && '!bg-primary'
+                  options.fill !== 'transparent' && '!bg-primary'
                 )}
                 onClick={() => handleTypeChange('fill')}
               >
@@ -66,7 +59,7 @@ const TriangleOptions = () => {
                 type="button"
                 className={cn(
                   'px-2 py-1 font-medium bg-neutral-100 hover:bg-neutral-200',
-                  options.shapeType === 'outline' && '!bg-primary'
+                  options.fill === 'transparent' && '!bg-primary'
                 )}
                 onClick={() => handleTypeChange('outline')}
               >
@@ -80,9 +73,9 @@ const TriangleOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="triangle-options-fill-color"
-              color={options.fillColorHex}
-              disabled={options.shapeType === 'outline'}
-              onChange={(e) => handleChange(e, 'fillColorHex')}
+              color={options.fill as string}
+              disabled={options.fill === 'transparent'}
+              onChange={(e) => handleChange(e, 'fill')}
             />
           </div>
         </div>
@@ -90,15 +83,15 @@ const TriangleOptions = () => {
           <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
-              id="triangle-options-stroke-thickness"
-              value={options.strokeThickness}
-              min={options.shapeType === 'outline' ? 1 : 0}
+              id="triangle-options-stroke-width"
+              value={options.strokeWidth || 0}
+              min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
               step={1}
-              onChange={(e) => handleChange(e, 'strokeThickness')}
+              onChange={(e) => handleChange(e, 'strokeWidth')}
             />
             <div className="text-xs font-medium w-4">
-              {options.strokeThickness}
+              {options.strokeWidth || 0}
             </div>
           </div>
         </div>
@@ -107,8 +100,8 @@ const TriangleOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="triangle-options-stroke-color"
-              color={options.strokeColorHex}
-              onChange={(e) => handleChange(e, 'strokeColorHex')}
+              color={options.stroke!}
+              onChange={(e) => handleChange(e, 'stroke')}
             />
           </div>
         </div>

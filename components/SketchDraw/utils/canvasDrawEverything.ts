@@ -1,3 +1,5 @@
+import { fabric } from 'fabric'
+
 import { CANVAS_ID, PRIMARY_COLOR_HEX } from '@/sketch-draw/data/constants'
 import type {
   ActionMode,
@@ -19,6 +21,7 @@ import renderText from './render/renderText'
 import renderTriangle from './render/renderTriangle'
 
 export default function canvasDrawEverything({
+  fabricCanvas,
   canvas,
   context,
   canvasWorkingSize,
@@ -30,6 +33,7 @@ export default function canvasDrawEverything({
   zoom,
   containerSize
 }: {
+  fabricCanvas: fabric.Canvas | null
   canvas: HTMLCanvasElement | null
   context: CanvasRenderingContext2D | null
   canvasWorkingSize: CanvasWorkingSize
@@ -71,7 +75,7 @@ export default function canvasDrawEverything({
         break
       }
       case 'square': {
-        renderSquare({ context, ...object })
+        renderSquare({ context, ...object, canvas: fabricCanvas })
         break
       }
       case 'triangle': {

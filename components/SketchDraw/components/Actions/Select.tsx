@@ -1,26 +1,29 @@
 import { MousePointerClickIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import useUserMode from '@/sketch-draw/store/useUserMode'
+import useCanvas from '@/sketch-draw/store/useCanvas'
 import { cn } from '@/sketch-draw/utils/common'
 
 import style from './Actions.module.css'
 
 const Select = () => {
   const { isReady } = useSketchDrawContext()
-  const { userMode, setUserMode } = useUserMode()
+  const { activeObject, activeTool, setActiveTool } = useCanvas()
 
-  const handleSelectClick = () => {
-    setUserMode('select')
+  const handleClick = () => {
+    setActiveTool(null)
   }
 
   return (
     <button
       type="button"
       title="Select"
-      className={cn(style.action, userMode === 'select' && style.actionActive)}
+      className={cn(
+        style.action,
+        (!!activeObject || (!activeObject && !activeTool)) && style.actionActive
+      )}
       disabled={!isReady}
-      onClick={handleSelectClick}
+      onClick={handleClick}
     >
       <MousePointerClickIcon />
     </button>

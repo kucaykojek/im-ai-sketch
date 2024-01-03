@@ -1,15 +1,4 @@
-import {
-  CanvasObject,
-  CircleOptions,
-  EraserOptions,
-  HighlighterOptions,
-  IconOptions,
-  ImageOptions,
-  PencilOptions,
-  SquareOptions,
-  TextOptions,
-  UserMode
-} from './types'
+import { CircleOptions, RectangleOptions, TriangleOptions } from './types'
 
 export const CANVAS_ID: string = 'im-aisketch-canvas'
 export const OBJECTS_STORAGE_KEY = 'im-aisketch-objects'
@@ -25,75 +14,35 @@ export const PALETTE_COLORS: string[] = [
   '#9747ff'
 ]
 
-export const COMMON_DEFAULT = {
-  canvasBackgroundColor: '#ffffff',
-  canvasObjectColor: '#000000',
-  userMode: 'select' as UserMode
+export const CANVAS_DEFAULT = {
+  background: '#ffffff',
+  dimension: {
+    width: 500,
+    height: 500
+  }
+}
+
+const OBJECT_DEFAULT = {
+  color: '#000000'
 }
 
 export const CIRCLE_OPTIONS_DEFAULT: CircleOptions = {
-  shapeType: 'fill',
-  fillColorHex: COMMON_DEFAULT.canvasObjectColor,
-  strokeThickness: 0,
-  strokeColorHex: COMMON_DEFAULT.canvasObjectColor,
+  fill: OBJECT_DEFAULT.color,
+  strokeWidth: 0,
+  stroke: OBJECT_DEFAULT.color,
   opacity: 100
 }
 
-export const SQUARE_OPTIONS_DEFAULT: SquareOptions = {
-  shapeType: 'fill',
-  fillColorHex: COMMON_DEFAULT.canvasObjectColor,
-  strokeThickness: 0,
-  strokeColorHex: COMMON_DEFAULT.canvasObjectColor,
+export const RECTANGLE_OPTIONS_DEFAULT: RectangleOptions = {
+  fill: OBJECT_DEFAULT.color,
+  strokeWidth: 0,
+  stroke: OBJECT_DEFAULT.color,
   opacity: 100
 }
 
-export const TRIANGLE_OPTIONS_DEFAULT: SquareOptions = {
-  shapeType: 'fill',
-  fillColorHex: COMMON_DEFAULT.canvasObjectColor,
-  strokeThickness: 0,
-  strokeColorHex: COMMON_DEFAULT.canvasObjectColor,
-  opacity: 100
-}
-export const ERASER_OPTIONS_DEFAULT: EraserOptions = {
-  lineCap: 'round',
-  lineJoin: 'round',
-  strokeThickness: 10,
-  strokeColorHex: COMMON_DEFAULT.canvasBackgroundColor,
-  opacity: 100
-}
-export const PENCIL_OPTIONS_DEFAULT: PencilOptions = {
-  lineCap: 'round',
-  lineJoin: 'round',
-  strokeThickness: 1,
-  strokeColorHex: COMMON_DEFAULT.canvasObjectColor,
-  opacity: 100
-}
-export const HIGHLIGHTER_OPTIONS_DEFAULT: HighlighterOptions = {
-  lineCap: 'butt',
-  lineJoin: 'round',
-  strokeThickness: 20,
-  strokeColorHex: COMMON_DEFAULT.canvasObjectColor,
-  opacity: 55
-}
-export const TEXT_OPTIONS_DEFAULT: TextOptions = {
-  text: 'text here',
-  fontFamily: 'sans-serif',
-  fontSize: 30,
-  fontColorHex: COMMON_DEFAULT.canvasObjectColor
-}
-export const ICON_OPTIONS_DEFAULT: IconOptions = {
-  svgPath: '',
-  bgColorHex: COMMON_DEFAULT.canvasObjectColor
-}
-export const IMAGE_OPTIONS_DEFAULT: ImageOptions = {
-  imageUrl: '',
-  imageElement: null
-}
-
-export const CANVAS_OBJECT_DEFAULT: Omit<CanvasObject, 'id' | 'type'> = {
-  x: 0,
-  y: 0,
-  width: 0,
-  height: 0,
+export const TRIANGLE_OPTIONS_DEFAULT: TriangleOptions = {
+  fill: OBJECT_DEFAULT.color,
+  strokeWidth: 0,
+  stroke: OBJECT_DEFAULT.color,
   opacity: 100
 }

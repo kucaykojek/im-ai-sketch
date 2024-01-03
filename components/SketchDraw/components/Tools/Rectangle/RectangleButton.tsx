@@ -1,13 +1,13 @@
-import { TriangleIcon } from 'lucide-react'
+import { SquareIcon } from 'lucide-react'
 
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import useCanvas from '@/sketch-draw/store/useCanvas'
 import { cn } from '@/sketch-draw/utils/common'
 
-const tool = 'triangle'
+const tool = 'rectangle'
 
-const TriangleButton = () => {
+const RectangleButton = () => {
   const { isReady } = useSketchDrawContext()
   const { activeObject, activeTool, setActiveTool } = useCanvas()
 
@@ -24,14 +24,14 @@ const TriangleButton = () => {
           (activeObject?.type === tool || activeTool === tool) &&
             style.toolActive
         )}
-        title="Triangle"
+        title="Rectangle"
         disabled={!isReady}
         onClick={handleClick}
       >
-        <TriangleIcon className={style.toolIcon} />
+        <SquareIcon className={style.toolIcon} />
       </button>
     </>
   )
 }
 
-export default TriangleButton
+export default RectangleButton

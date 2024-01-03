@@ -2,31 +2,28 @@ import { CircleIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
 import style from '@/sketch-draw/components/Tools/Tools.module.css'
-import { CIRCLE_OPTIONS_DEFAULT } from '@/sketch-draw/data/constants'
-import useCircleOptions from '@/sketch-draw/store/object/useCircleOptions'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useUserMode from '@/sketch-draw/store/useUserMode'
+import useCanvas from '@/sketch-draw/store/useCanvas'
 import { cn } from '@/sketch-draw/utils/common'
 
-const mode = 'circle'
+const tool = 'circle'
 
 const CircleButton = () => {
   const { isReady } = useSketchDrawContext()
-  const { setActiveObjectId } = useActiveObjectId()
-  const { userMode, setUserMode } = useUserMode()
-  const { setOptions } = useCircleOptions()
+  const { activeObject, activeTool, setActiveTool } = useCanvas()
 
   const handleClick = () => {
-    setUserMode(userMode === mode ? 'select' : mode)
-    setActiveObjectId(null)
-    setOptions(CIRCLE_OPTIONS_DEFAULT)
+    setActiveTool(activeTool === tool ? null : tool)
   }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, userMode === mode && style.toolActive)}
+        className={cn(
+          style.tool,
+          (activeObject?.type === tool || activeTool === tool) &&
+            style.toolActive
+        )}
         title="Circle"
         disabled={!isReady}
         onClick={handleClick}

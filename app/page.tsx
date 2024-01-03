@@ -1,6 +1,6 @@
 'use client'
 
-import CanvasInfo from '@/components/CanvasInfo'
+// import CanvasInfo from '@/components/CanvasInfo'
 import Dock from '@/components/Dock'
 import GenerationResult, {
   Actions as GenerationActions,
@@ -51,7 +51,7 @@ export default function Home() {
       <Dock />
 
       {/* Debugger Components */}
-      <CanvasInfo />
+      {/* <CanvasInfo /> */}
       <GenerationInfo />
       {/* Debugger Components */}
     </SketchDrawProvider>

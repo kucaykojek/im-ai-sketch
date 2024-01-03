@@ -1,34 +1,22 @@
 import { Trash2Icon } from 'lucide-react'
 
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import useSketchDrawContext from '@/sketch-draw/SketchDraw.context'
-import useActiveObjectId from '@/sketch-draw/store/useActiveObjectId'
-import useCanvasObjects from '@/sketch-draw/store/useCanvasObjects'
-import saveObjectsToStorage from '@/sketch-draw/utils/saveObjectsToStorage'
 
 import style from './Actions.module.css'
 
 const Delete = () => {
   const { isReady } = useSketchDrawContext()
-  const { activeObjectId, setActiveObjectId } = useActiveObjectId()
-  const { canvasObjects, deleteCanvasObject } = useCanvasObjects()
+  const { activeObject, setActiveObject } = useCanvas()
 
-  const disabled = !isReady || !activeObjectId
+  const disabled = !isReady || !activeObject
 
   const handleDeleteClick = () => {
-    if (!activeObjectId) {
+    if (!activeObject) {
       return
     }
 
-    // BEGIN: update storage
-    // for saving to storage so don't have to listen of canvasObjects changes
-    const filtedCanvasObjects = canvasObjects.filter(
-      (obj) => obj.id !== activeObjectId
-    )
-    saveObjectsToStorage(filtedCanvasObjects)
-    // END: update storage
-
-    deleteCanvasObject(activeObjectId)
-    setActiveObjectId(null)
+    setActiveObject(null)
   }
 
   return (
