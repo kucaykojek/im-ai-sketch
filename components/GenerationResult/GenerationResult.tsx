@@ -21,8 +21,7 @@ const GenerationResult = () => {
     resultImages,
     setResultImages,
     addResultImages,
-    sumGenerationCount,
-    sumGenerationCostedCredits
+    sumGenerationCount
   } = useAISketchStore()
 
   useEffect(() => {
@@ -44,6 +43,14 @@ const GenerationResult = () => {
   //   }
   // }, [something])
 
+  const blobToBase64 = (blob: Blob) => {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+  }
+
   const generateImages = debounce(async (sourceImage: string) => {
     if (generating || !payload.prompt) {
       return
@@ -60,18 +67,19 @@ const GenerationResult = () => {
         })
       })
 
-      const { data } = await generate.json()
+      const resultImage = await generate.blob()
 
-      addResultImages(data.image)
-      setSelectedImage(data.image)
+      const image = (await blobToBase64(resultImage)) as string
+
+      addResultImages(image.split(';base64,')[1])
+      setSelectedImage(image.split(';base64,')[1])
       sumGenerationCount()
-      sumGenerationCostedCredits(data.cost || 0)
 
       // Save to local storage
       if (localStorage) {
         localStorage.setItem(
           GENERATION_RESULT_KEYS,
-          JSON.stringify([...resultImages, data.image])
+          JSON.stringify([...resultImages, image])
         )
       }
     } catch (error) {

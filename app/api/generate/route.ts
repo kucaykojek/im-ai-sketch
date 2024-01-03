@@ -1,8 +1,9 @@
-const apiKey = process.env.GETIMGAI_API_KEY
-const apiUrl = process.env.GETIMGAI_API_URL
+import { NextResponse } from 'next/server'
+
+const apiUrl = process.env.API_URL
 
 export async function POST(req: Request) {
-  if (!apiKey || !apiUrl) {
+  if (!apiUrl) {
     return Response.json({
       status: 500,
       message: 'No key or url on the server'
@@ -11,21 +12,29 @@ export async function POST(req: Request) {
 
   const { image, prompt, strength } = await req.json()
 
-  const response = await fetch(`${apiUrl}/stable-diffusion/image-to-image`, {
+  const response = await fetch(`${apiUrl}/img2img`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-type': 'application/json',
-      Authorization: `Bearer ${apiKey}`
+      'Content-type': 'application/json'
     },
     body: JSON.stringify({
-      image,
+      image_b64: image,
       prompt,
-      strength
+      strength,
+      negative_prompt: '',
+      guidance_scale: 1,
+      steps: 4,
+      seed: 1,
+      accept: 'image/jpeg'
     })
   })
 
-  const data = await response.json()
+  const blob = await response.blob()
 
-  return Response.json({ status: 200, data })
+  const headers = new Headers()
+
+  headers.set('Content-Type', 'image/*')
+
+  return new NextResponse(blob, { status: 200, headers })
 }
