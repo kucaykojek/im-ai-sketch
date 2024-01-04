@@ -1,5 +1,6 @@
 import Circle, { CircleOptions } from './Circle'
 import ColorPalette from './Color'
+import Eraser, { EraserOptions } from './Eraser'
 import Highlighter, { HighlighterOptions } from './Highlighter'
 import Image, { ImageOptions } from './Image'
 import Pencil, { PencilOptions } from './Pencil'
@@ -12,6 +13,8 @@ export {
   HighlighterOptions,
   Pencil,
   PencilOptions,
+  Eraser,
+  EraserOptions,
   Circle,
   CircleOptions,
   Rectangle,

@@ -8,13 +8,13 @@ export type PencilOptions = Pick<
   fabric.BaseBrush,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
 >
-export type SprayOptions = Pick<
-  fabric.BaseBrush,
-  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
->
 export type HighlighterOptions = Pick<
   fabric.BaseBrush,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+>
+export type EraserOptions = Pick<
+  fabric.BaseBrush,
+  'width' | 'strokeLineCap' | 'strokeLineJoin'
 >
 export type TextOptions = fabric.ITextOptions & {
   text?: string
@@ -23,8 +23,8 @@ export type TextOptions = fabric.ITextOptions & {
 export type PencilObject = Pick<fabric.Object, 'type' | 'name'> &
   PencilOptions &
   fabric.IPathOptions
-export type SprayObject = Pick<fabric.Object, 'type' | 'name'> &
-  PencilOptions &
+export type EraserObject = Pick<fabric.Object, 'type' | 'name'> &
+  EraserOptions &
   fabric.IPathOptions
 export type HighlighterObject = Pick<fabric.Object, 'type' | 'name'> &
   HighlighterOptions &
@@ -35,13 +35,13 @@ export type TextObject = fabric.Text
 export type CanvasObject =
   | ShapeObject
   | PencilObject
-  | SprayObject
+  | EraserOptions
   | HighlighterObject
   | TextObject
 
 type CanvasActiveTool =
   | 'pencil'
-  | 'spray'
+  | 'eraser'
   | 'highlighter'
   | 'circle'
   | 'rectangle'

@@ -1,21 +1,29 @@
+import { fabric } from 'fabric'
+
 import type {
   CanvasObject,
+  EraserObject,
   HighlighterObject,
-  PencilObject,
-  SprayObject
+  PencilObject
 } from '@/components/SketchDraw/data/types'
+
+import {
+  ERASER_OPTIONS_DEFAULT,
+  HIGHLIGHTER_OPTIONS_DEFAULT,
+  PENCIL_OPTIONS_DEFAULT
+} from '../data/constants'
 
 export const getSelectedType = (obj: CanvasObject) => {
   if (!obj) {
     return null
   }
 
-  return obj.type !== 'path'
-    ? obj.type
+  return (obj as fabric.Object).type !== 'path'
+    ? (obj as fabric.Object).type
     : isPencilObject(obj)
       ? 'pencil'
-      : isSprayObject(obj)
-        ? 'spray'
+      : isEraserObject(obj)
+        ? 'eraser'
         : isHighlighterObject(obj)
           ? 'highlighter'
           : null
@@ -30,23 +38,25 @@ export const isPencilObject = (obj: CanvasObject) => {
     return (
       !!(obj as PencilObject).stroke &&
       !!(obj as PencilObject).strokeLineJoin &&
-      (obj as PencilObject).strokeLineCap === 'round'
+      (obj as PencilObject).strokeLineCap ===
+        PENCIL_OPTIONS_DEFAULT.strokeLineCap
     )
   } else {
     return false
   }
 }
 
-export const isSprayObject = (obj: CanvasObject) => {
+export const isEraserObject = (obj: CanvasObject) => {
   if (!obj) {
     return false
   }
 
-  if ((obj as SprayObject)?.type?.length) {
+  if ((obj as EraserObject)?.type?.length) {
     return (
-      !!(obj as SprayObject).stroke &&
-      !!(obj as SprayObject).strokeLineJoin &&
-      (obj as SprayObject).strokeLineCap === 'round'
+      !!(obj as EraserObject).stroke &&
+      !!(obj as EraserObject).strokeLineCap &&
+      (obj as EraserObject).strokeLineJoin ===
+        ERASER_OPTIONS_DEFAULT.strokeLineJoin
     )
   } else {
     return false
@@ -62,7 +72,8 @@ export const isHighlighterObject = (obj: CanvasObject) => {
     return (
       !!(obj as HighlighterObject).stroke &&
       !!(obj as HighlighterObject).strokeLineJoin &&
-      (obj as HighlighterObject).strokeLineCap === 'butt'
+      (obj as HighlighterObject).strokeLineCap ===
+        HIGHLIGHTER_OPTIONS_DEFAULT.strokeLineCap
     )
   } else {
     return false

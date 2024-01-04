@@ -6,19 +6,23 @@ import getAvailableFonts from '@/libs/getAvailableFonts'
 import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
 import useCircleOptions from './store/object/useCircleOptions'
+import useEraserOptions from './store/object/useEraserOptions'
 import useHighlighterOptions from './store/object/useHighlighterOptions'
 import usePencilOptions from './store/object/usePencilOptions'
 import useRectangleOptions from './store/object/useRectangleOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
+import { isEraserObject } from './utils/object'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
-  const { activeTool, setCanvasOptions, setSelectedObjects } = useCanvas()
+  const { activeTool, canvasOptions, setCanvasOptions, setSelectedObjects } =
+    useCanvas()
   const { startDrawing, updateDrawing, stopDrawing } = useSketchDrawHandler()
   const { setContainerSize } = useContainerSize()
   const { options: pencilOptions } = usePencilOptions()
+  const { options: eraserOptions } = useEraserOptions()
   const { options: highlighterOptions } = useHighlighterOptions()
   const { options: circleOptions } = useCircleOptions()
   const { options: rectangleOptions } = useRectangleOptions()
@@ -130,7 +134,7 @@ export default function SketchDrawListener() {
           canvas.off('mouse:up', canvasMouseUp)
         }
       } else if (
-        ['pencil', 'spray', 'highlighter'].includes(activeTool || '')
+        ['pencil', 'eraser', 'highlighter'].includes(activeTool || '')
       ) {
         canvas.isDrawingMode = true
 
@@ -142,6 +146,15 @@ export default function SketchDrawListener() {
             canvas.freeDrawingBrush.strokeLineCap = pencilOptions.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
               pencilOptions.strokeLineJoin
+            break
+          case 'eraser':
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
+            canvas.freeDrawingBrush.color =
+              canvasOptions.backgroundColor as string
+            canvas.freeDrawingBrush.width = eraserOptions.width
+            canvas.freeDrawingBrush.strokeLineCap = eraserOptions.strokeLineCap
+            canvas.freeDrawingBrush.strokeLineJoin =
+              eraserOptions.strokeLineJoin
             break
           case 'highlighter':
             canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
@@ -178,11 +191,13 @@ export default function SketchDrawListener() {
       canvas.on('selection:created', canvasObjectSelection)
       canvas.on('selection:updated', canvasObjectSelection)
       canvas.on('selection:cleared', canvasObjectSelection)
+      canvas.on('object:added', canvasObjectSelection)
 
       return () => {
         canvas.off('selection:created', canvasObjectSelection)
         canvas.off('selection:updated', canvasObjectSelection)
         canvas.off('selection:cleared', canvasObjectSelection)
+        canvas.off('object:added', canvasObjectSelection)
       }
     }
   }, [canvas])

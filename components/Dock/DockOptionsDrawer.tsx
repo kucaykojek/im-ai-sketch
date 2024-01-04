@@ -1,5 +1,6 @@
 import {
   CircleOptions,
+  EraserOptions,
   HighlighterOptions,
   ImageOptions,
   PencilOptions,
@@ -32,6 +33,7 @@ const DockOptionsDrawer = () => {
         <>
           {selectedType === 'highlighter' && <HighlighterOptions />}
           {selectedType === 'pencil' && <PencilOptions />}
+          {selectedType === 'eraser' && <EraserOptions />}
           {selectedType === 'circle' && <CircleOptions />}
           {selectedType === 'rectangle' && <RectangleOptions />}
           {selectedType === 'triangle' && <TriangleOptions />}

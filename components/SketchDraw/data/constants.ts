@@ -1,5 +1,6 @@
 import {
   CircleOptions,
+  EraserOptions,
   HighlighterOptions,
   PencilOptions,
   RectangleOptions,
@@ -43,14 +44,13 @@ export const PENCIL_OPTIONS_DEFAULT: Pick<
   strokeLineJoin: 'round'
 }
 
-export const SPRAY_OPTIONS_DEFAULT: Pick<
-  PencilOptions,
-  'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
+export const ERASER_OPTIONS_DEFAULT: Pick<
+  EraserOptions,
+  'width' | 'strokeLineCap' | 'strokeLineJoin'
 > = {
-  color: OBJECT_DEFAULT.color,
-  width: 30,
+  width: 10,
   strokeLineCap: 'round',
-  strokeLineJoin: 'round'
+  strokeLineJoin: 'mitter'
 }
 
 export const HIGHLIGHTER_OPTIONS_DEFAULT: Pick<
