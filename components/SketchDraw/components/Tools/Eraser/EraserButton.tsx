@@ -30,7 +30,7 @@ const EraserButton = () => {
       <button
         type="button"
         className={cn(style.tool, isActive && style.toolActive)}
-        title="Eraser"
+        title="Masking / Eraser"
         disabled={!isReady}
         onClick={handleClick}
       >

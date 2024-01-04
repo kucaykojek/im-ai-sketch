@@ -64,7 +64,7 @@ const RectangleOptions = () => {
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
         <SquareIcon />
-        Square
+        Rectangle
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
