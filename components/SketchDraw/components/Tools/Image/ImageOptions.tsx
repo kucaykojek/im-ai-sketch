@@ -1,3 +1,6 @@
+'use client'
+
+import { fabric } from 'fabric'
 import { ImageIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -5,11 +8,15 @@ import { useDropzone } from 'react-dropzone'
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn, fileToBase64 } from '@/components/SketchDraw/utils/common'
+import {
+  cn,
+  fileToBase64,
+  generateUniqueId
+} from '@/components/SketchDraw/utils/common'
 
 const ImageOptions = () => {
   const { isReady } = useSketchDrawContext()
-  const { canvasOptions } = useCanvas()
+  const { canvas, canvasOptions, setActiveTool } = useCanvas()
 
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
     useDropzone({
@@ -41,15 +48,31 @@ const ImageOptions = () => {
   }
 
   const pushImageObject = async ({
-    image: _imageUrl,
-    width: _w,
-    height: _h
+    image: imageUrl,
+    width,
+    height
   }: {
     image: string
     width: number
     height: number
   }) => {
     // TODO:
+    if (canvas) {
+      fabric.Image.fromURL(imageUrl, (img) => {
+        const obj = img.set({
+          name: generateUniqueId(),
+          left: (canvasOptions.width! - width) / 2, // center
+          top: (canvasOptions.height! - height) / 2, // center
+          width: width,
+          height: height
+        })
+
+        canvas.add(obj)
+        canvas.requestRenderAll()
+
+        setActiveTool(null)
+      })
+    }
   }
 
   useEffect(() => {

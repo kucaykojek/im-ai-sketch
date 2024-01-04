@@ -3,6 +3,7 @@ import {
   HighlighterOptions,
   PencilOptions,
   RectangleOptions,
+  TextOptions,
   TriangleOptions
 } from './types'
 
@@ -81,4 +82,14 @@ export const TRIANGLE_OPTIONS_DEFAULT: TriangleOptions = {
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,
   opacity: 100
+}
+
+export const TEXT_OPTIONS_DEFAULT: TextOptions = {
+  text: 'text',
+  fontFamily: 'Arial',
+  fontWeight: 'normal',
+  fontStyle: 'normal',
+  underline: false,
+  linethrough: false,
+  fill: OBJECT_DEFAULT.color
 }

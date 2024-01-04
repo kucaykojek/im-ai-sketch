@@ -1,8 +1,10 @@
 import {
   CircleOptions,
   HighlighterOptions,
+  ImageOptions,
   PencilOptions,
   RectangleOptions,
+  TextOptions,
   TriangleOptions
 } from '@/components/SketchDraw/components/Tools'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
@@ -33,6 +35,8 @@ const DockOptionsDrawer = () => {
           {selectedType === 'circle' && <CircleOptions />}
           {selectedType === 'rectangle' && <RectangleOptions />}
           {selectedType === 'triangle' && <TriangleOptions />}
+          {selectedType === 'text' && <TextOptions />}
+          {activeTool === 'image' && <ImageOptions />}
         </>
       )}
     </div>

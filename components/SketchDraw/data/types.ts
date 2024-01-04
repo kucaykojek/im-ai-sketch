@@ -16,6 +16,9 @@ export type HighlighterOptions = Pick<
   fabric.BaseBrush,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
 >
+export type TextOptions = fabric.ITextOptions & {
+  text?: string
+}
 
 export type PencilObject = Pick<fabric.Object, 'type' | 'name'> &
   PencilOptions &
@@ -27,12 +30,14 @@ export type HighlighterObject = Pick<fabric.Object, 'type' | 'name'> &
   HighlighterOptions &
   fabric.IPathOptions
 export type ShapeObject = fabric.Object
+export type TextObject = fabric.Text
 
 export type CanvasObject =
   | ShapeObject
   | PencilObject
   | SprayObject
   | HighlighterObject
+  | TextObject
 
 type CanvasActiveTool =
   | 'pencil'

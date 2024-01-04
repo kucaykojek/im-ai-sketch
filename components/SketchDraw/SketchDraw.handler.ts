@@ -1,7 +1,10 @@
 import { fabric } from 'fabric'
+import { omit } from 'lodash'
 
+import { TEXT_OPTIONS_DEFAULT } from './data/constants'
 import useCircleOptions from './store/object/useCircleOptions'
 import useRectangleOptions from './store/object/useRectangleOptions'
+import useTextOptions from './store/object/useTextOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import { generateUniqueId } from './utils/common'
@@ -15,6 +18,7 @@ const useSketchDrawHandler = () => {
   const { options: circleOptions } = useCircleOptions()
   const { options: rectangleOptions } = useRectangleOptions()
   const { options: triangleOptions } = useTriangleOptions()
+  const { options: textOptions } = useTextOptions()
 
   const startDrawing = (e: fabric.IEvent) => {
     if (!canvas) {
@@ -40,8 +44,8 @@ const useSketchDrawHandler = () => {
     switch (activeTool) {
       case 'circle':
         obj = new fabric.Ellipse({
-          ...circleOptions,
           ...commonInitOptions,
+          ...circleOptions,
           rx: 1,
           ry: 1,
           type: 'circle',
@@ -50,19 +54,30 @@ const useSketchDrawHandler = () => {
         break
       case 'rectangle':
         obj = new fabric.Rect({
-          ...rectangleOptions,
           ...commonInitOptions,
+          ...rectangleOptions,
           type: 'rectangle',
           name: generateUniqueId()
         })
         break
       case 'triangle':
         obj = new fabric.Triangle({
-          ...triangleOptions,
           ...commonInitOptions,
+          ...triangleOptions,
           type: 'triangle',
           name: generateUniqueId()
         })
+        break
+      case 'text':
+        obj = new fabric.Textbox(
+          textOptions.text || TEXT_OPTIONS_DEFAULT.text || '',
+          {
+            ...commonInitOptions,
+            ...omit(textOptions, ['text']),
+            type: 'text',
+            name: generateUniqueId()
+          }
+        )
         break
 
       default:
@@ -120,6 +135,15 @@ const useSketchDrawHandler = () => {
 
         obj.set({ width })
         obj.set({ height })
+        break
+      case 'text':
+        if (initPosition.x > pointer.x) {
+          obj.set({ left: Math.abs(pointer.x) })
+        }
+
+        if (initPosition.y > pointer.y) {
+          obj.set({ top: Math.abs(pointer.y) })
+        }
         break
 
       default:

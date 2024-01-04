@@ -10,6 +10,7 @@ import useRectangleOptions from './store/object/useRectangleOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
+import getAvailableFonts from '@/libs/getAvailableFonts'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()

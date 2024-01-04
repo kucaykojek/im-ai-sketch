@@ -2,21 +2,33 @@ import { ImageIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
+import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 
-const ImageButton = () => {
-  const disabled = true
-  const { isReady } = useSketchDrawContext()
+const tool = 'image'
 
-  const handleClick = () => {}
+const TextButton = () => {
+  const { isReady } = useSketchDrawContext()
+  const { canvas, activeTool, setActiveTool } = useCanvas()
+
+  const isActive = activeTool === tool
+
+  const handleClick = () => {
+    setActiveTool(isActive ? null : tool)
+
+    if (canvas && canvas.getActiveObjects().length) {
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+    }
+  }
 
   return (
     <>
       <button
         type="button"
-        className={cn(style.tool, !disabled && style.toolActive)}
-        title="Image"
-        disabled={disabled || !isReady}
+        className={cn(style.tool, isActive && style.toolActive)}
+        title="Text"
+        disabled={!isReady}
         onClick={handleClick}
       >
         <ImageIcon className={style.toolIcon} />
@@ -25,4 +37,4 @@ const ImageButton = () => {
   )
 }
 
-export default ImageButton
+export default TextButton
