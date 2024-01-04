@@ -1,6 +1,8 @@
 import { fabric } from 'fabric'
 import { useEffect } from 'react'
 
+import getAvailableFonts from '@/libs/getAvailableFonts'
+
 import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
 import useCircleOptions from './store/object/useCircleOptions'
@@ -10,7 +12,6 @@ import useRectangleOptions from './store/object/useRectangleOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
-import getAvailableFonts from '@/libs/getAvailableFonts'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()

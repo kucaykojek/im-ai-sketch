@@ -1,6 +1,8 @@
 'use client'
 
-export default async function getAvailableFonts(): Promise<string[] | undefined> {
+export default async function getAvailableFonts(): Promise<
+  string[] | undefined
+> {
   if (document) {
     await document.fonts.ready
 
