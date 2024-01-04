@@ -35,7 +35,7 @@ export type TextObject = fabric.Text
 export type CanvasObject =
   | ShapeObject
   | PencilObject
-  | EraserOptions
+  | EraserObject
   | HighlighterObject
   | TextObject
 
