@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "clsx": "^2.0.0",
-    "fabric": "^5.3.0",
+    "fabric": "^6.0.0-beta16",
     "lodash": "^4.17.21",
     "lucide-react": "^0.302.0",
     "next": "14.0.4",

@@ -1,4 +1,4 @@
-import { fabric } from 'fabric'
+import { Ellipse, Rect, Triangle, Textbox, TPointerEvent } from 'fabric'
 import { omit } from 'lodash'
 
 import { TEXT_OPTIONS_DEFAULT } from './data/constants'
@@ -20,7 +20,7 @@ const useSketchDrawHandler = () => {
   const { options: triangleOptions } = useTriangleOptions()
   const { options: textOptions } = useTextOptions()
 
-  const startDrawing = (e: fabric.IEvent) => {
+  const startDrawing = (e: TPointerEvent) => {
     if (!canvas) {
       return
     }
@@ -30,7 +30,7 @@ const useSketchDrawHandler = () => {
     }
 
     isDrawing = true
-    const pointer = canvas.getPointer(e as unknown as Event)
+    const pointer = canvas.getViewportPoint(e)
 
     initPosition = { x: pointer.x, y: pointer.y }
 
@@ -43,7 +43,7 @@ const useSketchDrawHandler = () => {
 
     switch (activeTool) {
       case 'circle':
-        obj = new fabric.Ellipse({
+        obj = new Ellipse({
           ...commonInitOptions,
           ...circleOptions,
           rx: 1,
@@ -53,7 +53,7 @@ const useSketchDrawHandler = () => {
         })
         break
       case 'rectangle':
-        obj = new fabric.Rect({
+        obj = new Rect({
           ...commonInitOptions,
           ...rectangleOptions,
           type: 'rectangle',
@@ -61,7 +61,7 @@ const useSketchDrawHandler = () => {
         })
         break
       case 'triangle':
-        obj = new fabric.Triangle({
+        obj = new Triangle({
           ...commonInitOptions,
           ...triangleOptions,
           type: 'triangle',
@@ -69,7 +69,7 @@ const useSketchDrawHandler = () => {
         })
         break
       case 'text':
-        obj = new fabric.Textbox(
+        obj = new Textbox(
           textOptions.text || TEXT_OPTIONS_DEFAULT.text || '',
           {
             ...commonInitOptions,
@@ -91,12 +91,12 @@ const useSketchDrawHandler = () => {
     }
   }
 
-  const updateDrawing = (e: fabric.IEvent) => {
+  const updateDrawing = (e: TPointerEvent) => {
     if (!isDrawing || !activeTool || !canvas || !canvas!.getActiveObject()) {
       return
     }
 
-    const pointer = canvas.getPointer(e as unknown as Event)
+    const pointer = canvas.getViewportPoint(e)
     let obj = canvas.getActiveObject()
 
     if (!obj) {

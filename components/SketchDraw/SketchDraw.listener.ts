@@ -1,7 +1,5 @@
-import { fabric } from 'fabric'
+import { TPointerEvent, fabric } from 'fabric'
 import { useEffect } from 'react'
-
-import getAvailableFonts from '@/libs/getAvailableFonts'
 
 import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
@@ -36,6 +34,7 @@ export default function SketchDrawListener() {
         height: containerRef.current.offsetHeight
       })
       setCanvasOptions({
+        ...canvasOptions,
         width: containerRef.current.offsetWidth as number,
         height: containerRef.current.offsetHeight as number
       })
@@ -50,6 +49,7 @@ export default function SketchDrawListener() {
           height: containerRef.current.offsetHeight
         })
         setCanvasOptions({
+          ...canvasOptions,
           width: containerRef.current.offsetWidth as number,
           height: containerRef.current.offsetHeight as number
         })
@@ -107,11 +107,11 @@ export default function SketchDrawListener() {
       ) {
         fabric.Object.prototype.selectable = false
 
-        const canvasMouseDown = (e: fabric.IEvent) => {
+        const canvasMouseDown = (e: TPointerEvent) => {
           startDrawing(e)
         }
 
-        const canvasMouseMove = (e: fabric.IEvent) => {
+        const canvasMouseMove = (e: TPointerEvent) => {
           updateDrawing(e)
         }
 

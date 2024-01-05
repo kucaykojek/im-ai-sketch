@@ -1,36 +1,56 @@
-import { fabric } from 'fabric'
+import type {
+  BaseBrush,
+  Canvas,
+  CanvasOptions,
+  FabricObject,
+  FabricObjectProps,
+  FabricText,
+  PathProps,
+  TextboxProps
+} from 'fabric'
 
 // BEGIN: canvas related types
-export type CircleOptions = fabric.ICircleOptions
-export type RectangleOptions = fabric.IRectOptions
-export type TriangleOptions = fabric.ITriangleOptions
+export type CircleOptions = Pick<
+  FabricObjectProps,
+  'fill' | 'strokeWidth' | 'stroke' | 'opacity'
+>
+export type RectangleOptions = Pick<
+  FabricObjectProps,
+  'fill' | 'strokeWidth' | 'stroke' | 'opacity'
+>
+export type TriangleOptions = Pick<
+  FabricObjectProps,
+  'fill' | 'strokeWidth' | 'stroke' | 'opacity'
+>
 export type PencilOptions = Pick<
-  fabric.BaseBrush,
+  BaseBrush,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
 >
 export type HighlighterOptions = Pick<
-  fabric.BaseBrush,
+  BaseBrush,
   'width' | 'color' | 'strokeLineCap' | 'strokeLineJoin'
 >
 export type EraserOptions = Pick<
-  fabric.BaseBrush,
+  BaseBrush,
   'width' | 'strokeLineCap' | 'strokeLineJoin'
 >
-export type TextOptions = fabric.ITextOptions & {
+export type TextOptions = Pick<
+  TextboxProps,
+  | 'fontFamily'
+  | 'fontWeight'
+  | 'fontStyle'
+  | 'underline'
+  | 'linethrough'
+  | 'fill'
+> & {
   text?: string
 }
 
-export type PencilObject = Pick<fabric.Object, 'type' | 'name'> &
-  PencilOptions &
-  fabric.IPathOptions
-export type EraserObject = Pick<fabric.Object, 'type' | 'name'> &
-  EraserOptions &
-  fabric.IPathOptions
-export type HighlighterObject = Pick<fabric.Object, 'type' | 'name'> &
-  HighlighterOptions &
-  fabric.IPathOptions
-export type ShapeObject = fabric.Object
-export type TextObject = fabric.Text
+export type PencilObject = FabricObject & PencilOptions & PathProps
+export type EraserObject = FabricObject & EraserOptions & PathProps
+export type HighlighterObject = FabricObject & HighlighterOptions & PathProps
+export type ShapeObject = FabricObject
+export type TextObject = FabricText
 
 export type CanvasObject =
   | ShapeObject
@@ -51,9 +71,9 @@ type CanvasActiveTool =
   | 'image'
   | null
 
-export type Canvas = {
-  canvas: fabric.Canvas | null
-  canvasOptions: fabric.ICanvasOptions
+export type CanvasType = {
+  canvas: Canvas | null
+  canvasOptions: Pick<CanvasOptions, 'backgroundColor' | 'width' | 'height'>
   selectedObjects: CanvasObject[]
   activeTool: CanvasActiveTool
 }

@@ -50,7 +50,7 @@ export const ERASER_OPTIONS_DEFAULT: Pick<
 > = {
   width: 10,
   strokeLineCap: 'round',
-  strokeLineJoin: 'mitter'
+  strokeLineJoin: 'miter'
 }
 
 export const HIGHLIGHTER_OPTIONS_DEFAULT: Pick<
@@ -67,21 +67,21 @@ export const CIRCLE_OPTIONS_DEFAULT: CircleOptions = {
   fill: OBJECT_DEFAULT.color,
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,
-  opacity: 100
+  opacity: 1
 }
 
 export const RECTANGLE_OPTIONS_DEFAULT: RectangleOptions = {
   fill: OBJECT_DEFAULT.color,
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,
-  opacity: 100
+  opacity: 1
 }
 
 export const TRIANGLE_OPTIONS_DEFAULT: TriangleOptions = {
   fill: OBJECT_DEFAULT.color,
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,
-  opacity: 100
+  opacity: 1
 }
 
 export const TEXT_OPTIONS_DEFAULT: TextOptions = {

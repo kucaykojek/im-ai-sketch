@@ -1,4 +1,4 @@
-import { fabric } from 'fabric'
+import { Canvas, FabricObject } from 'fabric'
 import React, {
   type MutableRefObject,
   type ReactNode,
@@ -13,14 +13,14 @@ import React, {
 } from 'react'
 
 import { BG_STORAGE_KEY, PRIMARY_COLOR_HEX } from './data/constants'
-import type { Canvas } from './data/types'
+import type { CanvasType } from './data/types'
 import useCanvas from './store/useCanvas'
 
 interface SketchDrawContextType {
   isReady: boolean
   containerRef: MutableRefObject<HTMLDivElement | null>
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
-  canvas: Canvas['canvas']
+  canvas: CanvasType['canvas']
   initCanvas: () => void
 }
 
@@ -56,6 +56,7 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       const backgroundColor =
         localStorage.getItem(BG_STORAGE_KEY) || canvasOptions.backgroundColor
       setCanvasOptions({
+        ...canvasOptions,
         backgroundColor
       })
 
@@ -63,16 +64,16 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
     }
 
     if (!canvas) {
-      fabric.Object.prototype.transparentCorners = false
-      fabric.Object.prototype.borderColor = PRIMARY_COLOR_HEX
-      fabric.Object.prototype.cornerColor = PRIMARY_COLOR_HEX
-      fabric.Object.prototype.cornerStyle = 'circle'
+      FabricObject.prototype.transparentCorners = false
+      FabricObject.prototype.borderColor = PRIMARY_COLOR_HEX
+      FabricObject.prototype.cornerColor = PRIMARY_COLOR_HEX
+      FabricObject.prototype.cornerStyle = 'circle'
 
-      setCanvas(new fabric.Canvas(canvasRef.current, canvasOptions))
+      setCanvas(new Canvas(canvasRef.current, canvasOptions))
     } else {
-      canvas.setBackgroundColor(canvasOptions.backgroundColor!, () => {})
-      canvas.setWidth(canvasOptions.width!)
-      canvas.setHeight(canvasOptions.height!)
+      canvas.backgroundColor = canvasOptions.backgroundColor
+      canvas.width = canvasOptions.width
+      canvas.height = canvasOptions.height
     }
 
     setIsReady(true)

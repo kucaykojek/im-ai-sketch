@@ -39,9 +39,10 @@ const RectangleOptions = () => {
   useEffect(() => {
     if (selectedObjects?.[0]?.type === 'rectangle') {
       setOptions({
+        ...options,
         fill: (selectedObjects[0] as ShapeObject).fill,
         stroke: (selectedObjects[0] as ShapeObject).stroke,
-        strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
+        strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth,
       })
     }
   }, [selectedObjects])
@@ -132,7 +133,7 @@ const RectangleOptions = () => {
           <div className={style.optionsControl}>
             <ColorPicker
               id="square-options-stroke-color"
-              color={options.stroke!}
+              color={options.stroke as string}
               onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />
           </div>
