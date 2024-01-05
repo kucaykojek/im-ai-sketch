@@ -1,4 +1,4 @@
-import { fabric } from 'fabric'
+import { Canvas } from 'fabric'
 import React, {
   type MutableRefObject,
   type ReactNode,
@@ -12,15 +12,21 @@ import React, {
   useState
 } from 'react'
 
-import { BG_STORAGE_KEY, PRIMARY_COLOR_HEX } from './data/constants'
-import type { Canvas } from './data/types'
+import {
+  BG_STORAGE_KEY,
+  CANVAS_DEFAULT,
+  PRIMARY_COLOR_HEX
+} from './data/constants'
+import type { CanvasType } from './data/types'
 import useCanvas from './store/useCanvas'
+import useContainerSize from './store/useContainerSize'
+import { drawObjectsFromStorage } from './utils/object'
 
 interface SketchDrawContextType {
   isReady: boolean
   containerRef: MutableRefObject<HTMLDivElement | null>
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
-  canvas: Canvas['canvas']
+  canvas: CanvasType['canvas']
   initCanvas: () => void
 }
 
@@ -39,6 +45,7 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const { canvas, canvasOptions, setCanvas, setCanvasOptions } = useCanvas()
+  const { containerSize } = useContainerSize()
 
   // Init canvas function
   const initCanvas = useCallback(() => {
@@ -50,33 +57,38 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    // Restore from local storage
-    if (localStorage) {
-      // Canvas
-      const backgroundColor =
-        localStorage.getItem(BG_STORAGE_KEY) || canvasOptions.backgroundColor
-      setCanvasOptions({
-        backgroundColor
-      })
+    const backgroundColor = localStorage
+      ? localStorage.getItem(BG_STORAGE_KEY) || CANVAS_DEFAULT.background
+      : canvasOptions.backgroundColor
+    const width = containerRef.current.offsetWidth
+    const height = containerRef.current.offsetHeight
 
-      // TODO: Canvas Objects
-    }
+    setCanvasOptions({
+      backgroundColor,
+      width,
+      height
+    })
 
     if (!canvas) {
-      fabric.Object.prototype.transparentCorners = false
-      fabric.Object.prototype.borderColor = PRIMARY_COLOR_HEX
-      fabric.Object.prototype.cornerColor = PRIMARY_COLOR_HEX
-      fabric.Object.prototype.cornerStyle = 'circle'
+      const newCanvas = new Canvas(canvasRef.current, {
+        backgroundColor,
+        width,
+        height,
+        selectionBorderColor: PRIMARY_COLOR_HEX,
+        selectionLineWidth: 1
+      })
 
-      setCanvas(new fabric.Canvas(canvasRef.current, canvasOptions))
+      setCanvas(newCanvas)
+
+      // TODO: draw
+      drawObjectsFromStorage(newCanvas)
     } else {
-      canvas.setBackgroundColor(canvasOptions.backgroundColor!, () => {})
-      canvas.setWidth(canvasOptions.width!)
-      canvas.setHeight(canvasOptions.height!)
+      canvas.backgroundColor = backgroundColor
+      canvas.setDimensions({ width, height })
     }
 
     setIsReady(true)
-  }, [canvasOptions.width, canvasOptions.height, canvasOptions.backgroundColor])
+  }, [containerSize, canvasOptions.backgroundColor])
 
   useEffect(() => {
     initCanvas()

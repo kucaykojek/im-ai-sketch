@@ -1,17 +1,17 @@
 import { create } from 'zustand'
 
 import { CANVAS_DEFAULT } from '@/components/SketchDraw/data/constants'
-import { Canvas } from '@/components/SketchDraw/data/types'
+import type { CanvasType } from '@/components/SketchDraw/data/types'
 
 const useCanvas = create<{
-  canvas: Canvas['canvas']
-  canvasOptions: Canvas['canvasOptions']
-  selectedObjects: Canvas['selectedObjects']
-  activeTool: Canvas['activeTool']
-  setCanvas: (_: Canvas['canvas']) => void
-  setCanvasOptions: (_: Canvas['canvasOptions']) => void
-  setSelectedObjects: (_: Canvas['selectedObjects']) => void
-  setActiveTool: (_: Canvas['activeTool']) => void
+  canvas: CanvasType['canvas']
+  canvasOptions: CanvasType['canvasOptions']
+  selectedObjects: CanvasType['selectedObjects']
+  activeTool: CanvasType['activeTool']
+  setCanvas: (_: CanvasType['canvas']) => void
+  setCanvasOptions: (_: CanvasType['canvasOptions']) => void
+  setSelectedObjects: (_: CanvasType['selectedObjects']) => void
+  setActiveTool: (_: CanvasType['activeTool']) => void
 }>((set, get) => ({
   canvas: null,
   canvasOptions: {

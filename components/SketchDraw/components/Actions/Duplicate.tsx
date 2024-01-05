@@ -1,4 +1,3 @@
-import { fabric } from 'fabric'
 import { CopyIcon } from 'lucide-react'
 
 import useSketchDrawContext from '../../SketchDraw.context'
@@ -9,25 +8,27 @@ const Duplicate = () => {
   const { isReady } = useSketchDrawContext()
   const { canvas, selectedObjects } = useCanvas()
 
-  const handleClick = () => {
+  const selectedObject = selectedObjects?.[0] || null
+
+  const handleClick = async () => {
     if (!canvas) {
       return
     }
 
-    if (selectedObjects.length !== 1) {
+    if (!selectedObject) {
       return
     }
 
-    canvas!.getActiveObject()!.clone((cloned: fabric.Object) => {
-      canvas.add(cloned)
-      cloned.set({
-        left: cloned.left! + 10,
-        top: cloned.top! + 10
-      })
+    const cloned = await selectedObject.clone()
 
-      canvas.setActiveObject(cloned)
-      canvas.renderAll()
+    canvas.add(cloned)
+    cloned.set({
+      left: cloned.left! + 10,
+      top: cloned.top! + 10
     })
+
+    canvas.setActiveObject(cloned)
+    canvas.renderAll()
   }
 
   return (
@@ -35,7 +36,7 @@ const Duplicate = () => {
       type="button"
       title="Duplicate"
       className={style.action}
-      disabled={!isReady || selectedObjects.length !== 1}
+      disabled={!isReady || !selectedObject}
       onClick={handleClick}
     >
       <CopyIcon />

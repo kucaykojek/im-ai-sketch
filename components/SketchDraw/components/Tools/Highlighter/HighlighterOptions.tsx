@@ -25,8 +25,8 @@ const HighlighterOptions = () => {
         ...HIGHLIGHTER_OPTIONS_DEFAULT,
         color:
           (
-            (selectedObjects[0] as HighlighterObject).stroke ||
-            HIGHLIGHTER_OPTIONS_DEFAULT.color
+            ((selectedObjects[0] as HighlighterObject).stroke ||
+              HIGHLIGHTER_OPTIONS_DEFAULT.color) as string
           ).slice(0, 7) + 55,
         width:
           (selectedObjects[0] as HighlighterObject).strokeWidth ||

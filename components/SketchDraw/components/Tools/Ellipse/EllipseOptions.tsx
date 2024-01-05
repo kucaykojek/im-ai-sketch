@@ -6,12 +6,12 @@ import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
 import type { ShapeObject } from '@/components/SketchDraw/data/types'
-import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
+import useEllipseOptions from '@/components/SketchDraw/store/object/useEllipseOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 
-const RectangleOptions = () => {
-  const { options, setOptions } = useRectangleOptions()
+const EllipseOptions = () => {
+  const { options, setOptions } = useEllipseOptions()
   const { canvas, selectedObjects } = useCanvas()
 
   const handleChangeOptions = (key: any, value: any) => {
@@ -37,8 +37,9 @@ const RectangleOptions = () => {
   }
 
   useEffect(() => {
-    if (selectedObjects?.[0]?.type === 'rectangle') {
+    if (selectedObjects?.[0]?.type === 'ellipse') {
       setOptions({
+        ...options,
         fill: (selectedObjects[0] as ShapeObject).fill,
         stroke: (selectedObjects[0] as ShapeObject).stroke,
         strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
@@ -51,7 +52,7 @@ const RectangleOptions = () => {
       // Change objects based on options
       canvas
         .getActiveObjects()
-        .filter((obj) => obj.type === 'rectangle')
+        .filter((obj) => obj.type === 'ellipse')
         .forEach((obj) => {
           obj.set({ ...options })
         })
@@ -64,7 +65,7 @@ const RectangleOptions = () => {
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
         <SquareIcon />
-        Rectangle
+        Ellipse
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
@@ -98,7 +99,7 @@ const RectangleOptions = () => {
           <div className={style.optionsItemLabel}>Background</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="square-options-fill-color"
+              id="ellipse-options-fill-color"
               color={
                 options.fill === 'transparent'
                   ? OBJECT_DEFAULT.color
@@ -113,7 +114,7 @@ const RectangleOptions = () => {
           <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
-              id="square-options-stroke-width"
+              id="ellipse-options-stroke-width"
               value={options.strokeWidth || 0}
               min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
@@ -131,8 +132,8 @@ const RectangleOptions = () => {
           <div className={style.optionsItemLabel}>Border Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="square-options-stroke-color"
-              color={options.stroke!}
+              id="ellipse-options-stroke-color"
+              color={options.stroke as string}
               onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />
           </div>
@@ -142,4 +143,4 @@ const RectangleOptions = () => {
   )
 }
 
-export default RectangleOptions
+export default EllipseOptions

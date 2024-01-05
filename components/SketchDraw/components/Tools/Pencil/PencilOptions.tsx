@@ -23,9 +23,8 @@ const PencilOptions = () => {
     if (isPencilObject(selectedObjects?.[0])) {
       setOptions({
         ...PENCIL_OPTIONS_DEFAULT,
-        color:
-          (selectedObjects[0] as PencilObject).stroke ||
-          PENCIL_OPTIONS_DEFAULT.color,
+        color: ((selectedObjects[0] as PencilObject).stroke ||
+          PENCIL_OPTIONS_DEFAULT.color) as string,
         width:
           (selectedObjects[0] as PencilObject).strokeWidth ||
           PENCIL_OPTIONS_DEFAULT.width

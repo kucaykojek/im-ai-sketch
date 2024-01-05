@@ -17,7 +17,7 @@ const Delete = () => {
       return
     }
 
-    canvas.getActiveObjects().forEach((obj) => {
+    selectedObjects.forEach((obj) => {
       canvas.remove(obj)
     })
 

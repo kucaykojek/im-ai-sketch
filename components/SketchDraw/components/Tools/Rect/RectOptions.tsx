@@ -1,4 +1,4 @@
-import { CircleIcon } from 'lucide-react'
+import { SquareIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
 import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
@@ -6,12 +6,12 @@ import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
 import type { ShapeObject } from '@/components/SketchDraw/data/types'
-import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useRectOptions from '@/components/SketchDraw/store/object/useRectOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 
-const CircleOptions = () => {
-  const { options, setOptions } = useCircleOptions()
+const RectOptions = () => {
+  const { options, setOptions } = useRectOptions()
   const { canvas, selectedObjects } = useCanvas()
 
   const handleChangeOptions = (key: any, value: any) => {
@@ -37,8 +37,9 @@ const CircleOptions = () => {
   }
 
   useEffect(() => {
-    if (selectedObjects?.[0]?.type === 'circle') {
+    if (selectedObjects?.[0]?.type === 'rect') {
       setOptions({
+        ...options,
         fill: (selectedObjects[0] as ShapeObject).fill,
         stroke: (selectedObjects[0] as ShapeObject).stroke,
         strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
@@ -51,7 +52,7 @@ const CircleOptions = () => {
       // Change objects based on options
       canvas
         .getActiveObjects()
-        .filter((obj) => obj.type === 'circle')
+        .filter((obj) => obj.type === 'rect')
         .forEach((obj) => {
           obj.set({ ...options })
         })
@@ -63,8 +64,8 @@ const CircleOptions = () => {
   return (
     <div className={style.toolOptions}>
       <div className={style.optionsTitle}>
-        <CircleIcon />
-        Circle
+        <SquareIcon />
+        Rect
       </div>
       <div className={style.optionsWrapper}>
         <div className={style.optionsItem}>
@@ -98,7 +99,7 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Background</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="circle-options-fill-color"
+              id="rect-options-fill-color"
               color={
                 options.fill === 'transparent'
                   ? OBJECT_DEFAULT.color
@@ -113,7 +114,7 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
-              id="circle-options-stroke-width"
+              id="rect-options-stroke-width"
               value={options.strokeWidth || 0}
               min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
@@ -131,8 +132,8 @@ const CircleOptions = () => {
           <div className={style.optionsItemLabel}>Border Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="circle-options-stroke-color"
-              color={options.stroke!}
+              id="rect-options-stroke-color"
+              color={options.stroke as string}
               onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />
           </div>
@@ -142,4 +143,4 @@ const CircleOptions = () => {
   )
 }
 
-export default CircleOptions
+export default RectOptions

@@ -1,26 +1,39 @@
-import { fabric } from 'fabric'
+import {
+  Ellipse,
+  FabricObject,
+  Rect,
+  TPointerEvent,
+  Textbox,
+  Triangle
+} from 'fabric'
 import { omit } from 'lodash'
 
 import { TEXT_OPTIONS_DEFAULT } from './data/constants'
-import useCircleOptions from './store/object/useCircleOptions'
-import useRectangleOptions from './store/object/useRectangleOptions'
+import useEllipseOptions from './store/object/useEllipseOptions'
+import useRectOptions from './store/object/useRectOptions'
 import useTextOptions from './store/object/useTextOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import { generateUniqueId } from './utils/common'
 
-let obj: fabric.Object
+let obj: FabricObject
 let isDrawing = false
 let initPosition = { x: 0, y: 0 }
 
 const useSketchDrawHandler = () => {
   const { canvas, activeTool, setActiveTool } = useCanvas()
-  const { options: circleOptions } = useCircleOptions()
-  const { options: rectangleOptions } = useRectangleOptions()
+  const { options: ellipseOptions } = useEllipseOptions()
+  const { options: rectOptions } = useRectOptions()
   const { options: triangleOptions } = useTriangleOptions()
   const { options: textOptions } = useTextOptions()
 
-  const startDrawing = (e: fabric.IEvent) => {
+  const setSelectable = (selectable: boolean) => {
+    if (canvas) {
+      canvas.getObjects().forEach((obj) => obj.set({ selectable }))
+    }
+  }
+
+  const startDrawing = (e: TPointerEvent) => {
     if (!canvas) {
       return
     }
@@ -30,7 +43,7 @@ const useSketchDrawHandler = () => {
     }
 
     isDrawing = true
-    const pointer = canvas.getPointer(e as unknown as Event)
+    const pointer = canvas.getViewportPoint(e)
 
     initPosition = { x: pointer.x, y: pointer.y }
 
@@ -42,42 +55,31 @@ const useSketchDrawHandler = () => {
     }
 
     switch (activeTool) {
-      case 'circle':
-        obj = new fabric.Ellipse({
+      case 'ellipse':
+        obj = new Ellipse({
           ...commonInitOptions,
-          ...circleOptions,
+          ...ellipseOptions,
           rx: 1,
-          ry: 1,
-          type: 'circle',
-          name: generateUniqueId()
+          ry: 1
         })
         break
-      case 'rectangle':
-        obj = new fabric.Rect({
+      case 'rect':
+        obj = new Rect({
           ...commonInitOptions,
-          ...rectangleOptions,
-          type: 'rectangle',
-          name: generateUniqueId()
+          ...rectOptions
         })
         break
       case 'triangle':
-        obj = new fabric.Triangle({
+        obj = new Triangle({
           ...commonInitOptions,
-          ...triangleOptions,
-          type: 'triangle',
-          name: generateUniqueId()
+          ...triangleOptions
         })
         break
-      case 'text':
-        obj = new fabric.Textbox(
-          textOptions.text || TEXT_OPTIONS_DEFAULT.text || '',
-          {
-            ...commonInitOptions,
-            ...omit(textOptions, ['text']),
-            type: 'text',
-            name: generateUniqueId()
-          }
-        )
+      case 'textbox':
+        obj = new Textbox(textOptions.text || TEXT_OPTIONS_DEFAULT.text || '', {
+          ...commonInitOptions,
+          ...omit(textOptions, ['textbox'])
+        })
         break
 
       default:
@@ -91,12 +93,12 @@ const useSketchDrawHandler = () => {
     }
   }
 
-  const updateDrawing = (e: fabric.IEvent) => {
+  const updateDrawing = (e: TPointerEvent) => {
     if (!isDrawing || !activeTool || !canvas || !canvas!.getActiveObject()) {
       return
     }
 
-    const pointer = canvas.getPointer(e as unknown as Event)
+    const pointer = canvas.getViewportPoint(e)
     let obj = canvas.getActiveObject()
 
     if (!obj) {
@@ -107,7 +109,7 @@ const useSketchDrawHandler = () => {
     const height = Math.abs(pointer.y - initPosition.y)
 
     switch (activeTool) {
-      case 'circle':
+      case 'ellipse':
         if (initPosition.x > pointer.x) {
           obj.set({ left: Math.abs(pointer.x) })
         }
@@ -118,12 +120,12 @@ const useSketchDrawHandler = () => {
 
         obj.set({ width })
         obj.set({ height })
-        ;(obj as fabric.Ellipse).set({
+        ;(obj as Ellipse).set({
           rx: width / 2,
           ry: height / 2
         })
         break
-      case 'rectangle':
+      case 'rect':
       case 'triangle':
         if (initPosition.x > pointer.x) {
           obj.set({ left: Math.abs(pointer.x) })
@@ -136,7 +138,7 @@ const useSketchDrawHandler = () => {
         obj.set({ width })
         obj.set({ height })
         break
-      case 'text':
+      case 'textbox':
         if (initPosition.x > pointer.x) {
           obj.set({ left: Math.abs(pointer.x) })
         }
@@ -164,7 +166,7 @@ const useSketchDrawHandler = () => {
     setActiveTool(null)
   }
 
-  return { startDrawing, updateDrawing, stopDrawing }
+  return { startDrawing, updateDrawing, stopDrawing, setSelectable }
 }
 
 export default useSketchDrawHandler

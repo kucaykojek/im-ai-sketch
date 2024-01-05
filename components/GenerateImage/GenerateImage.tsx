@@ -1,11 +1,9 @@
 'use client'
 
-import { debounce } from 'lodash'
 import { ImageIcon, Loader2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect } from 'react'
 
-import blobToBase64 from '@/libs/blobToBase64'
 import useAISketchStore, {
   GENERATION_RESULT_KEYS
 } from '@/store/ai-sketch.store'

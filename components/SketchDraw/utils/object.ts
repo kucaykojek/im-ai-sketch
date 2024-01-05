@@ -1,7 +1,6 @@
-import { fabric } from 'fabric'
+import { Canvas, FabricObject, util } from 'fabric'
 
 import type {
-  CanvasObject,
   EraserObject,
   HighlighterObject,
   PencilObject
@@ -10,16 +9,17 @@ import type {
 import {
   ERASER_OPTIONS_DEFAULT,
   HIGHLIGHTER_OPTIONS_DEFAULT,
+  OBJECTS_STORAGE_KEY,
   PENCIL_OPTIONS_DEFAULT
 } from '../data/constants'
 
-export const getSelectedType = (obj: CanvasObject) => {
+export const getSelectedType = (obj: FabricObject) => {
   if (!obj) {
     return null
   }
 
-  return (obj as fabric.Object).type !== 'path'
-    ? (obj as fabric.Object).type
+  return obj.get('type') !== 'path'
+    ? obj.get('type')
     : isPencilObject(obj)
       ? 'pencil'
       : isEraserObject(obj)
@@ -29,7 +29,7 @@ export const getSelectedType = (obj: CanvasObject) => {
           : null
 }
 
-export const isPencilObject = (obj: CanvasObject) => {
+export const isPencilObject = (obj: FabricObject) => {
   if (!obj) {
     return false
   }
@@ -46,7 +46,7 @@ export const isPencilObject = (obj: CanvasObject) => {
   }
 }
 
-export const isEraserObject = (obj: CanvasObject) => {
+export const isEraserObject = (obj: FabricObject) => {
   if (!obj) {
     return false
   }
@@ -63,7 +63,7 @@ export const isEraserObject = (obj: CanvasObject) => {
   }
 }
 
-export const isHighlighterObject = (obj: CanvasObject) => {
+export const isHighlighterObject = (obj: FabricObject) => {
   if (!obj) {
     return false
   }
@@ -77,5 +77,28 @@ export const isHighlighterObject = (obj: CanvasObject) => {
     )
   } else {
     return false
+  }
+}
+
+export const drawObjectsFromStorage = async (canvas: Canvas) => {
+  if (!canvas) {
+    return
+  }
+
+  const objectsOnStorage =
+    localStorage && localStorage.getItem(OBJECTS_STORAGE_KEY)
+  const objects = objectsOnStorage ? JSON.parse(objectsOnStorage) : []
+
+  const revivedObjects = await util.enlivenObjects(objects)
+  revivedObjects.forEach((obj) => {
+    canvas.add(obj as FabricObject)
+  })
+
+  canvas.requestRenderAll()
+}
+
+export const saveObjectsToStorage = (objects: FabricObject[]) => {
+  if (localStorage) {
+    localStorage.setItem(OBJECTS_STORAGE_KEY, JSON.stringify(objects))
   }
 }
