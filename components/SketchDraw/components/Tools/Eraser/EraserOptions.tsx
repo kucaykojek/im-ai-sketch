@@ -1,14 +1,12 @@
 import { EraserIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
-import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
 import SliderRange from '@/components/SketchDraw/components/SliderRange'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { ERASER_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
 import { EraserObject } from '@/components/SketchDraw/data/types'
 import useEraserOptions from '@/components/SketchDraw/store/object/useEraserOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
 import { isEraserObject } from '@/components/SketchDraw/utils/object'
 
 const EraserOptions = () => {

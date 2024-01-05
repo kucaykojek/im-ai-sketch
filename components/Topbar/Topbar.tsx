@@ -4,10 +4,7 @@ import { XIcon } from 'lucide-react'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import useAISketchStore, {
-  GENERATION_PAYLOAD_KEYS,
-  type Payload
-} from '@/store/ai-sketch.store'
+import useAISketchStore from '@/store/ai-sketch.store'
 
 import SliderRange from '../Common/SliderRange'
 import useGenerateHandler from '../GenerateImage/GenerateImage.handler'
@@ -24,70 +21,37 @@ const Topbar = () => {
   })
   const { payload, setPayload } = useAISketchStore()
 
-  const prompt = form.watch('prompt')
-
-  const savePayloadToLocalStorage = (payload: Payload) => {
-    if (localStorage) {
-      localStorage.setItem(GENERATION_PAYLOAD_KEYS, JSON.stringify(payload))
-    }
-  }
+  useEffect(() => {
+    generateImage(payload)
+  }, [payload])
 
   useEffect(() => {
-    if (typeof prompt !== 'undefined') {
-      setShowClear(prompt.length > 0)
-    }
-  }, [prompt])
+    form.setValue('prompt', payload.prompt || '')
+    form.setValue('strength', payload.strength || 0.8)
+  }, [payload.prompt, payload.strength])
 
   useEffect(() => {
-    const storedPayload = localStorage?.getItem(GENERATION_PAYLOAD_KEYS)
-
-    if (!!storedPayload) {
-      const { prompt, strength } = JSON.parse(storedPayload)
-
-      form.setValue('prompt', prompt)
-      form.setValue('strength', strength)
-
-      setPayload({
-        image: '',
-        prompt,
-        strength: strength ? Number(strength) : 0
-      })
+    if (typeof payload.prompt !== 'undefined') {
+      setShowClear(payload.prompt.length > 0)
     }
-  }, [])
+  }, [payload.prompt])
 
   const onSubmit = (data: any) => {
-    setPayload({ ...payload, ...data })
-    savePayloadToLocalStorage({ ...payload, ...data })
-
-    generateImage(data)
+    setPayload(data)
   }
 
   const handlePromptChange = (e: ChangeEvent<HTMLInputElement>) => {
     const prompt = e.target.value
-
-    form.setValue('prompt', prompt)
-    setPayload({ ...payload, prompt })
-    savePayloadToLocalStorage({ ...payload, prompt })
-
-    if (!!prompt) {
-      generateImage({ ...payload, prompt })
-    }
+    setPayload({ prompt })
   }
 
   const handleStrengthChange = (e: ChangeEvent<HTMLInputElement>) => {
     const strength = Number(e.target.value)
-
-    form.setValue('strength', strength)
-    setPayload({ ...payload, strength })
-    savePayloadToLocalStorage({ ...payload, strength })
-
-    generateImage({ ...payload, strength })
+    setPayload({ strength })
   }
 
   const handleClear = () => {
-    form.setValue('prompt', '')
-    setPayload({ ...payload, prompt: '' })
-    savePayloadToLocalStorage({ ...payload, prompt: '' })
+    setPayload({ prompt: '' })
   }
 
   return (

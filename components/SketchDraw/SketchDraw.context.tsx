@@ -75,7 +75,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
         width,
         height,
         selectionBorderColor: PRIMARY_COLOR_HEX,
-        selectionLineWidth: 1
+        selectionLineWidth: 1,
+        preserveObjectStacking: true
       })
 
       setCanvas(newCanvas)

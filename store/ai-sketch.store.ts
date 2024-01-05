@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 
 export type Payload = {
-  image: string
-  prompt: string
-  strength: number
+  prompt?: string
+  strength?: number
 }
 
 export const GENERATION_PAYLOAD_KEYS = 'im-aisketch-generation-payload'
@@ -22,9 +21,10 @@ const useAISketchStore = create<{
   resultImages: string[]
   setResultImages: (_: string[]) => void
   addResultImages: (_: string) => void
-}>((set) => ({
-  payload: { image: '', prompt: '', strength: 0.8 },
-  setPayload: (payload: Payload) => set(() => ({ payload })),
+}>((set, get) => ({
+  payload: { prompt: '', strength: 0.8 },
+  setPayload: (payload: Payload) =>
+    set(() => ({ payload: { ...get().payload, ...payload } })),
 
   generating: false,
   setGenerating: (generating: boolean) => set(() => ({ generating })),

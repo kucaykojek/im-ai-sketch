@@ -1,12 +1,18 @@
-import { debounce } from 'lodash'
+'use client'
+
+import { debounce, omit } from 'lodash'
 
 import blobToBase64 from '@/libs/blobToBase64'
 import useAISketchStore, {
+  GENERATION_PAYLOAD_KEYS,
   GENERATION_RESULT_KEYS,
   type Payload
 } from '@/store/ai-sketch.store'
 
+import useSketchDrawContext from '../SketchDraw/SketchDraw.context'
+
 const useGenerateHandler = () => {
+  const { canvasRef } = useSketchDrawContext()
   const {
     payload,
     generating,
@@ -17,10 +23,17 @@ const useGenerateHandler = () => {
     sumGenerationCount
   } = useAISketchStore()
 
-  const generateImage = debounce(async (overridePayload: Payload) => {
-    if (!payload.image || !payload.prompt || !payload.strength || generating) {
+  const generateImage = debounce(async (overridePayload?: Payload) => {
+    if (
+      !payload.prompt ||
+      !payload.strength ||
+      generating ||
+      !canvasRef.current
+    ) {
       return
     }
+
+    const canvasImage = canvasRef.current.toDataURL('image/jpeg')
 
     setGenerating(true)
 
@@ -29,7 +42,8 @@ const useGenerateHandler = () => {
         method: 'POST',
         body: JSON.stringify({
           ...payload,
-          ...overridePayload
+          ...(overridePayload ? overridePayload : {}),
+          image: canvasImage
         })
       })
 
@@ -41,13 +55,11 @@ const useGenerateHandler = () => {
       setSelectedImage(image)
       sumGenerationCount()
 
-      // Save to local storage
-      if (localStorage) {
-        localStorage.setItem(
-          GENERATION_RESULT_KEYS,
-          JSON.stringify([...resultImages, image])
-        )
-      }
+      savePayloadToLocalStorage({
+        ...payload,
+        ...overridePayload
+      })
+      saveResultsToLocalStorage([...resultImages, image])
     } catch (error) {
       console.error(error)
     } finally {
@@ -55,7 +67,22 @@ const useGenerateHandler = () => {
     }
   }, 500)
 
-  return { generateImage }
+  const savePayloadToLocalStorage = (payload: Payload) => {
+    if (localStorage) {
+      localStorage.setItem(
+        GENERATION_PAYLOAD_KEYS,
+        JSON.stringify(omit(payload, ['image']))
+      )
+    }
+  }
+
+  const saveResultsToLocalStorage = (images: string[]) => {
+    if (localStorage) {
+      localStorage.setItem(GENERATION_RESULT_KEYS, JSON.stringify(images))
+    }
+  }
+
+  return { generateImage, savePayloadToLocalStorage, saveResultsToLocalStorage }
 }
 
 export default useGenerateHandler

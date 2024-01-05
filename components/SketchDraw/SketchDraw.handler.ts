@@ -14,7 +14,6 @@ import useRectOptions from './store/object/useRectOptions'
 import useTextOptions from './store/object/useTextOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
-import { generateUniqueId } from './utils/common'
 
 let obj: FabricObject
 let isDrawing = false

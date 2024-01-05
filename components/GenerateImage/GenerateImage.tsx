@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 
 import useAISketchStore, {
+  GENERATION_PAYLOAD_KEYS,
   GENERATION_RESULT_KEYS
 } from '@/store/ai-sketch.store'
 
@@ -21,12 +22,17 @@ const GenerateImage = () => {
     generating,
     selectedImage,
     setPayload,
-    setSelectedImage,
-    setResultImages
+    setResultImages,
+    setSelectedImage
   } = useAISketchStore()
 
   useEffect(() => {
+    const storedPayload = localStorage?.getItem(GENERATION_PAYLOAD_KEYS)
     const storedResult = localStorage?.getItem(GENERATION_RESULT_KEYS)
+
+    if (!!storedPayload) {
+      setPayload(JSON.parse(storedPayload))
+    }
 
     if (!!storedResult) {
       const images = JSON.parse(storedResult)
@@ -38,24 +44,14 @@ const GenerateImage = () => {
 
   useEffect(() => {
     if (canvas && canvasRef.current) {
-      const calculateObjectMeta = () => {
-        const image = canvasRef
-          .current!.toDataURL('image/jpeg')
-          .split(';base64,')[1]
-
-        if (canvas.getObjects().length > 0 && !generating && !!payload.prompt) {
-          setPayload({ ...payload, image })
-          generateImage({
-            ...payload,
-            image
-          })
-        }
+      const generatingImage = () => {
+        generateImage()
       }
 
-      canvas.on('after:render', calculateObjectMeta)
+      canvas.on('after:render', generatingImage)
 
       return () => {
-        canvas.off('after:render', calculateObjectMeta)
+        canvas.off('after:render', generatingImage)
       }
     }
   }, [canvas, canvasRef, generating, payload])
