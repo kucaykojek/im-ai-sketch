@@ -1,10 +1,10 @@
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
 import { PALETTE_COLORS } from '@/components/SketchDraw/data/constants'
-import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useEllipseOptions from '@/components/SketchDraw/store/object/useEllipseOptions'
 import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
 import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
-import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
+import useRectOptions from '@/components/SketchDraw/store/object/useRectOptions'
 import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
@@ -19,10 +19,9 @@ const ColorPalette = () => {
   const { options: highlighterOptions, setOptions: setHighlighterOptions } =
     useHighlighterOptions()
 
-  const { options: circleOptions, setOptions: setCircleOptions } =
-    useCircleOptions()
-  const { options: rectangleOptions, setOptions: setRectangleOptions } =
-    useRectangleOptions()
+  const { options: ellipseOptions, setOptions: setEllipseOptions } =
+    useEllipseOptions()
+  const { options: rectOptions, setOptions: setRectOptions } = useRectOptions()
   const { options: triangleOptions, setOptions: setTriangleOptions } =
     useTriangleOptions()
 
@@ -44,16 +43,16 @@ const ColorPalette = () => {
             color: color + 55
           })
           break
-        case 'circle':
-          setCircleOptions({
-            ...circleOptions,
+        case 'ellipse':
+          setEllipseOptions({
+            ...ellipseOptions,
             fill: color,
             stroke: color
           })
           break
-        case 'rectangle':
-          setRectangleOptions({
-            ...rectangleOptions,
+        case 'rect':
+          setRectOptions({
+            ...rectOptions,
             fill: color,
             stroke: color
           })

@@ -1,10 +1,10 @@
 import {
-  CircleOptions,
+  EllipseOptions,
   EraserOptions,
   HighlighterOptions,
   ImageOptions,
   PencilOptions,
-  RectangleOptions,
+  RectOptions,
   TextOptions,
   TriangleOptions
 } from '@/components/SketchDraw/components/Tools'
@@ -34,10 +34,10 @@ const DockOptionsDrawer = () => {
           {selectedType === 'highlighter' && <HighlighterOptions />}
           {selectedType === 'pencil' && <PencilOptions />}
           {selectedType === 'eraser' && <EraserOptions />}
-          {selectedType === 'circle' && <CircleOptions />}
-          {selectedType === 'rectangle' && <RectangleOptions />}
+          {selectedType === 'ellipse' && <EllipseOptions />}
+          {selectedType === 'rect' && <RectOptions />}
           {selectedType === 'triangle' && <TriangleOptions />}
-          {selectedType === 'text' && <TextOptions />}
+          {selectedType === 'textbox' && <TextOptions />}
           {activeTool === 'image' && <ImageOptions />}
         </>
       )}

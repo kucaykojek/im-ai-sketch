@@ -7,7 +7,7 @@ import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const tool = 'text'
+const tool = 'textbox'
 
 const TextButton = () => {
   const { isReady } = useSketchDrawContext()

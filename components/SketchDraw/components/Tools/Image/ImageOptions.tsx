@@ -1,6 +1,6 @@
 'use client'
 
-import { fabric } from 'fabric'
+import { FabricImage } from 'fabric'
 import { ImageIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -58,20 +58,19 @@ const ImageOptions = () => {
   }) => {
     // TODO:
     if (canvas) {
-      fabric.Image.fromURL(imageUrl, (img) => {
-        const obj = img.set({
-          name: generateUniqueId(),
-          left: (canvasOptions.width! - width) / 2, // center
-          top: (canvasOptions.height! - height) / 2, // center
-          width: width,
-          height: height
-        })
-
-        canvas.add(obj)
-        canvas.requestRenderAll()
-
-        setActiveTool(null)
+      const imageObj = await FabricImage.fromURL(imageUrl)
+      const obj = imageObj.set({
+        name: generateUniqueId(),
+        left: (canvasOptions.width! - width) / 2, // center
+        top: (canvasOptions.height! - height) / 2, // center
+        width: width,
+        height: height
       })
+
+      canvas.add(obj)
+      canvas.requestRenderAll()
+
+      setActiveTool(null)
     }
   }
 

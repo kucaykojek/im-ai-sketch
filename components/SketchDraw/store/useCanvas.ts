@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 import { CANVAS_DEFAULT } from '@/components/SketchDraw/data/constants'
-import { CanvasType } from '@/components/SketchDraw/data/types'
+import type { CanvasType } from '@/components/SketchDraw/data/types'
 
 const useCanvas = create<{
   canvas: CanvasType['canvas']

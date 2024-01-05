@@ -1,18 +1,18 @@
-import { SquareIcon } from 'lucide-react'
+import { CircleIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useRectangleOptions from '@/components/SketchDraw/store/object/useRectangleOptions'
+import useEllipseOptions from '@/components/SketchDraw/store/object/useEllipseOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const tool = 'rectangle'
+const tool = 'ellipse'
 
-const RectangleButton = () => {
+const EllipseButton = () => {
   const { isReady } = useSketchDrawContext()
   const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
-  const { resetOptions } = useRectangleOptions()
+  const { resetOptions } = useEllipseOptions()
 
   const isActive =
     activeTool === tool ||
@@ -38,14 +38,14 @@ const RectangleButton = () => {
       <button
         type="button"
         className={cn(style.tool, isActive && style.toolActive)}
-        title="Rectangle"
+        title="Ellipse"
         disabled={!isReady}
         onClick={handleClick}
       >
-        <SquareIcon className={style.toolIcon} />
+        <CircleIcon className={style.toolIcon} />
       </button>
     </>
   )
 }
 
-export default RectangleButton
+export default EllipseButton

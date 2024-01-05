@@ -99,7 +99,7 @@ const TriangleOptions = () => {
           <div className={style.optionsItemLabel}>Background</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="square-options-fill-color"
+              id="rect-options-fill-color"
               color={
                 options.fill === 'transparent'
                   ? OBJECT_DEFAULT.color
@@ -114,7 +114,7 @@ const TriangleOptions = () => {
           <div className={style.optionsItemLabel}>Border Thickness</div>
           <div className={style.optionsControl}>
             <SliderRange
-              id="square-options-stroke-width"
+              id="rect-options-stroke-width"
               value={options.strokeWidth || 0}
               min={options.fill !== 'transparent' ? 1 : 0}
               max={100}
@@ -132,7 +132,7 @@ const TriangleOptions = () => {
           <div className={style.optionsItemLabel}>Border Color</div>
           <div className={style.optionsControl}>
             <ColorPicker
-              id="square-options-stroke-color"
+              id="rect-options-stroke-color"
               color={options.stroke as string}
               onChange={(e) => handleChangeOptions('stroke', e.target.value)}
             />

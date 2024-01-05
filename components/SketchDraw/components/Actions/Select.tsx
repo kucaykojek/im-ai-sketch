@@ -7,7 +7,7 @@ import style from './Actions.module.css'
 
 const Select = () => {
   const { isReady } = useSketchDrawContext()
-  const { canvas, activeTool, selectedObjects, setActiveTool } = useCanvas()
+  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
 
   const isActive = selectedObjects.length > 0 || activeTool === null
 

@@ -1,18 +1,18 @@
-import { CircleIcon } from 'lucide-react'
+import { SquareIcon } from 'lucide-react'
 
 import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
 import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useCircleOptions from '@/components/SketchDraw/store/object/useCircleOptions'
+import useRectOptions from '@/components/SketchDraw/store/object/useRectOptions'
 import useCanvas from '@/components/SketchDraw/store/useCanvas'
 import { cn } from '@/components/SketchDraw/utils/common'
 import { getSelectedType } from '@/components/SketchDraw/utils/object'
 
-const tool = 'circle'
+const tool = 'rect'
 
-const CircleButton = () => {
+const RectButton = () => {
   const { isReady } = useSketchDrawContext()
   const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
-  const { resetOptions } = useCircleOptions()
+  const { resetOptions } = useRectOptions()
 
   const isActive =
     activeTool === tool ||
@@ -38,14 +38,14 @@ const CircleButton = () => {
       <button
         type="button"
         className={cn(style.tool, isActive && style.toolActive)}
-        title="Circle"
+        title="Rect"
         disabled={!isReady}
         onClick={handleClick}
       >
-        <CircleIcon className={style.toolIcon} />
+        <SquareIcon className={style.toolIcon} />
       </button>
     </>
   )
 }
 
-export default CircleButton
+export default RectButton

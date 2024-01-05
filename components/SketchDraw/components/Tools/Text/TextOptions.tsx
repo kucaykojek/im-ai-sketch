@@ -32,7 +32,7 @@ const TextOptions = () => {
   }
 
   useEffect(() => {
-    if (selectedObjects?.[0]?.type === 'text') {
+    if (selectedObjects?.[0]?.type === 'textbox') {
       setOptions({
         ...(pick(selectedObjects?.[0], [
           'text',
@@ -52,7 +52,7 @@ const TextOptions = () => {
       // Change objects based on options
       canvas
         .getActiveObjects()
-        .filter((obj) => obj.type === 'text')
+        .filter((obj) => obj.type === 'textbox')
         .forEach((obj) => {
           obj.set({ ...options })
         })

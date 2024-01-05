@@ -1,15 +1,17 @@
+import { FabricObject } from 'fabric'
+
 import {
-  CircleOptions,
+  EllipseOptions,
   EraserOptions,
   HighlighterOptions,
   PencilOptions,
-  RectangleOptions,
+  RectOptions,
   TextOptions,
   TriangleOptions
 } from './types'
 
 export const CANVAS_ID: string = 'im-aisketch-canvas'
-export const OBJECTS_STORAGE_KEY = 'im-aisketch-objects'
+export const OBJECTS_STORAGE_KEY = 'im-aisketch-obj'
 export const BG_STORAGE_KEY = 'im-aisketch-bg'
 export const PRIMARY_COLOR_HEX = '#ffc40c'
 
@@ -32,6 +34,16 @@ export const CANVAS_DEFAULT = {
 
 export const OBJECT_DEFAULT = {
   color: '#000000'
+}
+
+export const SELECTION_OPTIONS: Pick<
+  FabricObject,
+  'transparentCorners' | 'borderColor' | 'cornerColor' | 'cornerStyle'
+> = {
+  transparentCorners: false,
+  borderColor: PRIMARY_COLOR_HEX,
+  cornerColor: PRIMARY_COLOR_HEX,
+  cornerStyle: 'circle'
 }
 
 export const PENCIL_OPTIONS_DEFAULT: Pick<
@@ -63,14 +75,14 @@ export const HIGHLIGHTER_OPTIONS_DEFAULT: Pick<
   strokeLineJoin: 'round'
 }
 
-export const CIRCLE_OPTIONS_DEFAULT: CircleOptions = {
+export const ELLIPSE_OPTIONS_DEFAULT: EllipseOptions = {
   fill: OBJECT_DEFAULT.color,
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,
   opacity: 1
 }
 
-export const RECTANGLE_OPTIONS_DEFAULT: RectangleOptions = {
+export const RECT_OPTIONS_DEFAULT: RectOptions = {
   fill: OBJECT_DEFAULT.color,
   strokeWidth: 0,
   stroke: OBJECT_DEFAULT.color,

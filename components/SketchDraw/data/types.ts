@@ -10,11 +10,11 @@ import type {
 } from 'fabric'
 
 // BEGIN: canvas related types
-export type CircleOptions = Pick<
+export type EllipseOptions = Pick<
   FabricObjectProps,
   'fill' | 'strokeWidth' | 'stroke' | 'opacity'
 >
-export type RectangleOptions = Pick<
+export type RectOptions = Pick<
   FabricObjectProps,
   'fill' | 'strokeWidth' | 'stroke' | 'opacity'
 >
@@ -63,10 +63,10 @@ type CanvasActiveTool =
   | 'pencil'
   | 'eraser'
   | 'highlighter'
-  | 'circle'
-  | 'rectangle'
+  | 'ellipse'
+  | 'rect'
   | 'triangle'
-  | 'text'
+  | 'textbox'
   | 'icon'
   | 'image'
   | null
