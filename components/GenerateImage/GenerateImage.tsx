@@ -22,6 +22,7 @@ const GenerateImage = () => {
     payload,
     generating,
     selectedImage,
+    setPayload,
     setSelectedImage,
     setResultImages
   } = useAISketchStore()
@@ -39,13 +40,16 @@ const GenerateImage = () => {
 
   useEffect(() => {
     if (canvas && canvasRef.current) {
+      const image = canvasRef
+        .current!.toDataURL('image/jpeg')
+        .split(';base64,')[1]
+
+      setPayload({ ...payload, image })
       const calculateObjectMeta = () => {
         if (canvas.getObjects().length > 0 && !generating && !!payload.prompt) {
           generateImage({
             ...payload,
-            image: canvasRef
-              .current!.toDataURL('image/jpeg')
-              .split(';base64,')[1]
+            image
           })
         }
       }
