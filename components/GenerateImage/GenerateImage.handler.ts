@@ -9,6 +9,7 @@ import useAISketchStore, {
 const useGenerateHandler = () => {
   const {
     payload,
+    generating,
     setGenerating,
     setSelectedImage,
     resultImages,
@@ -17,6 +18,10 @@ const useGenerateHandler = () => {
   } = useAISketchStore()
 
   const generateImage = debounce(async (overridePayload: Payload) => {
+    if (!payload.image || !payload.prompt || !payload.strength || generating) {
+      return
+    }
+
     setGenerating(true)
 
     try {

@@ -109,7 +109,7 @@ const Topbar = () => {
         />
         <div className="flex items-center absolute right-4 top-0 h-full space-x-3">
           {showClear && (
-            <button onClick={handleClear}>
+            <button type="button" onClick={handleClear}>
               <XIcon className="w-6 h-6 text-neutral-400 hover:text-primary" />
             </button>
           )}
