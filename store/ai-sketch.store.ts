@@ -6,21 +6,17 @@ export type Payload = {
   strength: number
 }
 
-export const GENERATION_PAYLOAD_KEYS = 'im-aisketch-payload'
-export const GENERATION_RESULT_KEYS = 'im-aisketch-results'
+export const GENERATION_PAYLOAD_KEYS = 'im-aisketch-generation-payload'
+export const GENERATION_RESULT_KEYS = 'im-aisketch-generation-results'
 export const GENERATION_RESULT_MAX = 3
 
 const useAISketchStore = create<{
   payload: Payload
   setPayload: (_: Payload) => void
-  balance: number
-  setBalance: (_: number) => void
   generating: boolean
   setGenerating: (_: boolean) => void
   generationCount: number
   sumGenerationCount: () => void
-  generationCostedCredits: number
-  sumGenerationCostedCredits: (_: number) => void
   selectedImage: string
   setSelectedImage: (_: string) => void
   resultImages: string[]
@@ -30,21 +26,12 @@ const useAISketchStore = create<{
   payload: { image: '', prompt: '', strength: 0.8 },
   setPayload: (payload: Payload) => set(() => ({ payload })),
 
-  balance: 0,
-  setBalance: (balance: number) => set(() => ({ balance })),
-
   generating: false,
   setGenerating: (generating: boolean) => set(() => ({ generating })),
 
   generationCount: 0,
   sumGenerationCount: () =>
     set((state) => ({ generationCount: state.generationCount + 1 })),
-
-  generationCostedCredits: 0,
-  sumGenerationCostedCredits: (n: number) =>
-    set((state) => ({
-      generationCostedCredits: state.generationCostedCredits + n
-    })),
 
   selectedImage: '',
   setSelectedImage: (selectedImage: string) => set(() => ({ selectedImage })),

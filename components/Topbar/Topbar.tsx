@@ -5,7 +5,8 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import useAISketchStore, {
-  GENERATION_PAYLOAD_KEYS
+  GENERATION_PAYLOAD_KEYS,
+  type Payload
 } from '@/store/ai-sketch.store'
 
 import SliderRange from '../Common/SliderRange'
@@ -24,6 +25,12 @@ const Topbar = () => {
   const { payload, setPayload } = useAISketchStore()
 
   const prompt = form.watch('prompt')
+
+  const savePayloadToLocalStorage = (payload: Payload) => {
+    if (localStorage) {
+      localStorage.setItem(GENERATION_PAYLOAD_KEYS, JSON.stringify(payload))
+    }
+  }
 
   useEffect(() => {
     if (typeof prompt !== 'undefined') {
@@ -49,7 +56,8 @@ const Topbar = () => {
   }, [])
 
   const onSubmit = (data: any) => {
-    setPayload(data)
+    setPayload({ ...payload, ...data })
+    savePayloadToLocalStorage({ ...payload, ...data })
 
     generateImage(data)
   }
@@ -59,6 +67,7 @@ const Topbar = () => {
 
     form.setValue('prompt', prompt)
     setPayload({ ...payload, prompt })
+    savePayloadToLocalStorage({ ...payload, prompt })
 
     if (!!prompt) {
       generateImage({ ...payload, prompt })
@@ -70,6 +79,7 @@ const Topbar = () => {
 
     form.setValue('strength', strength)
     setPayload({ ...payload, strength })
+    savePayloadToLocalStorage({ ...payload, strength })
 
     generateImage({ ...payload, strength })
   }
@@ -77,13 +87,7 @@ const Topbar = () => {
   const handleClear = () => {
     form.setValue('prompt', '')
     setPayload({ ...payload, prompt: '' })
-
-    if (localStorage) {
-      localStorage.setItem(
-        GENERATION_PAYLOAD_KEYS,
-        JSON.stringify({ ...payload, prompt: '' })
-      )
-    }
+    savePayloadToLocalStorage({ ...payload, prompt: '' })
   }
 
   return (

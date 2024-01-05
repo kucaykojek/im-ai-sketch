@@ -37,8 +37,8 @@ const useGenerateHandler = () => {
 
       const image = (await blobToBase64(resultImage)) as string
 
-      addResultImages(image.split(';base64,')[1])
-      setSelectedImage(image.split(';base64,')[1])
+      addResultImages(image)
+      setSelectedImage(image)
       sumGenerationCount()
 
       // Save to local storage

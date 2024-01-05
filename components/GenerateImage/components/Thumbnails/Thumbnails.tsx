@@ -23,7 +23,7 @@ const Thumbnails = () => {
         <React.Fragment key={`thumb-${index}`}>
           {resultImages[index] ? (
             <Image
-              src={`data:image/png;base64,${resultImages[index]}`}
+              src={resultImages[index]}
               alt=""
               width="50"
               height="50"

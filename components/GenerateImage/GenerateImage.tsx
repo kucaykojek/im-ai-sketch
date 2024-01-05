@@ -70,7 +70,7 @@ const GenerateImage = () => {
 
       {selectedImage ? (
         <Image
-          src={`data:image/png;base64,${selectedImage}`}
+          src={selectedImage}
           priority
           fill={true}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
