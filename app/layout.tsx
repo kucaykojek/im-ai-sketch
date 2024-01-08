@@ -6,7 +6,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'PoC Imagemaker AI Sketch'
+  title: 'Imagemaker AI Sketch'
 }
 
 export default function RootLayout({
