@@ -18,21 +18,22 @@ const Topbar = () => {
   const { payload, setPayload } = useAISketchStore()
   const { generateImage, savePayloadToLocalStorage } = useGenerateHandler()
   const form = useForm({
-    defaultValues:
-      localStorage && localStorage.getItem(GENERATION_PAYLOAD_KEYS)
-        ? {
-            ...JSON.parse(localStorage?.getItem(GENERATION_PAYLOAD_KEYS)!)
-          }
-        : {
-            prompt: payload.prompt || '',
-            strength: payload.strength || 0.8
-          }
+    defaultValues: {
+      prompt: payload.prompt || '',
+      strength: payload.strength || 0.8
+    }
   })
 
   const prompt = form.watch('prompt')
   const strength = form.watch('strength')
 
   useEffect(() => {
+    if (localStorage && localStorage.getItem(GENERATION_PAYLOAD_KEYS)) {
+      form.reset({
+        ...JSON.parse(localStorage?.getItem(GENERATION_PAYLOAD_KEYS)!)
+      })
+    }
+
     document.addEventListener('fullscreenchange', handleFullscren)
 
     return () => {
@@ -52,10 +53,6 @@ const Topbar = () => {
       strength: Number(strength)
     })
   }, [prompt, strength, setPayload])
-
-  useEffect(() => {
-    form.setValue('strength', payload.strength || 0.8)
-  }, [payload.strength])
 
   useEffect(() => {
     if (typeof payload.prompt !== 'undefined') {
