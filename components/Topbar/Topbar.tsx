@@ -18,7 +18,7 @@ const Topbar = () => {
   const { payload, setPayload } = useAISketchStore()
   const { generateImage, savePayloadToLocalStorage } = useGenerateHandler()
   const form = useForm({
-    defaultValues: localStorage?.getItem(GENERATION_PAYLOAD_KEYS)
+    defaultValues: localStorage && localStorage.getItem(GENERATION_PAYLOAD_KEYS)
       ? {
           ...JSON.parse(localStorage?.getItem(GENERATION_PAYLOAD_KEYS)!)
         }
