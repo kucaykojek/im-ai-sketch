@@ -54,7 +54,7 @@ const GenerateImage = () => {
         canvas.off('after:render', generatingImage)
       }
     }
-  }, [canvas, canvasRef, generating, payload, generateImage])
+  }, [canvas, canvasRef, generating, payload])
 
   return (
     <div className="relative h-full bg-white overflow-hidden rounded-xl flex flex-col items-center justify-center">

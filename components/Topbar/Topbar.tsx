@@ -23,12 +23,12 @@ const Topbar = () => {
 
   useEffect(() => {
     generateImage(payload)
-  }, [payload, generateImage])
+  }, [payload])
 
   useEffect(() => {
     form.setValue('prompt', payload.prompt || '')
     form.setValue('strength', payload.strength || 0.8)
-  }, [form, payload.prompt, payload.strength])
+  }, [payload.prompt, payload.strength])
 
   useEffect(() => {
     if (typeof payload.prompt !== 'undefined') {
