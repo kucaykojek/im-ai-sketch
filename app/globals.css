@@ -23,9 +23,32 @@ html {
 }
 
 main {
-  @apply relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto overflow-visible py-20;
+  @apply relative z-10 mx-auto mt-14 py-10 grid grid-cols-1 lg:grid-cols-2 gap-6 max-h-screen max-w-[calc(100vw-10rem)] xl:max-w-[calc(100vw-14rem)];
 }
 main .drawing-wrapper,
 main .result-wrapper {
-  @apply relative w-full aspect-square;
+  @apply relative w-full h-full aspect-square;
+}
+
+input[type='range'] {
+  @apply appearance-none bg-none cursor-pointer w-auto focus:outline-none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  @apply bg-neutral-300 rounded h-2;
+}
+input[type='range']::-webkit-slider-thumb {
+  @apply appearance-none border-none -mt-1.5 bg-primary w-5 h-5 rounded-full;
+}
+input[type='range']:focus::-webkit-slider-thumb {
+  @apply ring-2 ring-primary ring-offset-1;
+}
+
+input[type='range']::-moz-range-track {
+  @apply bg-neutral-300 rounded h-2;
+}
+input[type='range']::-moz-range-thumb {
+  @apply appearance-none border-none -mt-1.5 bg-primary w-5 h-5 rounded-full;
+}
+input[type='range']:focus::-moz-range-thumb {
+  @apply ring-2 ring-primary ring-offset-1;
 }

@@ -8,7 +8,7 @@
   @apply hidden;
 }
 .toolbarLogo {
-  @apply h-4 w-auto mr-4 grow-0 shrink-0 basis-0;
+  @apply h-5 w-auto mr-4 grow-0 shrink-0 basis-0;
 }
 .toolWrapper {
   @apply inline-flex items-center space-x-4 grow shrink basis-auto min-w-0;

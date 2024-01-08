@@ -31,7 +31,7 @@ const SliderRange = (props: Props) => {
         min={min}
         max={max}
         disabled={disabled}
-        className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
+        className="!w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
         onChange={onChange}
         {...otherProps}
       />
