@@ -1,4 +1,4 @@
-import { Trash2Icon } from 'lucide-react'
+import { TrashIcon } from 'lucide-react'
 
 import useSketchDrawContext from '../../SketchDraw.context'
 import useCanvas from '../../store/useCanvas'
@@ -33,7 +33,7 @@ const Delete = () => {
       disabled={!isReady || selectedObjects.length === 0}
       onClick={handleClick}
     >
-      <Trash2Icon />
+      <TrashIcon />
     </button>
   )
 }

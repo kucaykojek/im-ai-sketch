@@ -16,6 +16,7 @@ const useGenerateHandler = () => {
   const { canvasRef } = useSketchDrawContext()
   const { canvas } = useCanvas()
   const {
+    enabled,
     payload,
     generating,
     setGenerating,
@@ -27,6 +28,7 @@ const useGenerateHandler = () => {
 
   const generateImage = debounce(async (overridePayload?: Payload) => {
     if (
+      !enabled ||
       !canvasRef.current ||
       !canvas ||
       canvas.getActiveObjects().length > 0 ||
@@ -58,11 +60,6 @@ const useGenerateHandler = () => {
       addResultImages(image)
       setSelectedImage(image)
       sumGenerationCount()
-
-      savePayloadToLocalStorage({
-        ...payload,
-        ...overridePayload
-      })
       saveResultsToLocalStorage([...resultImages, image])
     } catch (error) {
       console.error(error)

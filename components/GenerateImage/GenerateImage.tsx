@@ -18,6 +18,7 @@ const GenerateImage = () => {
   const { canvasRef } = useSketchDrawContext()
   const { generateImage } = useGenerateHandler()
   const {
+    enabled,
     payload,
     generating,
     selectedImage,
@@ -54,7 +55,7 @@ const GenerateImage = () => {
         canvas.off('after:render', generatingImage)
       }
     }
-  }, [canvas, canvasRef, generating, payload])
+  }, [canvas, canvasRef, generating, payload, enabled])
 
   return (
     <div className="relative h-full bg-white overflow-hidden rounded-xl flex flex-col items-center justify-center">

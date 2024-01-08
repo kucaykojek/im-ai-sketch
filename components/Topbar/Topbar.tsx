@@ -1,10 +1,12 @@
 'use client'
 
 import { ExpandIcon, ShrinkIcon, XIcon } from 'lucide-react'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import useAISketchStore from '@/store/ai-sketch.store'
+import useAISketchStore, {
+  GENERATION_PAYLOAD_KEYS
+} from '@/store/ai-sketch.store'
 
 import SliderRange from '../Common/SliderRange'
 import useGenerateHandler from '../GenerateImage/GenerateImage.handler'
@@ -13,14 +15,21 @@ import style from './Topbar.module.css'
 const Topbar = () => {
   const [showClear, setShowClear] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const { payload, setPayload } = useAISketchStore()
   const { generateImage, savePayloadToLocalStorage } = useGenerateHandler()
   const form = useForm({
-    defaultValues: {
-      prompt: '',
-      strength: 0.8
-    }
+    defaultValues: localStorage?.getItem(GENERATION_PAYLOAD_KEYS)
+      ? {
+          ...JSON.parse(localStorage?.getItem(GENERATION_PAYLOAD_KEYS)!)
+        }
+      : {
+          prompt: payload.prompt || '',
+          strength: payload.strength || 0.8
+        }
   })
-  const { payload, setPayload } = useAISketchStore()
+
+  const prompt = form.watch('prompt')
+  const strength = form.watch('strength')
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscren)
@@ -35,9 +44,17 @@ const Topbar = () => {
   }, [payload])
 
   useEffect(() => {
-    form.setValue('prompt', payload.prompt || '')
+    setPayload({ prompt: prompt, strength: Number(strength) })
+    savePayloadToLocalStorage({
+      ...payload,
+      prompt: prompt,
+      strength: Number(strength)
+    })
+  }, [prompt, strength, setPayload])
+
+  useEffect(() => {
     form.setValue('strength', payload.strength || 0.8)
-  }, [payload.prompt, payload.strength])
+  }, [payload.strength])
 
   useEffect(() => {
     if (typeof payload.prompt !== 'undefined') {
@@ -49,22 +66,8 @@ const Topbar = () => {
     setPayload(data)
   }
 
-  const handlePromptChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const prompt = e.target.value
-    setPayload({ prompt })
-  }
-
-  const handleStrengthChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const strength = Number(e.target.value)
-    setPayload({ strength })
-  }
-
   const handleClear = () => {
-    setPayload({ prompt: '' })
-    savePayloadToLocalStorage({
-      ...payload,
-      prompt: ''
-    })
+    form.setValue('prompt', '')
   }
   const handleFullscren = () => {
     if (!document.fullscreenElement) {
@@ -111,14 +114,14 @@ const Topbar = () => {
             control={form.control}
             name="prompt"
             rules={{ required: true }}
-            render={({ field: { value } }) => (
+            render={({ field: { value, onChange } }) => (
               <input
                 type="text"
                 name="prompt"
                 value={value}
                 placeholder="Try: SpongeBob dried up in the middle of the desert"
                 className="w-full outline-none border-2 border-neutral-200 focus:border-primary py-1.5 pl-4 pr-80 rounded-lg"
-                onChange={handlePromptChange}
+                onChange={onChange}
               />
             )}
           />
@@ -133,14 +136,14 @@ const Topbar = () => {
               <Controller
                 control={form.control}
                 name="strength"
-                render={({ field: { value } }) => (
+                render={({ field: { value, onChange } }) => (
                   <SliderRange
                     id="strength-slider"
                     min={0}
                     max={1}
                     step={0.1}
                     value={value}
-                    onChange={handleStrengthChange}
+                    onChange={onChange}
                   />
                 )}
               />

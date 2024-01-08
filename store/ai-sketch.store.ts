@@ -10,6 +10,8 @@ export const GENERATION_RESULT_KEYS = 'im-aisketch-generation-results'
 export const GENERATION_RESULT_MAX = 3
 
 const useAISketchStore = create<{
+  enabled: boolean
+  setEnabled: (_: boolean) => void
   payload: Payload
   setPayload: (_: Payload) => void
   generating: boolean
@@ -22,6 +24,9 @@ const useAISketchStore = create<{
   setResultImages: (_: string[]) => void
   addResultImages: (_: string) => void
 }>((set, get) => ({
+  enabled: true,
+  setEnabled: (enabled: boolean) => set(() => ({ enabled })),
+
   payload: { prompt: '', strength: 0.8 },
   setPayload: (payload: Payload) =>
     set(() => ({ payload: { ...get().payload, ...payload } })),

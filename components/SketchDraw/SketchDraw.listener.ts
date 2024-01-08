@@ -12,7 +12,6 @@ import useRectOptions from './store/object/useRectOptions'
 import useTriangleOptions from './store/object/useTriangleOptions'
 import useCanvas from './store/useCanvas'
 import useContainerSize from './store/useContainerSize'
-import { saveObjectsToStorage } from './utils/object'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
@@ -188,7 +187,6 @@ export default function SketchDrawListener() {
       const canvasObjectSelection = (e: any) => {
         if (canvas) {
           setSelectedObjects(e.selected || [])
-          saveObjectsToStorage(canvas)
         }
       }
 

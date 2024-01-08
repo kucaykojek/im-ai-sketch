@@ -31,6 +31,7 @@ export default function Home() {
             <SketchActions.New />
             <SketchActions.Background />
             <hr />
+            <SketchActions.Save />
             <SketchActions.Download />
           </Sidebar>
 
@@ -38,6 +39,8 @@ export default function Home() {
         </div>
         <div className="result-wrapper">
           <Sidebar position="right">
+            <GenerationActions.Stop />
+            <hr />
             <GenerationActions.Enhance />
             <GenerationActions.Regenerate />
             <hr />
