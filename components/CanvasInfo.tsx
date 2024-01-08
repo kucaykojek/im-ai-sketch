@@ -15,9 +15,11 @@ const CanvasInfo = () => {
   useEffect(() => {
     if (canvas) {
       const calcualteObjectMeta = () => {
+        const objects = canvas.getObjects()
         setMetadata({
-          objects: canvas.getObjects().length,
-          size: new Blob([JSON.stringify(canvas.getObjects())]).size
+          objects: objects.length,
+          size:
+            objects.length > 0 ? new Blob([JSON.stringify(objects)]).size : 0
         })
       }
 
@@ -36,10 +38,10 @@ const CanvasInfo = () => {
       <div className="font-normal text-xs text-neutral-400/70 text-left">
         <div className="font-medium uppercase">Canvas Info</div>
         <p>
-          Object: <strong>{metadata.objects}</strong>
-        </p>
-        <p>
-          Data Size: <strong>{metadata.size} bytes</strong>
+          Object:{' '}
+          <strong>
+            {metadata.objects} / {metadata.size} bytes
+          </strong>
         </p>
       </div>
     </div>

@@ -55,10 +55,10 @@ export default function Home() {
 
       <Dock />
 
-      {/* Debugger Components */}
+      {/* INFO Components */}
       <CanvasInfo />
       <GenerationInfo />
-      {/* Debugger Components */}
+      {/* INFO Components */}
     </SketchDrawProvider>
   )
 }
