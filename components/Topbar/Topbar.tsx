@@ -12,7 +12,7 @@ import style from './Topbar.module.css'
 
 const Topbar = () => {
   const [showClear, setShowClear] = useState(false)
-  const { generateImage } = useGenerateHandler()
+  const { generateImage, savePayloadToLocalStorage } = useGenerateHandler()
   const form = useForm({
     defaultValues: {
       prompt: '',
@@ -23,12 +23,12 @@ const Topbar = () => {
 
   useEffect(() => {
     generateImage(payload)
-  }, [payload])
+  }, [payload, generateImage])
 
   useEffect(() => {
     form.setValue('prompt', payload.prompt || '')
     form.setValue('strength', payload.strength || 0.8)
-  }, [payload.prompt, payload.strength])
+  }, [form, payload.prompt, payload.strength])
 
   useEffect(() => {
     if (typeof payload.prompt !== 'undefined') {
@@ -52,6 +52,10 @@ const Topbar = () => {
 
   const handleClear = () => {
     setPayload({ prompt: '' })
+    savePayloadToLocalStorage({
+      ...payload,
+      prompt: ''
+    })
   }
 
   return (

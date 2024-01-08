@@ -1,4 +1,4 @@
-import { Canvas, FabricObject, util } from 'fabric'
+import { Canvas, FabricObject } from 'fabric'
 
 import type {
   EraserObject,
@@ -81,24 +81,22 @@ export const isHighlighterObject = (obj: FabricObject) => {
 }
 
 export const drawObjectsFromStorage = async (canvas: Canvas) => {
-  if (!canvas) {
+  if (!canvas || !localStorage) {
     return
   }
 
-  const objectsOnStorage =
-    localStorage && localStorage.getItem(OBJECTS_STORAGE_KEY)
-  const objects = objectsOnStorage ? JSON.parse(objectsOnStorage) : []
+  const objectsOnStorage = localStorage.getItem(OBJECTS_STORAGE_KEY) || '[]'
 
-  const revivedObjects = await util.enlivenObjects(objects)
-  revivedObjects.forEach((obj) => {
-    canvas.add(obj as FabricObject)
-  })
-
-  canvas.requestRenderAll()
+  ;(await canvas.loadFromJSON(objectsOnStorage)).requestRenderAll()
 }
 
-export const saveObjectsToStorage = (objects: FabricObject[]) => {
-  if (localStorage) {
-    localStorage.setItem(OBJECTS_STORAGE_KEY, JSON.stringify(objects))
+export const saveObjectsToStorage = (canvas: Canvas) => {
+  if (!canvas || !localStorage) {
+    return
   }
+
+  localStorage.setItem(
+    OBJECTS_STORAGE_KEY,
+    JSON.stringify(canvas.toDatalessJSON())
+  )
 }

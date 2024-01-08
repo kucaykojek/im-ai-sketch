@@ -9,6 +9,8 @@ import type {
   TextboxProps
 } from 'fabric'
 
+import SketchDrawHistory from '../SketchDraw.history'
+
 // BEGIN: canvas related types
 export type EllipseOptions = Pick<
   FabricObjectProps,
@@ -73,6 +75,7 @@ type CanvasActiveTool =
 
 export type CanvasType = {
   canvas: Canvas | null
+  history: SketchDrawHistory | null
   canvasOptions: Pick<CanvasOptions, 'backgroundColor' | 'width' | 'height'>
   selectedObjects: CanvasObject[]
   activeTool: CanvasActiveTool

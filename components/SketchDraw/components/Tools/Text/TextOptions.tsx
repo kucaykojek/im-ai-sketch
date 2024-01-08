@@ -45,7 +45,7 @@ const TextOptions = () => {
         ]) as TextObject)
       })
     }
-  }, [selectedObjects])
+  }, [selectedObjects, setOptions])
 
   useEffect(() => {
     if (canvas && selectedObjects.length > 0) {

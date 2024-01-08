@@ -12,6 +12,7 @@ import React, {
   useState
 } from 'react'
 
+import SketchDrawHistory from './SketchDraw.history'
 import {
   BG_STORAGE_KEY,
   CANVAS_DEFAULT,
@@ -44,7 +45,8 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const { canvas, canvasOptions, setCanvas, setCanvasOptions } = useCanvas()
+  const { canvas, canvasOptions, setHistory, setCanvas, setCanvasOptions } =
+    useCanvas()
   const { containerSize } = useContainerSize()
 
   // Init canvas function
@@ -80,11 +82,30 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       })
 
       setCanvas(newCanvas)
+      setHistory(new SketchDrawHistory(newCanvas))
 
-      // TODO: draw
       drawObjectsFromStorage(newCanvas)
     } else {
       canvas.backgroundColor = backgroundColor
+
+      if (canvas.width != width || canvas.height != height) {
+        const scaleX = width / canvas.width
+        const scaleY = height / canvas.height
+        var objects = canvas.getObjects()
+
+        objects.forEach((obj) => {
+          obj.scaleX = obj.scaleX * scaleX
+          obj.scaleY = obj.scaleY * scaleY
+          obj.left = obj.left * scaleX
+          obj.top = obj.top * scaleY
+          obj.setCoords()
+        })
+
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+        canvas.calcOffset()
+      }
+
       canvas.setDimensions({ width, height })
     }
 
@@ -103,7 +124,7 @@ export function SketchDrawProvider({ children }: { children: ReactNode }) {
       canvas,
       initCanvas
     }),
-    [initCanvas]
+    [canvas, isReady, initCanvas]
   )
 
   return (

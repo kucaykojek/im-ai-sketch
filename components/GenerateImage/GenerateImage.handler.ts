@@ -10,9 +10,11 @@ import useAISketchStore, {
 } from '@/store/ai-sketch.store'
 
 import useSketchDrawContext from '../SketchDraw/SketchDraw.context'
+import useCanvas from '../SketchDraw/store/useCanvas'
 
 const useGenerateHandler = () => {
   const { canvasRef } = useSketchDrawContext()
+  const { canvas } = useCanvas()
   const {
     payload,
     generating,
@@ -25,10 +27,12 @@ const useGenerateHandler = () => {
 
   const generateImage = debounce(async (overridePayload?: Payload) => {
     if (
+      !canvasRef.current ||
+      !canvas ||
+      canvas.getActiveObjects().length > 0 ||
       !payload.prompt ||
       !payload.strength ||
-      generating ||
-      !canvasRef.current
+      generating
     ) {
       return
     }

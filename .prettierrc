@@ -2,7 +2,7 @@
   "semi": false,
   "arrowParens": "always",
   "singleQuote": true,
-  "trailingComma" : "none",
+  "trailingComma": "none",
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": ["^@/(.*)$", "^[./]"],
   "importOrderSeparation": true,

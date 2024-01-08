@@ -16,7 +16,7 @@ import { saveObjectsToStorage } from './utils/object'
 
 export default function SketchDrawListener() {
   const { containerRef, initCanvas, canvas } = useSketchDrawContext()
-  const { activeTool, canvasOptions, setSelectedObjects } = useCanvas()
+  const { activeTool, canvasOptions, history, setSelectedObjects } = useCanvas()
   const { startDrawing, updateDrawing, stopDrawing, setSelectable } =
     useSketchDrawHandler()
   const { setContainerSize } = useContainerSize()
@@ -37,7 +37,7 @@ export default function SketchDrawListener() {
       width: containerRef.current.offsetWidth,
       height: containerRef.current.offsetHeight
     })
-  }, [setContainerSize])
+  }, [containerRef, setContainerSize])
 
   useEffect(() => {
     const onResize = () => {
@@ -54,17 +54,21 @@ export default function SketchDrawListener() {
     return () => {
       window.removeEventListener('resize', onResize)
     }
-  }, [setContainerSize, initCanvas])
+  }, [containerRef, setContainerSize, initCanvas])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (!canvas) {
+        return
+      }
+
       const isInputFocused = ['input', 'textarea'].includes(
         document.activeElement?.localName || ''
       )
       const deleteKeys: KeyboardEvent['key'][] = ['Backspace', 'Delete']
 
+      // Delete keys
       if (
-        !!canvas &&
         deleteKeys.includes(event.key) &&
         !isInputFocused &&
         canvas.getActiveObjects().length > 0
@@ -73,24 +77,30 @@ export default function SketchDrawListener() {
         canvas.discardActiveObject()
         canvas.requestRenderAll()
       }
+
+      // Undo: Ctrl+Z / Redo: Ctrl+Shift+Z
+      if (
+        event.code === 'KeyZ' &&
+        (event.ctrlKey || event.metaKey) &&
+        event.shiftKey &&
+        history?.canRedo()
+      ) {
+        history?.redo()
+      } else if (
+        event.code === 'KeyZ' &&
+        (event.ctrlKey || event.metaKey) &&
+        history?.canUndo()
+      ) {
+        history?.undo()
+      }
     }
 
     window.addEventListener('keydown', onKeyDown)
+
     return () => {
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [canvas])
-
-  useEffect(() => {
-    const onBeforeUnload = () => {
-      return confirm('Are you sure?')
-    }
-
-    window.addEventListener('onbeforeunload', onBeforeUnload)
-    return () => {
-      window.removeEventListener('onbeforeunload', onBeforeUnload)
-    }
-  }, [])
+  }, [canvas, history])
   // END: window/document events
 
   useEffect(() => {
@@ -178,7 +188,7 @@ export default function SketchDrawListener() {
       const canvasObjectSelection = (e: any) => {
         if (canvas) {
           setSelectedObjects(e.selected || [])
-          saveObjectsToStorage(canvas.getObjects())
+          saveObjectsToStorage(canvas)
         }
       }
 

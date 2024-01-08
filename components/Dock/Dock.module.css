@@ -1,14 +1,20 @@
+.container {
+  @apply fixed z-10 bottom-0 w-full flex justify-center;
+}
 .toolbar {
-  @apply fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-16 py-2 bg-white rounded-t-lg flex items-center justify-center space-x-4 shadow;
+  @apply relative z-50 flex items-center justify-center mx-auto px-6 py-2 bg-white rounded-t-lg space-x-4 shadow overflow-x-auto w-fit max-w-full;
+}
+.toolbar::-webkit-scrollbar {
+  @apply hidden;
 }
 .toolbarLogo {
-  @apply h-4 w-auto mr-4 shrink-0;
+  @apply h-4 w-auto mr-4 grow-0 shrink-0 basis-0;
 }
 .toolWrapper {
-  @apply flex items-center grow shrink-0 space-x-4;
+  @apply inline-flex items-center space-x-4 grow shrink basis-auto min-w-0;
 }
 .toolGroup {
-  @apply relative flex items-center w-fit overflow-hidden;
+  @apply relative flex items-center shrink-0;
 }
 .toolGroup::before {
   @apply hidden absolute w-6 h-6 left-11 top-1/2 -translate-y-1/2 opacity-30;

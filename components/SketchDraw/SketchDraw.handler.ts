@@ -152,7 +152,7 @@ const useSketchDrawHandler = () => {
     }
 
     if (obj) {
-      canvas.renderAll()
+      canvas.requestRenderAll()
     }
   }
 

@@ -33,7 +33,7 @@ const HighlighterOptions = () => {
           HIGHLIGHTER_OPTIONS_DEFAULT.width
       })
     }
-  }, [selectedObjects])
+  }, [selectedObjects, setOptions])
 
   useEffect(() => {
     if (canvas && selectedObjects.length > 0) {

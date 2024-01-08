@@ -45,7 +45,7 @@ const TriangleOptions = () => {
         strokeWidth: (selectedObjects[0] as ShapeObject).strokeWidth
       })
     }
-  }, [selectedObjects])
+  }, [selectedObjects, setOptions])
 
   useEffect(() => {
     if (canvas && selectedObjects.length > 0) {

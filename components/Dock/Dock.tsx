@@ -9,7 +9,7 @@ import DockTools from './DockTools'
 
 const Dock = () => {
   return (
-    <>
+    <div className={style.container}>
       <DockOptionsDrawer />
 
       <div className={style.toolbar}>
@@ -26,7 +26,7 @@ const Dock = () => {
           <DockTools />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

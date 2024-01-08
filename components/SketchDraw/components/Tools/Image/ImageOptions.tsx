@@ -32,21 +32,6 @@ const ImageOptions = () => {
 
   const isError = acceptedFiles.length === 0 && fileRejections.length > 0
 
-  const handleFileSelected = async (file: File) => {
-    try {
-      const result = await fileToBase64(file, {
-        width: canvasOptions.width || 0,
-        height: canvasOptions.height || 0
-      })
-
-      if (result) {
-        pushImageObject(result)
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
   const pushImageObject = async ({
     image: imageUrl,
     width,
@@ -75,10 +60,25 @@ const ImageOptions = () => {
   }
 
   useEffect(() => {
+    const handleFileSelected = async (file: File) => {
+      try {
+        const result = await fileToBase64(file, {
+          width: canvasOptions.width || 0,
+          height: canvasOptions.height || 0
+        })
+
+        if (result) {
+          pushImageObject(result)
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
     if (acceptedFiles.length > 0) {
       handleFileSelected(acceptedFiles[0])
     }
-  }, [acceptedFiles, handleFileSelected])
+  }, [acceptedFiles])
 
   return (
     <div className={style.imageToolOptions}>

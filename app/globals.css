@@ -23,9 +23,9 @@ html {
 }
 
 main {
-  @apply absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 grid grid-cols-1 lg:grid-cols-2 gap-6 w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto overflow-visible;
+  @apply relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 w-[calc(100vw-10rem)] lg:w-[calc(100vw-20rem)] mx-auto overflow-visible py-20;
 }
 main .drawing-wrapper,
 main .result-wrapper {
-  @apply relative w-full h-[calc(100vh-17.5rem)] aspect-square;
+  @apply relative w-full aspect-square;
 }

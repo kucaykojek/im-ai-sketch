@@ -26,7 +26,7 @@ const EraserOptions = () => {
           ERASER_OPTIONS_DEFAULT.width
       })
     }
-  }, [selectedObjects])
+  }, [selectedObjects, setOptions])
 
   useEffect(() => {
     if (canvas && selectedObjects.length > 0) {

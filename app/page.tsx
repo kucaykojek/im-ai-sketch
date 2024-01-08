@@ -24,6 +24,8 @@ export default function Home() {
           <Sidebar position="left">
             <SketchActions.Select />
             <SketchActions.Duplicate />
+            {/* <SketchActions.Undo />
+            <SketchActions.Redo /> */}
             <SketchActions.Delete />
             <hr />
             <SketchActions.New />

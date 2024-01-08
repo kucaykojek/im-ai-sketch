@@ -40,7 +40,7 @@ const GenerateImage = () => {
       setResultImages(images)
       setSelectedImage(images[0] || '')
     }
-  }, [])
+  }, [setPayload, setResultImages, setSelectedImage])
 
   useEffect(() => {
     if (canvas && canvasRef.current) {
@@ -54,7 +54,7 @@ const GenerateImage = () => {
         canvas.off('after:render', generatingImage)
       }
     }
-  }, [canvas, canvasRef, generating, payload])
+  }, [canvas, canvasRef, generating, payload, generateImage])
 
   return (
     <div className="relative h-full bg-white overflow-hidden rounded-xl flex flex-col items-center justify-center">

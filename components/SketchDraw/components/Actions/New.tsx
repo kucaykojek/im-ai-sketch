@@ -4,6 +4,7 @@ import useSketchDrawContext from '../../SketchDraw.context'
 import { CANVAS_DEFAULT } from '../../data/constants'
 import useCanvas from '../../store/useCanvas'
 import { saveBackgroundToStorage } from '../../utils/canvas'
+import { saveObjectsToStorage } from '../../utils/object'
 import style from './Actions.module.css'
 
 const New = () => {
@@ -18,6 +19,7 @@ const New = () => {
     if (canvas) {
       canvas.backgroundColor = color
       canvas.clear()
+      saveObjectsToStorage(canvas)
     }
   }
 
