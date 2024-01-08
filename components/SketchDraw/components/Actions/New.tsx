@@ -17,8 +17,8 @@ const New = () => {
     saveBackgroundToStorage(color)
 
     if (canvas) {
-      canvas.backgroundColor = color
       canvas.clear()
+      canvas.backgroundColor = color
       saveObjectsToStorage(canvas)
     }
   }

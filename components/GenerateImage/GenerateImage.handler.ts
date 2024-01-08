@@ -31,6 +31,7 @@ const useGenerateHandler = () => {
       !enabled ||
       !canvasRef.current ||
       !canvas ||
+      canvas.getObjects().length === 0 ||
       canvas.getActiveObjects().length > 0 ||
       !payload.prompt ||
       !payload.strength ||
