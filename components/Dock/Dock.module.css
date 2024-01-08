@@ -14,7 +14,7 @@
   @apply inline-flex items-center space-x-4 grow shrink basis-auto min-w-0;
 }
 .toolGroup {
-  @apply relative flex items-center shrink-0;
+  @apply relative flex items-center shrink-0 overflow-hidden;
 }
 .toolGroup::before {
   @apply hidden absolute w-6 h-6 left-11 top-1/2 -translate-y-1/2 opacity-30;
