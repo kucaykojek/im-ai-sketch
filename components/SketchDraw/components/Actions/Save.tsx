@@ -1,13 +1,11 @@
 import { SaveIcon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvas from '../../store/useCanvas'
-import { saveObjectsToStorage } from '../../utils/object'
+import useSketchDrawStore from '../../store/SketchDraw.store'
+import { saveCanvasToStorage } from '../../utils/canvas'
 import style from './Actions.module.css'
 
 const Save = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas } = useCanvas()
+  const { isReady, canvas } = useSketchDrawStore()
 
   const isDisabled = !isReady || (canvas?.getObjects()?.length || 0) === 0
 
@@ -16,7 +14,7 @@ const Save = () => {
       return
     }
 
-    saveObjectsToStorage(canvas)
+    saveCanvasToStorage(canvas)
   }
 
   return (

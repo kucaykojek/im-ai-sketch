@@ -1,19 +1,19 @@
 import { PencilIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
-import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
-import SliderRange from '@/components/SketchDraw/components/SliderRange'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { PENCIL_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
-import { PencilObject } from '@/components/SketchDraw/data/types'
-import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { isPencilObject } from '@/components/SketchDraw/utils/object'
+import { PENCIL_OPTIONS_DEFAULT } from '../../../data/constants'
+import { PencilObject } from '../../../data/types'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import usePencilOptions from '../../../store/options/PencilOptions.store'
+import { cn } from '../../../utils/common'
+import { isPencilObject } from '../../../utils/object'
+import ColorPicker from '../../ColorPicker'
+import SliderRange from '../../SliderRange'
+import style from '../Tools.module.css'
 
 const PencilOptions = () => {
   const { options, setOptions } = usePencilOptions()
-  const { canvas, selectedObjects } = useCanvas()
+  const { canvas, selectedObjects } = useSketchDrawStore()
 
   const handleChangeOptions = (key: any, value: any) => {
     setOptions({ ...options, [key]: value })

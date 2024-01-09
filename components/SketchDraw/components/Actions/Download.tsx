@@ -1,11 +1,11 @@
 import { DownloadIcon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
+import useSketchDrawStore from '../../store/SketchDraw.store'
 import { generateUniqueId } from '../../utils/common'
 import style from './Actions.module.css'
 
 const Download = () => {
-  const { isReady, canvasRef } = useSketchDrawContext()
+  const { isReady, canvasRef } = useSketchDrawStore()
 
   const handleDownloadClick = () => {
     if (canvasRef.current) {

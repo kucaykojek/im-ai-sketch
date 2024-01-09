@@ -10,9 +10,8 @@ import {
   TriangleOptions
 } from './types'
 
-export const CANVAS_ID: string = 'im-aisketch-canvas'
-export const OBJECTS_STORAGE_KEY = 'im-aisketch-canvas-objects'
-export const BG_STORAGE_KEY = 'im-aisketch-canvas-bg'
+export const CANVAS_ID: string = 'aisketch-canvas'
+export const CANVAS_STORAGE_KEY = 'im-aisketch-canvas'
 export const PRIMARY_COLOR_HEX = '#ffc40c'
 
 export const PALETTE_COLORS: string[] = [

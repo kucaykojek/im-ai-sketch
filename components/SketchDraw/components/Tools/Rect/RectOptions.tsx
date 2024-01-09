@@ -1,18 +1,18 @@
 import { SquareIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
-import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
-import SliderRange from '@/components/SketchDraw/components/SliderRange'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
-import type { ShapeObject } from '@/components/SketchDraw/data/types'
-import useRectOptions from '@/components/SketchDraw/store/object/useRectOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
+import { OBJECT_DEFAULT } from '../../../data/constants'
+import type { ShapeObject } from '../../../data/types'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useRectOptions from '../../../store/options/RectOptions.store'
+import { cn } from '../../../utils/common'
+import ColorPicker from '../../ColorPicker'
+import SliderRange from '../../SliderRange'
+import style from '../Tools.module.css'
 
 const RectOptions = () => {
   const { options, setOptions } = useRectOptions()
-  const { canvas, selectedObjects } = useCanvas()
+  const { canvas, selectedObjects } = useSketchDrawStore()
 
   const handleChangeOptions = (key: any, value: any) => {
     setOptions({ ...options, [key]: value })

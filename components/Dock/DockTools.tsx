@@ -4,16 +4,14 @@ import { AudioWaveformIcon, PaletteIcon, ShapesIcon } from 'lucide-react'
 import { useState } from 'react'
 import React from 'react'
 
-import {
-  Tools as SketchDrawTool,
-  useSketchDrawContext
-} from '@/components/SketchDraw'
+import { Tools as SketchDrawTool } from '@/components/SketchDraw'
+import useSketchDrawStore from '@/components/SketchDraw/store/SketchDraw.store'
 import { cn } from '@/libs/utils'
 
 import style from './Dock.module.css'
 
 const DockTools = () => {
-  const { isReady } = useSketchDrawContext()
+  const { isReady } = useSketchDrawStore()
   const [isExpandedGroup, setIsExpandedGroup] = useState<{
     [_: string]: boolean
   }>({

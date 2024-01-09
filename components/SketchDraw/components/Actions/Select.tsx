@@ -1,13 +1,12 @@
 import { MousePointerClickIcon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvas from '../../store/useCanvas'
+import useSketchDrawStore from '../../store/SketchDraw.store'
 import { cn } from '../../utils/common'
 import style from './Actions.module.css'
 
 const Select = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, selectedObjects, activeTool, setActiveTool } =
+    useSketchDrawStore()
 
   const isActive = selectedObjects.length > 0 || activeTool === null
 

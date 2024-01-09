@@ -1,15 +1,13 @@
 import { ImageIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import { cn } from '../../../utils/common'
+import style from '../Tools.module.css'
 
 const tool = 'image'
 
 const TextButton = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, activeTool, setActiveTool } = useSketchDrawStore()
 
   const isActive = activeTool === tool
 

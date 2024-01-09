@@ -1,24 +1,23 @@
 import { ChangeEvent } from 'react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvas from '../../store/useCanvas'
-import { saveBackgroundToStorage } from '../../utils/canvas'
+import useSketchDrawStore from '../../store/SketchDraw.store'
+import { saveCanvasToStorage } from '../../utils/canvas'
 import { cn, isHexLight } from '../../utils/common'
 import { isEraserObject } from '../../utils/object'
 import style from './Actions.module.css'
 
 const Background = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, canvasOptions, setCanvasOptions } = useCanvas()
+  const { isReady, canvas, canvasOptions, setCanvasOptions } =
+    useSketchDrawStore()
 
   const handleChange = (e: ChangeEvent) => {
     const color = (e.target as HTMLInputElement).value
 
     setCanvasOptions({ ...canvasOptions, backgroundColor: color })
-    saveBackgroundToStorage(color)
 
     // Recoloring all eraser / masking
     if (canvas) {
+      canvas.backgroundColor = color
       canvas
         .getObjects()
         .filter((obj) => isEraserObject(obj))
@@ -27,6 +26,8 @@ const Background = () => {
         })
 
       canvas.requestRenderAll()
+
+      saveCanvasToStorage(canvas)
     }
   }
 

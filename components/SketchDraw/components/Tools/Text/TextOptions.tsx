@@ -8,19 +8,19 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { OBJECT_DEFAULT } from '@/components/SketchDraw/data/constants'
-import type { TextObject } from '@/components/SketchDraw/data/types'
-import useTextOptions from '@/components/SketchDraw/store/object/useTextOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import getAvailableFonts from '@/libs/getAvailableFonts'
+import { OBJECT_DEFAULT } from '../../../data/constants'
+import type { TextObject } from '../../../data/types'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useTextOptions from '../../../store/options/TextOptions.store'
+import { cn } from '../../../utils/common'
+import getAvailableFonts from '../../../utils/fonts'
+import ColorPicker from '../../ColorPicker'
+import style from '../Tools.module.css'
 
 const TextOptions = () => {
   const [fonts, setFonts] = useState<string[]>([])
   const { options, setOptions } = useTextOptions()
-  const { canvas, selectedObjects } = useCanvas()
+  const { canvas, selectedObjects } = useSketchDrawStore()
 
   const handleChangeOptions = (key: any, value: any) => {
     setOptions({ ...options, [key]: value })

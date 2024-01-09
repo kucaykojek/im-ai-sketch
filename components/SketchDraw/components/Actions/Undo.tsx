@@ -1,12 +1,10 @@
 import { Undo2Icon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvas from '../../store/useCanvas'
+import useSketchDrawStore from '../../store/SketchDraw.store'
 import style from './Actions.module.css'
 
 const Undo = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, history } = useCanvas()
+  const { isReady, canvas, history } = useSketchDrawStore()
 
   const handleUndoClick = () => {
     if (!canvas || !history || !history?.canUndo()) {

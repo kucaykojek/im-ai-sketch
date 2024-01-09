@@ -2,19 +2,17 @@
 
 import { debounce, omit } from 'lodash'
 
-import blobToBase64 from '@/libs/blobToBase64'
+import { blobToBase64 } from '@/libs/utils'
 import useAISketchStore, {
   GENERATION_PAYLOAD_KEYS,
   GENERATION_RESULT_KEYS,
   type Payload
 } from '@/store/ai-sketch.store'
 
-import useSketchDrawContext from '../SketchDraw/SketchDraw.context'
-import useCanvas from '../SketchDraw/store/useCanvas'
+import useSketchDrawStore from '../SketchDraw/store/SketchDraw.store'
 
 const useGenerateHandler = () => {
-  const { canvasRef } = useSketchDrawContext()
-  const { canvas } = useCanvas()
+  const { canvasRef, canvas } = useSketchDrawStore()
   const {
     enabled,
     payload,

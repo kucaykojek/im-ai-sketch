@@ -8,14 +8,14 @@ import {
   TextOptions,
   TriangleOptions
 } from '@/components/SketchDraw/components/Tools'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import useSketchDrawStore from '@/components/SketchDraw/store/SketchDraw.store'
 import { getSelectedType } from '@/components/SketchDraw/utils/object'
 import { cn } from '@/libs/utils'
 
 import style from './Dock.module.css'
 
 const DockOptionsDrawer = () => {
-  const { canvas, activeTool } = useCanvas()
+  const { canvas, activeTool } = useSketchDrawStore()
 
   const selectedType = canvas
     ? getSelectedType(canvas.getActiveObjects()?.[0]) || activeTool

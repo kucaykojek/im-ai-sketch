@@ -1,16 +1,14 @@
 import { EraserIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useEraserOptions from '@/components/SketchDraw/store/object/useEraserOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useEraserOptions from '../../../store/options/EraserOptions.store'
+import { cn } from '../../../utils/common'
+import style from '../Tools.module.css'
 
 const tool = 'eraser'
 
 const EraserButton = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, activeTool, setActiveTool } = useSketchDrawStore()
   const { resetOptions } = useEraserOptions()
 
   const isActive = activeTool === tool

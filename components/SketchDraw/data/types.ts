@@ -8,6 +8,7 @@ import type {
   PathProps,
   TextboxProps
 } from 'fabric'
+import { MutableRefObject } from 'react'
 
 import SketchDrawHistory from '../SketchDraw.history'
 
@@ -73,7 +74,13 @@ type CanvasActiveTool =
   | 'image'
   | null
 
-export type CanvasType = {
+export type SketchDraw = {
+  canvasRef: MutableRefObject<HTMLCanvasElement | null>
+  containerRef: MutableRefObject<HTMLDivElement | null>
+  containerSize: {
+    width: number
+    height: number
+  }
   canvas: Canvas | null
   history: SketchDrawHistory | null
   canvasOptions: Pick<CanvasOptions, 'backgroundColor' | 'width' | 'height'>

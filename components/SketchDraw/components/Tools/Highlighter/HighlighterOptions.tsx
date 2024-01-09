@@ -1,19 +1,19 @@
 import { HighlighterIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
-import ColorPicker from '@/components/SketchDraw/components/ColorPicker'
-import SliderRange from '@/components/SketchDraw/components/SliderRange'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { HIGHLIGHTER_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
-import { HighlighterObject } from '@/components/SketchDraw/data/types'
-import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { isHighlighterObject } from '@/components/SketchDraw/utils/object'
+import { HIGHLIGHTER_OPTIONS_DEFAULT } from '../../../data/constants'
+import { HighlighterObject } from '../../../data/types'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useHighlighterOptions from '../../../store/options/HighlighterOptions.store'
+import { cn } from '../../../utils/common'
+import { isHighlighterObject } from '../../../utils/object'
+import ColorPicker from '../../ColorPicker'
+import SliderRange from '../../SliderRange'
+import style from '../Tools.module.css'
 
 const HighlighterOptions = () => {
   const { options, setOptions } = useHighlighterOptions()
-  const { canvas, selectedObjects } = useCanvas()
+  const { canvas, selectedObjects } = useSketchDrawStore()
 
   const handleChangeOptions = (key: any, value: any) => {
     setOptions({ ...options, [key]: value })

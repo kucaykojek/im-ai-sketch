@@ -9,22 +9,16 @@ import {
 import { omit } from 'lodash'
 
 import { TEXT_OPTIONS_DEFAULT } from './data/constants'
-import useEllipseOptions from './store/object/useEllipseOptions'
-import useRectOptions from './store/object/useRectOptions'
-import useTextOptions from './store/object/useTextOptions'
-import useTriangleOptions from './store/object/useTriangleOptions'
-import useCanvas from './store/useCanvas'
+import useSketchDrawStore from './store/SketchDraw.store'
+import useSketchDrawToolsOptionsStore from './store/options'
 
 let obj: FabricObject
 let isDrawing = false
 let initPosition = { x: 0, y: 0 }
 
 const useSketchDrawHandler = () => {
-  const { canvas, activeTool, setActiveTool } = useCanvas()
-  const { options: ellipseOptions } = useEllipseOptions()
-  const { options: rectOptions } = useRectOptions()
-  const { options: triangleOptions } = useTriangleOptions()
-  const { options: textOptions } = useTextOptions()
+  const { canvas, activeTool, setActiveTool } = useSketchDrawStore()
+  const toolsOptions = useSketchDrawToolsOptionsStore()
 
   const setSelectable = (selectable: boolean) => {
     if (canvas) {
@@ -57,7 +51,7 @@ const useSketchDrawHandler = () => {
       case 'ellipse':
         obj = new Ellipse({
           ...commonInitOptions,
-          ...ellipseOptions,
+          ...toolsOptions.Ellipse.options,
           rx: 1,
           ry: 1
         })
@@ -65,20 +59,23 @@ const useSketchDrawHandler = () => {
       case 'rect':
         obj = new Rect({
           ...commonInitOptions,
-          ...rectOptions
+          ...toolsOptions.Rect.options
         })
         break
       case 'triangle':
         obj = new Triangle({
           ...commonInitOptions,
-          ...triangleOptions
+          ...toolsOptions.Triangle.options
         })
         break
       case 'textbox':
-        obj = new Textbox(textOptions.text || TEXT_OPTIONS_DEFAULT.text || '', {
-          ...commonInitOptions,
-          ...omit(textOptions, ['textbox'])
-        })
+        obj = new Textbox(
+          toolsOptions.Text.options.text || TEXT_OPTIONS_DEFAULT.text || '',
+          {
+            ...commonInitOptions,
+            ...omit(toolsOptions.Text.options, ['textbox'])
+          }
+        )
         break
 
       default:

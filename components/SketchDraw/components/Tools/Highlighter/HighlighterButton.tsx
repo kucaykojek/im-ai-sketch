@@ -1,17 +1,16 @@
 import { HighlighterIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { getSelectedType } from '@/components/SketchDraw/utils/object'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useHighlighterOptions from '../../../store/options/HighlighterOptions.store'
+import { cn } from '../../../utils/common'
+import { getSelectedType } from '../../../utils/object'
+import style from '../Tools.module.css'
 
 const tool = 'highlighter'
 
 const HighlighterButton = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, selectedObjects, activeTool, setActiveTool } =
+    useSketchDrawStore()
   const { resetOptions } = useHighlighterOptions()
 
   const isActive =

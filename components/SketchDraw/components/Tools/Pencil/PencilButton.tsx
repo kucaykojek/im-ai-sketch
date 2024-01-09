@@ -1,17 +1,16 @@
 import { PencilIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { getSelectedType } from '@/components/SketchDraw/utils/object'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import usePencilOptions from '../../../store/options/PencilOptions.store'
+import { cn } from '../../../utils/common'
+import { getSelectedType } from '../../../utils/object'
+import style from '../Tools.module.css'
 
 const tool = 'pencil'
 
 const PencilButton = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, selectedObjects, activeTool, setActiveTool } =
+    useSketchDrawStore()
   const { resetOptions } = usePencilOptions()
 
   const isActive =

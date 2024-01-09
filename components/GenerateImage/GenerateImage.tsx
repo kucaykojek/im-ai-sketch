@@ -9,13 +9,11 @@ import useAISketchStore, {
   GENERATION_RESULT_KEYS
 } from '@/store/ai-sketch.store'
 
-import useSketchDrawContext from '../SketchDraw/SketchDraw.context'
-import useCanvas from '../SketchDraw/store/useCanvas'
+import useSketchDrawStore from '../SketchDraw/store/SketchDraw.store'
 import useGenerateHandler from './GenerateImage.handler'
 
 const GenerateImage = () => {
-  const { canvas } = useCanvas()
-  const { canvasRef } = useSketchDrawContext()
+  const { canvasRef, canvas } = useSketchDrawStore()
   const { generateImage } = useGenerateHandler()
   const {
     enabled,

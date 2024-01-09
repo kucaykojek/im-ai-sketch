@@ -1,12 +1,10 @@
 import { CopyIcon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
-import useCanvas from '../../store/useCanvas'
+import useSketchDrawStore from '../../store/SketchDraw.store'
 import style from './Actions.module.css'
 
 const Duplicate = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, selectedObjects } = useCanvas()
+  const { isReady, canvas, selectedObjects } = useSketchDrawStore()
 
   const selectedObject = selectedObjects?.[0] || null
 

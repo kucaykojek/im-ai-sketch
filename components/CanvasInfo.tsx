@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import useCanvas from './SketchDraw/store/useCanvas'
+import useSketchDrawStore from './SketchDraw/store/SketchDraw.store'
 
 const CanvasInfo = () => {
   const [metadata, setMetadata] = useState({
@@ -10,7 +10,7 @@ const CanvasInfo = () => {
     size: 0
   })
 
-  const { canvas } = useCanvas()
+  const { canvas } = useSketchDrawStore()
 
   useEffect(() => {
     if (canvas) {

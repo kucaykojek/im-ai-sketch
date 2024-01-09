@@ -1,15 +1,13 @@
 import { RefreshCcwIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
+import useSketchDrawStore from '@/components/SketchDraw/store/SketchDraw.store'
 import useAISketchStore from '@/store/ai-sketch.store'
 
 import useGenerateHandler from '../../GenerateImage.handler'
 import style from './Actions.module.css'
 
 const Regenerate = () => {
-  const { canvas } = useCanvas()
-  const { canvasRef } = useSketchDrawContext()
+  const { canvasRef, canvas } = useSketchDrawStore()
   const { generateImage } = useGenerateHandler()
   const { enabled, payload, generating } = useAISketchStore()
 

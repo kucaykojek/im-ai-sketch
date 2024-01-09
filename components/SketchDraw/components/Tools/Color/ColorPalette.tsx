@@ -1,18 +1,16 @@
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { PALETTE_COLORS } from '@/components/SketchDraw/data/constants'
-import useEllipseOptions from '@/components/SketchDraw/store/object/useEllipseOptions'
-import useHighlighterOptions from '@/components/SketchDraw/store/object/useHighlighterOptions'
-import usePencilOptions from '@/components/SketchDraw/store/object/usePencilOptions'
-import useRectOptions from '@/components/SketchDraw/store/object/useRectOptions'
-import useTriangleOptions from '@/components/SketchDraw/store/object/useTriangleOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { getSelectedType } from '@/components/SketchDraw/utils/object'
+import { PALETTE_COLORS } from '../../../data/constants'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useEllipseOptions from '../../../store/options/EllipseOptions.store'
+import useHighlighterOptions from '../../../store/options/HighlighterOptions.store'
+import usePencilOptions from '../../../store/options/PencilOptions.store'
+import useRectOptions from '../../../store/options/RectOptions.store'
+import useTriangleOptions from '../../../store/options/TriangleOptions.store'
+import { cn } from '../../../utils/common'
+import { getSelectedType } from '../../../utils/object'
+import style from '../Tools.module.css'
 
 const ColorPalette = () => {
-  const { isReady } = useSketchDrawContext()
-  const { activeTool, selectedObjects } = useCanvas()
+  const { isReady, activeTool, selectedObjects } = useSketchDrawStore()
 
   const { options: pencilOptions, setOptions: setPencilOptions } =
     usePencilOptions()

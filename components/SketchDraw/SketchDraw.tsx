@@ -1,15 +1,109 @@
 'use client'
 
+import { Canvas } from 'fabric'
 import { Loader2Icon } from 'lucide-react'
+import { createRef, useCallback, useEffect, useRef } from 'react'
 
-import useSketchDrawContext from './SketchDraw.context'
+import SketchDrawHistory from './SketchDraw.history'
 import SketchDrawListener from './SketchDraw.listener'
-import { CANVAS_ID } from './data/constants'
-import useCanvas from './store/useCanvas'
+import { CANVAS_ID, PRIMARY_COLOR_HEX } from './data/constants'
+import useSketchDrawStore from './store/SketchDraw.store'
+import {
+  drawCanvasFromStorage,
+  getCanvasBackgroundFromStorage
+} from './utils/canvas'
 
 export default function SketchDraw() {
-  const { isReady, containerRef, canvasRef } = useSketchDrawContext()
-  const { canvasOptions } = useCanvas()
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const {
+    isReady,
+    containerSize,
+    canvas,
+    canvasOptions,
+    setIsReady,
+    setCanvasRef,
+    setContainerRef,
+    setHistory,
+    setCanvas,
+    setCanvasOptions
+  } = useSketchDrawStore()
+
+  // Init canvas function
+  const initCanvas = useCallback(() => {
+    if (!containerRef.current) {
+      return
+    }
+
+    if (!canvasRef.current) {
+      return
+    }
+
+    const backgroundColor =
+      getCanvasBackgroundFromStorage() || canvasOptions.backgroundColor
+    const width = containerRef.current.offsetWidth
+    const height = containerRef.current.offsetHeight
+
+    setCanvasOptions({
+      backgroundColor,
+      width,
+      height
+    })
+
+    if (!canvas) {
+      const newCanvas = new Canvas(canvasRef.current, {
+        backgroundColor,
+        width,
+        height,
+        selectionBorderColor: PRIMARY_COLOR_HEX,
+        selectionLineWidth: 1,
+        preserveObjectStacking: true
+      })
+
+      setCanvas(newCanvas)
+      setHistory(new SketchDrawHistory(newCanvas))
+
+      drawCanvasFromStorage(newCanvas)
+    } else {
+      canvas.backgroundColor = backgroundColor
+
+      if (canvas.width != width || canvas.height != height) {
+        const scaleX = width / canvas.width
+        const scaleY = height / canvas.height
+        var objects = canvas.getObjects()
+
+        objects.forEach((obj) => {
+          obj.scaleX = obj.scaleX * scaleX
+          obj.scaleY = obj.scaleY * scaleY
+          obj.left = obj.left * scaleX
+          obj.top = obj.top * scaleY
+          obj.setCoords()
+        })
+
+        canvas.discardActiveObject()
+        canvas.requestRenderAll()
+        canvas.calcOffset()
+      }
+
+      canvas.setDimensions({ width, height })
+    }
+
+    setIsReady(true)
+  }, [containerSize, canvasOptions.backgroundColor])
+
+  useEffect(() => {
+    initCanvas()
+  }, [initCanvas])
+
+  useEffect(() => {
+    setCanvasRef(canvasRef)
+    setContainerRef(containerRef)
+
+    return () => {
+      setCanvasRef(createRef())
+      setContainerRef(createRef())
+    }
+  }, [setCanvasRef, setContainerRef])
 
   return (
     <div
@@ -29,7 +123,7 @@ export default function SketchDraw() {
         width={canvasOptions.width}
         height={canvasOptions.height}
       />
-      <SketchDrawListener />
+      <SketchDrawListener initCanvas={initCanvas} />
     </div>
   )
 }

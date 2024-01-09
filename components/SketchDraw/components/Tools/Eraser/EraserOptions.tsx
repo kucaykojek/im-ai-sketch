@@ -1,17 +1,17 @@
 import { EraserIcon } from 'lucide-react'
 import { useEffect } from 'react'
 
-import SliderRange from '@/components/SketchDraw/components/SliderRange'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import { ERASER_OPTIONS_DEFAULT } from '@/components/SketchDraw/data/constants'
-import { EraserObject } from '@/components/SketchDraw/data/types'
-import useEraserOptions from '@/components/SketchDraw/store/object/useEraserOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { isEraserObject } from '@/components/SketchDraw/utils/object'
+import { ERASER_OPTIONS_DEFAULT } from '../../../data/constants'
+import { EraserObject } from '../../../data/types'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useEraserOptions from '../../../store/options/EraserOptions.store'
+import { isEraserObject } from '../../../utils/object'
+import SliderRange from '../../SliderRange'
+import style from '../Tools.module.css'
 
 const EraserOptions = () => {
   const { options, setOptions } = useEraserOptions()
-  const { canvas, selectedObjects } = useCanvas()
+  const { canvas, selectedObjects } = useSketchDrawStore()
 
   const handleChangeOptions = (key: any, value: any) => {
     setOptions({ ...options, [key]: value })

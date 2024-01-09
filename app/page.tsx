@@ -8,15 +8,12 @@ import GenerateImage, {
 } from '@/components/GenerateImage'
 import GenerationInfo from '@/components/ResultInfo'
 import Sidebar from '@/components/Sidebar/Sidebar'
-import SketchDraw, {
-  Actions as SketchActions,
-  SketchDrawProvider
-} from '@/components/SketchDraw'
+import SketchDraw, { Actions as SketchActions } from '@/components/SketchDraw'
 import Topbar from '@/components/Topbar'
 
 export default function Home() {
   return (
-    <SketchDrawProvider>
+    <>
       <Topbar />
 
       <main>
@@ -59,6 +56,6 @@ export default function Home() {
       <CanvasInfo />
       <GenerationInfo />
       {/* INFO Components */}
-    </SketchDrawProvider>
+    </>
   )
 }

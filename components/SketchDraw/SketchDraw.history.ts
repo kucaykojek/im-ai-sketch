@@ -27,8 +27,7 @@ class SketchDrawHistory {
     return {
       'object:added': this._historySaveAction.bind(this),
       'object:removed': this._historySaveAction.bind(this),
-      'object:modified': this._historySaveAction.bind(this),
-      'object:skewing': this._historySaveAction.bind(this)
+      'object:modified': this._historySaveAction.bind(this)
     }
   }
 

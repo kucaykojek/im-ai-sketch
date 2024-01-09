@@ -1,25 +1,22 @@
 import { FileIcon } from 'lucide-react'
 
-import useSketchDrawContext from '../../SketchDraw.context'
 import { CANVAS_DEFAULT } from '../../data/constants'
-import useCanvas from '../../store/useCanvas'
-import { saveBackgroundToStorage } from '../../utils/canvas'
-import { saveObjectsToStorage } from '../../utils/object'
+import useSketchDrawStore from '../../store/SketchDraw.store'
+import { saveCanvasToStorage } from '../../utils/canvas'
 import style from './Actions.module.css'
 
 const New = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, canvasOptions, setCanvasOptions } = useCanvas()
+  const { isReady, canvas, canvasOptions, setCanvasOptions } =
+    useSketchDrawStore()
 
   const handleNewClick = () => {
     const color = CANVAS_DEFAULT.background
     setCanvasOptions({ ...canvasOptions, backgroundColor: color })
-    saveBackgroundToStorage(color)
 
     if (canvas) {
       canvas.clear()
       canvas.backgroundColor = color
-      saveObjectsToStorage(canvas)
+      saveCanvasToStorage(canvas)
     }
   }
 

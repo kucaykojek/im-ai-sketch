@@ -1,17 +1,15 @@
-import { Canvas, FabricObject } from 'fabric'
-
-import type {
-  EraserObject,
-  HighlighterObject,
-  PencilObject
-} from '@/components/SketchDraw/data/types'
+import { FabricObject } from 'fabric'
 
 import {
   ERASER_OPTIONS_DEFAULT,
   HIGHLIGHTER_OPTIONS_DEFAULT,
-  OBJECTS_STORAGE_KEY,
   PENCIL_OPTIONS_DEFAULT
 } from '../data/constants'
+import type {
+  EraserObject,
+  HighlighterObject,
+  PencilObject
+} from '../data/types'
 
 export const getSelectedType = (obj: FabricObject) => {
   if (!obj) {
@@ -78,25 +76,4 @@ export const isHighlighterObject = (obj: FabricObject) => {
   } else {
     return false
   }
-}
-
-export const drawObjectsFromStorage = async (canvas: Canvas) => {
-  if (!canvas || !localStorage) {
-    return
-  }
-
-  const objectsOnStorage = localStorage.getItem(OBJECTS_STORAGE_KEY) || '[]'
-
-  ;(await canvas.loadFromJSON(objectsOnStorage)).requestRenderAll()
-}
-
-export const saveObjectsToStorage = (canvas: Canvas) => {
-  if (!canvas || !localStorage) {
-    return
-  }
-
-  localStorage.setItem(
-    OBJECTS_STORAGE_KEY,
-    JSON.stringify(canvas.toDatalessJSON())
-  )
 }

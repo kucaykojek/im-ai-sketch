@@ -1,17 +1,16 @@
 import { CircleIcon } from 'lucide-react'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useEllipseOptions from '@/components/SketchDraw/store/object/useEllipseOptions'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import { cn } from '@/components/SketchDraw/utils/common'
-import { getSelectedType } from '@/components/SketchDraw/utils/object'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import useEllipseOptions from '../../../store/options/EllipseOptions.store'
+import { cn } from '../../../utils/common'
+import { getSelectedType } from '../../../utils/object'
+import style from '../Tools.module.css'
 
 const tool = 'ellipse'
 
 const EllipseButton = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, selectedObjects, activeTool, setActiveTool } = useCanvas()
+  const { isReady, canvas, selectedObjects, activeTool, setActiveTool } =
+    useSketchDrawStore()
   const { resetOptions } = useEllipseOptions()
 
   const isActive =

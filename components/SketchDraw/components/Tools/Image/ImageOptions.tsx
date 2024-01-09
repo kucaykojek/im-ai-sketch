@@ -5,18 +5,12 @@ import { ImageIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import useSketchDrawContext from '@/components/SketchDraw/SketchDraw.context'
-import style from '@/components/SketchDraw/components/Tools/Tools.module.css'
-import useCanvas from '@/components/SketchDraw/store/useCanvas'
-import {
-  cn,
-  fileToBase64,
-  generateUniqueId
-} from '@/components/SketchDraw/utils/common'
+import useSketchDrawStore from '../../../store/SketchDraw.store'
+import { cn, fileToBase64, generateUniqueId } from '../../../utils/common'
+import style from '../Tools.module.css'
 
 const ImageOptions = () => {
-  const { isReady } = useSketchDrawContext()
-  const { canvas, canvasOptions, setActiveTool } = useCanvas()
+  const { isReady, canvas, canvasOptions, setActiveTool } = useSketchDrawStore()
 
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
     useDropzone({

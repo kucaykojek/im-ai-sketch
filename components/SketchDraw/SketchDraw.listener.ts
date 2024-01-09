@@ -1,30 +1,29 @@
 import { PencilBrush } from 'fabric'
 import { useEffect } from 'react'
 
-import useSketchDrawContext from './SketchDraw.context'
 import useSketchDrawHandler from './SketchDraw.handler'
 import { SELECTION_OPTIONS } from './data/constants'
-import useEllipseOptions from './store/object/useEllipseOptions'
-import useEraserOptions from './store/object/useEraserOptions'
-import useHighlighterOptions from './store/object/useHighlighterOptions'
-import usePencilOptions from './store/object/usePencilOptions'
-import useRectOptions from './store/object/useRectOptions'
-import useTriangleOptions from './store/object/useTriangleOptions'
-import useCanvas from './store/useCanvas'
-import useContainerSize from './store/useContainerSize'
+import useSketchDrawStore from './store/SketchDraw.store'
+import useSketchDrawToolsOptionsStore from './store/options'
+import { saveCanvasToStorage } from './utils/canvas'
 
-export default function SketchDrawListener() {
-  const { containerRef, initCanvas, canvas } = useSketchDrawContext()
-  const { activeTool, canvasOptions, history, setSelectedObjects } = useCanvas()
+type Props = {
+  initCanvas: () => void
+}
+
+const SketchDrawListener = ({ initCanvas }: Props) => {
+  const {
+    activeTool,
+    containerRef,
+    canvas,
+    canvasOptions,
+    history,
+    setSelectedObjects,
+    setContainerSize
+  } = useSketchDrawStore()
   const { startDrawing, updateDrawing, stopDrawing, setSelectable } =
     useSketchDrawHandler()
-  const { setContainerSize } = useContainerSize()
-  const { options: pencilOptions } = usePencilOptions()
-  const { options: eraserOptions } = useEraserOptions()
-  const { options: highlighterOptions } = useHighlighterOptions()
-  const { options: ellipseOptions } = useEllipseOptions()
-  const { options: rectOptions } = useRectOptions()
-  const { options: triangleOptions } = useTriangleOptions()
+  const toolsOptions = useSketchDrawToolsOptionsStore()
 
   // BEGIN: window/document events
   useEffect(() => {
@@ -143,29 +142,33 @@ export default function SketchDrawListener() {
         switch (activeTool) {
           case 'pencil':
             canvas.freeDrawingBrush = new PencilBrush(canvas)
-            canvas.freeDrawingBrush.color = pencilOptions.color
-            canvas.freeDrawingBrush.width = pencilOptions.width
-            canvas.freeDrawingBrush.strokeLineCap = pencilOptions.strokeLineCap
+            canvas.freeDrawingBrush.color = toolsOptions.Pencil.options.color
+            canvas.freeDrawingBrush.width = toolsOptions.Pencil.options.width
+            canvas.freeDrawingBrush.strokeLineCap =
+              toolsOptions.Pencil.options.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
-              pencilOptions.strokeLineJoin
+              toolsOptions.Pencil.options.strokeLineJoin
             break
           case 'eraser':
             canvas.freeDrawingBrush = new PencilBrush(canvas)
             canvas.freeDrawingBrush.color =
               canvasOptions.backgroundColor as string
-            canvas.freeDrawingBrush.width = eraserOptions.width
-            canvas.freeDrawingBrush.strokeLineCap = eraserOptions.strokeLineCap
+            canvas.freeDrawingBrush.width = toolsOptions.Eraser.options.width
+            canvas.freeDrawingBrush.strokeLineCap =
+              toolsOptions.Eraser.options.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
-              eraserOptions.strokeLineJoin
+              toolsOptions.Eraser.options.strokeLineJoin
             break
           case 'highlighter':
             canvas.freeDrawingBrush = new PencilBrush(canvas)
-            canvas.freeDrawingBrush.color = highlighterOptions.color
-            canvas.freeDrawingBrush.width = highlighterOptions.width
+            canvas.freeDrawingBrush.color =
+              toolsOptions.Highlighter.options.color
+            canvas.freeDrawingBrush.width =
+              toolsOptions.Highlighter.options.width
             canvas.freeDrawingBrush.strokeLineCap =
-              highlighterOptions.strokeLineCap
+              toolsOptions.Highlighter.options.strokeLineCap
             canvas.freeDrawingBrush.strokeLineJoin =
-              highlighterOptions.strokeLineJoin
+              toolsOptions.Highlighter.options.strokeLineJoin
             break
         }
       } else {
@@ -175,37 +178,46 @@ export default function SketchDrawListener() {
   }, [
     canvas,
     activeTool,
-    pencilOptions,
-    highlighterOptions,
-    ellipseOptions,
-    rectOptions,
-    triangleOptions
+    toolsOptions.Pencil.options,
+    toolsOptions.Highlighter.options,
+    toolsOptions.Ellipse.options,
+    toolsOptions.Rect.options,
+    toolsOptions.Triangle.options
   ])
 
   useEffect(() => {
     if (canvas) {
       const canvasObjectSelection = (e: any) => {
-        if (canvas) {
-          setSelectedObjects(e.selected || [])
-        }
+        setSelectedObjects(e.selected || [])
+        saveCanvasToStorage(canvas)
+      }
+
+      const canvasSelectionCreated = (e: any) => {
+        canvasObjectSelection(e)
+      }
+
+      const canvasSelectionUpdated = (e: any) => {
+        canvasObjectSelection(e)
+      }
+
+      const canvasSelectionCleared = (e: any) => {
+        canvasObjectSelection(e)
       }
 
       const canvasObjectAdded = (e: any) => {
-        if (canvas) {
-          e.target.set({ ...SELECTION_OPTIONS })
-          canvasObjectSelection(e)
-        }
+        e.target.set({ ...SELECTION_OPTIONS })
+        canvasObjectSelection(e)
       }
 
-      canvas.on('selection:created', canvasObjectSelection)
-      canvas.on('selection:updated', canvasObjectSelection)
-      canvas.on('selection:cleared', canvasObjectSelection)
+      canvas.on('selection:created', canvasSelectionCreated)
+      canvas.on('selection:updated', canvasSelectionUpdated)
+      canvas.on('selection:cleared', canvasSelectionCleared)
       canvas.on('object:added', canvasObjectAdded)
 
       return () => {
-        canvas.off('selection:created', canvasObjectSelection)
-        canvas.off('selection:updated', canvasObjectSelection)
-        canvas.off('selection:cleared', canvasObjectSelection)
+        canvas.off('selection:created', canvasSelectionCreated)
+        canvas.off('selection:updated', canvasSelectionUpdated)
+        canvas.off('selection:cleared', canvasSelectionCleared)
         canvas.off('object:added', canvasObjectAdded)
       }
     }
@@ -213,3 +225,5 @@ export default function SketchDrawListener() {
 
   return null
 }
+
+export default SketchDrawListener
