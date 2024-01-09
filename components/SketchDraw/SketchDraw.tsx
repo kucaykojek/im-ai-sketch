@@ -4,7 +4,6 @@ import { Canvas } from 'fabric'
 import { Loader2Icon } from 'lucide-react'
 import { createRef, useCallback, useEffect, useRef } from 'react'
 
-import SketchDrawHistory from './SketchDraw.history'
 import SketchDrawListener from './SketchDraw.listener'
 import { CANVAS_ID, PRIMARY_COLOR_HEX } from './data/constants'
 import useSketchDrawStore from './store/SketchDraw.store'
@@ -12,6 +11,7 @@ import {
   drawCanvasFromStorage,
   getCanvasBackgroundFromStorage
 } from './utils/canvas'
+import historyManager from './utils/history'
 
 export default function SketchDraw() {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -25,12 +25,13 @@ export default function SketchDraw() {
     setCanvasRef,
     setContainerRef,
     setHistory,
+    pushHistoryState,
     setCanvas,
     setCanvasOptions
   } = useSketchDrawStore()
 
   // Init canvas function
-  const initCanvas = useCallback(() => {
+  const initCanvas = useCallback(async () => {
     if (!containerRef.current) {
       return
     }
@@ -61,9 +62,10 @@ export default function SketchDraw() {
       })
 
       setCanvas(newCanvas)
-      setHistory(new SketchDrawHistory(newCanvas))
+      await drawCanvasFromStorage(newCanvas)
 
-      drawCanvasFromStorage(newCanvas)
+      setHistory(historyManager())
+      pushHistoryState(newCanvas.toDatalessJSON())
     } else {
       canvas.backgroundColor = backgroundColor
 

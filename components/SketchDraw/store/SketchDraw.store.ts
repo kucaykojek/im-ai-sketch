@@ -11,6 +11,7 @@ const useSketchDrawStore = create<{
   containerSize: SketchDraw['containerSize']
   canvas: SketchDraw['canvas']
   history: SketchDraw['history']
+  historyStates: string[]
   canvasOptions: SketchDraw['canvasOptions']
   selectedObjects: SketchDraw['selectedObjects']
   activeTool: SketchDraw['activeTool']
@@ -20,6 +21,9 @@ const useSketchDrawStore = create<{
   setContainerSize: (_: SketchDraw['containerSize']) => void
   setCanvas: (_: SketchDraw['canvas']) => void
   setHistory: (_: SketchDraw['history']) => void
+  pushHistoryState: (_: string) => void
+  popHistoryState: () => void
+  clearHistoryStates: (_: string[]) => void
   setCanvasOptions: (_: SketchDraw['canvasOptions']) => void
   setSelectedObjects: (_: SketchDraw['selectedObjects']) => void
   setActiveTool: (_: SketchDraw['activeTool']) => void
@@ -30,6 +34,7 @@ const useSketchDrawStore = create<{
   containerSize: { width: 0, height: 0 },
   canvas: null,
   history: null,
+  historyStates: [],
   canvasOptions: {
     backgroundColor: CANVAS_DEFAULT.background,
     width: CANVAS_DEFAULT.dimension.width,
@@ -43,6 +48,19 @@ const useSketchDrawStore = create<{
   setContainerSize: (containerSize) => set(() => ({ containerSize })),
   setCanvas: (canvas) => set(() => ({ canvas })),
   setHistory: (history) => set(() => ({ history })),
+  pushHistoryState: (historyState) =>
+    set(() => {
+      const states = get().historyStates
+      states.push(historyState)
+      return { historyStates: states }
+    }),
+  popHistoryState: () =>
+    set(() => {
+      const states = get().historyStates
+      states.pop()
+      return { historyStates: states }
+    }),
+  clearHistoryStates: (historyStates) => set(() => ({ historyStates })),
   setCanvasOptions: (canvasOptions) =>
     set(() => ({
       canvasOptions: { ...get().canvasOptions, ...canvasOptions }

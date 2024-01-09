@@ -10,8 +10,6 @@ import type {
 } from 'fabric'
 import { MutableRefObject } from 'react'
 
-import SketchDrawHistory from '../SketchDraw.history'
-
 // BEGIN: canvas related types
 export type EllipseOptions = Pick<
   FabricObjectProps,
@@ -74,6 +72,24 @@ type CanvasActiveTool =
   | 'image'
   | null
 
+export type HistoryCommand = {
+  groupId?: string
+  undo: () => void
+  redo: () => void
+}
+export interface HistoryManager {
+  add: (_command: HistoryCommand) => HistoryManager
+  setCallback: (_callbackFunc: () => void | Promise<void>) => void
+  undo: () => HistoryManager
+  redo: () => HistoryManager
+  clear: () => HistoryManager
+  canUndo: () => boolean
+  canRedo: () => boolean
+  getCommands: (_groupId?: string) => HistoryCommand[]
+  getIndex: () => number
+  setLimit: (_max: number) => void
+}
+
 export type SketchDraw = {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
   containerRef: MutableRefObject<HTMLDivElement | null>
@@ -82,7 +98,7 @@ export type SketchDraw = {
     height: number
   }
   canvas: Canvas | null
-  history: SketchDrawHistory | null
+  history: HistoryManager | null
   canvasOptions: Pick<CanvasOptions, 'backgroundColor' | 'width' | 'height'>
   selectedObjects: CanvasObject[]
   activeTool: CanvasActiveTool

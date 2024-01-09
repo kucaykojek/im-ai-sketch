@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import useSketchDrawStore from '../../store/SketchDraw.store'
 import { saveCanvasToStorage } from '../../utils/canvas'
@@ -7,12 +7,35 @@ import { isEraserObject } from '../../utils/object'
 import style from './Actions.module.css'
 
 const Background = () => {
-  const { isReady, canvas, canvasOptions, setCanvasOptions } =
-    useSketchDrawStore()
+  const {
+    isReady,
+    canvas,
+    history,
+    historyStates,
+    canvasOptions,
+    setCanvasOptions,
+    pushHistoryState,
+    popHistoryState
+  } = useSketchDrawStore()
+  const [apiTimeout, setApiTimeout] = useState<any>(0)
 
-  const handleChange = (e: ChangeEvent) => {
-    const color = (e.target as HTMLInputElement).value
+  const updateCanvas = async () => {
+    if (canvas && historyStates.length > 0) {
+      const state = historyStates[historyStates.length - 1] as any
+      ;(
+        await canvas.loadFromJSON(historyStates[historyStates.length - 1])
+      ).requestRenderAll()
 
+      setCanvasOptions({
+        ...canvasOptions,
+        backgroundColor: state.background || canvasOptions.backgroundColor
+      })
+
+      saveCanvasToStorage(canvas)
+    }
+  }
+
+  const updateColor = (color: string) => {
     setCanvasOptions({ ...canvasOptions, backgroundColor: color })
 
     // Recoloring all eraser / masking
@@ -21,14 +44,38 @@ const Background = () => {
       canvas
         .getObjects()
         .filter((obj) => isEraserObject(obj))
-        .forEach((obj) => {
-          obj.set({ stroke: color })
-        })
+        .forEach((obj) => obj.set({ stroke: color }))
 
       canvas.requestRenderAll()
 
+      if (history) {
+        const newState = canvas.toDatalessJSON()
+        pushHistoryState(newState)
+
+        history.add({
+          undo: () => {
+            popHistoryState()
+            updateCanvas()
+          },
+          redo: () => {
+            pushHistoryState(newState)
+            updateCanvas()
+          }
+        })
+      }
+
       saveCanvasToStorage(canvas)
     }
+  }
+
+  const handleChange = (e: ChangeEvent) => {
+    clearTimeout(apiTimeout)
+
+    setApiTimeout(
+      setTimeout(() => {
+        updateColor((e.target as HTMLInputElement).value)
+      }, 300)
+    )
   }
 
   return (

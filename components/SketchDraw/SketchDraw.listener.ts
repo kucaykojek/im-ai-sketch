@@ -1,11 +1,9 @@
-import { PencilBrush } from 'fabric'
 import { useEffect } from 'react'
 
 import useSketchDrawHandler from './SketchDraw.handler'
 import { SELECTION_OPTIONS } from './data/constants'
 import useSketchDrawStore from './store/SketchDraw.store'
 import useSketchDrawToolsOptionsStore from './store/options'
-import { saveCanvasToStorage } from './utils/canvas'
 
 type Props = {
   initCanvas: () => void
@@ -18,11 +16,22 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
     canvas,
     canvasOptions,
     history,
-    setSelectedObjects,
     setContainerSize
   } = useSketchDrawStore()
-  const { startDrawing, updateDrawing, stopDrawing, setSelectable } =
-    useSketchDrawHandler()
+
+  const {
+    creatingStartListen,
+    creatingStopListen,
+    setSelectable,
+    setPencilDrawing,
+    setEraserDrawing,
+    setHighlighterDrawing,
+    historyStartListen,
+    historyStopListen,
+    selectionStartListen,
+    selectionStopListen
+  } = useSketchDrawHandler()
+
   const toolsOptions = useSketchDrawToolsOptionsStore()
 
   // BEGIN: window/document events
@@ -87,6 +96,7 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
       } else if (
         event.code === 'KeyZ' &&
         (event.ctrlKey || event.metaKey) &&
+        !event.shiftKey &&
         history?.canUndo()
       ) {
         history?.undo()
@@ -101,38 +111,17 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
   }, [canvas, history])
   // END: window/document events
 
+  // Listen for drawing objects
   useEffect(() => {
     if (canvas) {
       if (
         ['ellipse', 'rect', 'triangle', 'textbox'].includes(activeTool || '')
       ) {
         setSelectable(false)
-
-        const canvasMouseDown = (e: any) => {
-          startDrawing(e)
-        }
-
-        const canvasMouseMove = (e: any) => {
-          updateDrawing(e)
-        }
-
-        const canvasMouseUp = () => {
-          stopDrawing()
-          setSelectable(true)
-
-          canvas.off('mouse:down', canvasMouseDown)
-          canvas.off('mouse:move', canvasMouseMove)
-          canvas.off('mouse:up', canvasMouseUp)
-        }
-
-        canvas.on('mouse:down', canvasMouseDown)
-        canvas.on('mouse:move', canvasMouseMove)
-        canvas.on('mouse:up', canvasMouseUp)
+        creatingStartListen()
 
         return () => {
-          canvas.off('mouse:down', canvasMouseDown)
-          canvas.off('mouse:move', canvasMouseMove)
-          canvas.off('mouse:up', canvasMouseUp)
+          creatingStopListen()
         }
       } else if (
         ['pencil', 'eraser', 'highlighter'].includes(activeTool || '')
@@ -141,34 +130,13 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
 
         switch (activeTool) {
           case 'pencil':
-            canvas.freeDrawingBrush = new PencilBrush(canvas)
-            canvas.freeDrawingBrush.color = toolsOptions.Pencil.options.color
-            canvas.freeDrawingBrush.width = toolsOptions.Pencil.options.width
-            canvas.freeDrawingBrush.strokeLineCap =
-              toolsOptions.Pencil.options.strokeLineCap
-            canvas.freeDrawingBrush.strokeLineJoin =
-              toolsOptions.Pencil.options.strokeLineJoin
+            setPencilDrawing()
             break
           case 'eraser':
-            canvas.freeDrawingBrush = new PencilBrush(canvas)
-            canvas.freeDrawingBrush.color =
-              canvasOptions.backgroundColor as string
-            canvas.freeDrawingBrush.width = toolsOptions.Eraser.options.width
-            canvas.freeDrawingBrush.strokeLineCap =
-              toolsOptions.Eraser.options.strokeLineCap
-            canvas.freeDrawingBrush.strokeLineJoin =
-              toolsOptions.Eraser.options.strokeLineJoin
+            setEraserDrawing()
             break
           case 'highlighter':
-            canvas.freeDrawingBrush = new PencilBrush(canvas)
-            canvas.freeDrawingBrush.color =
-              toolsOptions.Highlighter.options.color
-            canvas.freeDrawingBrush.width =
-              toolsOptions.Highlighter.options.width
-            canvas.freeDrawingBrush.strokeLineCap =
-              toolsOptions.Highlighter.options.strokeLineCap
-            canvas.freeDrawingBrush.strokeLineJoin =
-              toolsOptions.Highlighter.options.strokeLineJoin
+            setHighlighterDrawing()
             break
         }
       } else {
@@ -178,50 +146,42 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
   }, [
     canvas,
     activeTool,
+    canvasOptions.backgroundColor,
     toolsOptions.Pencil.options,
     toolsOptions.Highlighter.options,
+    toolsOptions.Eraser.options,
     toolsOptions.Ellipse.options,
     toolsOptions.Rect.options,
     toolsOptions.Triangle.options
   ])
 
+  // Listen for object selections
   useEffect(() => {
     if (canvas) {
-      const canvasObjectSelection = (e: any) => {
-        setSelectedObjects(e.selected || [])
-        saveCanvasToStorage(canvas)
-      }
+      canvas.getActiveSelection().borderColor = SELECTION_OPTIONS.borderColor
+      canvas.getActiveSelection().cornerColor = SELECTION_OPTIONS.cornerColor
+      canvas.getActiveSelection().cornerStyle = SELECTION_OPTIONS.cornerStyle
+      canvas.getActiveSelection().transparentCorners =
+        SELECTION_OPTIONS.transparentCorners
 
-      const canvasSelectionCreated = (e: any) => {
-        canvasObjectSelection(e)
-      }
-
-      const canvasSelectionUpdated = (e: any) => {
-        canvasObjectSelection(e)
-      }
-
-      const canvasSelectionCleared = (e: any) => {
-        canvasObjectSelection(e)
-      }
-
-      const canvasObjectAdded = (e: any) => {
-        e.target.set({ ...SELECTION_OPTIONS })
-        canvasObjectSelection(e)
-      }
-
-      canvas.on('selection:created', canvasSelectionCreated)
-      canvas.on('selection:updated', canvasSelectionUpdated)
-      canvas.on('selection:cleared', canvasSelectionCleared)
-      canvas.on('object:added', canvasObjectAdded)
+      selectionStartListen()
 
       return () => {
-        canvas.off('selection:created', canvasSelectionCreated)
-        canvas.off('selection:updated', canvasSelectionUpdated)
-        canvas.off('selection:cleared', canvasSelectionCleared)
-        canvas.off('object:added', canvasObjectAdded)
+        selectionStopListen()
       }
     }
   }, [canvas])
+
+  // Listen for history
+  useEffect(() => {
+    if (canvas && history) {
+      historyStartListen()
+
+      return () => {
+        historyStopListen()
+      }
+    }
+  }, [canvas, history])
 
   return null
 }

@@ -72,9 +72,8 @@ const GenerateImage = () => {
           alt=""
         />
       ) : (
-        <div className="text-neutral-300 space-y-6 uppercase font-medium tracking-widest">
-          <ImageIcon className="w-60 h-60" />
-          <div className="text-xl">Result Placeholder</div>
+        <div className="text-neutral-300">
+          <ImageIcon className="w-24 h-24 md:w-32 md:h-60 xl:w-60 xl:h-52 mx-auto" />
         </div>
       )}
     </div>

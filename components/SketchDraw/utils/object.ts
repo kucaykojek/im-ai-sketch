@@ -32,7 +32,7 @@ export const isPencilObject = (obj: FabricObject) => {
     return false
   }
 
-  if ((obj as PencilObject)?.type?.length) {
+  if ((obj as EraserObject)?.get('type') === 'path') {
     return (
       !!(obj as PencilObject).stroke &&
       !!(obj as PencilObject).strokeLineJoin &&
@@ -49,7 +49,7 @@ export const isEraserObject = (obj: FabricObject) => {
     return false
   }
 
-  if ((obj as EraserObject)?.type?.length) {
+  if ((obj as EraserObject)?.get('type') === 'path') {
     return (
       !!(obj as EraserObject).stroke &&
       !!(obj as EraserObject).strokeLineCap &&
@@ -66,7 +66,7 @@ export const isHighlighterObject = (obj: FabricObject) => {
     return false
   }
 
-  if ((obj as HighlighterObject)?.type?.length) {
+  if ((obj as EraserObject)?.get('type') === 'path') {
     return (
       !!(obj as HighlighterObject).stroke &&
       !!(obj as HighlighterObject).strokeLineJoin &&
