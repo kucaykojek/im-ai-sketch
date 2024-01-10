@@ -116,7 +116,7 @@ const TriangleOptions = () => {
             <SliderRange
               id="rect-options-stroke-width"
               value={options.strokeWidth || 0}
-              min={options.fill !== 'transparent' ? 1 : 0}
+              min={options.fill !== 'transparent' ? 0 : 1}
               max={100}
               step={1}
               onChange={(e) =>
