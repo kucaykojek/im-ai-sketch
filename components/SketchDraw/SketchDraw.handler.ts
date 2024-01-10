@@ -48,7 +48,7 @@ const useSketchDrawHandler = () => {
     }
 
     isCreating = true
-    const pointer = canvas.getViewportPoint(e)
+    const pointer = canvas.getScenePoint(e)
 
     initPosition = { x: pointer.x, y: pointer.y }
 
@@ -106,7 +106,7 @@ const useSketchDrawHandler = () => {
       return
     }
 
-    const pointer = canvas.getViewportPoint(e)
+    const pointer = canvas.getScenePoint(e)
     let obj = canvas.getActiveObject()
 
     if (!obj) {

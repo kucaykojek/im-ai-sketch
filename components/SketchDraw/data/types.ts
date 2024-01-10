@@ -78,6 +78,7 @@ export type HistoryCommand = {
   redo: () => void
 }
 export interface HistoryManager {
+  on: (_status: boolean) => void
   add: (_command: HistoryCommand) => HistoryManager
   setCallback: (_callbackFunc: () => void | Promise<void>) => void
   undo: () => HistoryManager
@@ -94,6 +95,10 @@ export type SketchDraw = {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>
   containerRef: MutableRefObject<HTMLDivElement | null>
   containerSize: {
+    width: number
+    height: number
+  }
+  initialSize: {
     width: number
     height: number
   }

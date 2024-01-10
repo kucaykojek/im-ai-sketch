@@ -19,11 +19,13 @@ export default function SketchDraw() {
   const {
     isReady,
     containerSize,
+    initialSize,
     canvas,
     canvasOptions,
     setIsReady,
     setCanvasRef,
     setContainerRef,
+    setInitialSize,
     setHistory,
     pushHistoryState,
     setCanvas,
@@ -52,6 +54,7 @@ export default function SketchDraw() {
     })
 
     if (!canvas) {
+      setInitialSize({ width, height })
       const newCanvas = new Canvas(canvasRef.current, {
         backgroundColor,
         width,
@@ -69,29 +72,36 @@ export default function SketchDraw() {
     } else {
       canvas.backgroundColor = backgroundColor
 
-      if (canvas.width != width || canvas.height != height) {
-        const scaleX = width / canvas.width
-        const scaleY = height / canvas.height
-        var objects = canvas.getObjects()
-
-        objects.forEach((obj) => {
-          obj.scaleX = obj.scaleX * scaleX
-          obj.scaleY = obj.scaleY * scaleY
-          obj.left = obj.left * scaleX
-          obj.top = obj.top * scaleY
-          obj.setCoords()
-        })
-
-        canvas.discardActiveObject()
-        canvas.requestRenderAll()
+      // Method 1: Set Zoom
+      if (initialSize.width != width || initialSize.height != height) {
+        canvas.setZoom(width / initialSize.width)
         canvas.calcOffset()
       }
+
+      // Method 2: Re-Scale objects
+      // if (canvas.width != width || canvas.height != height) {
+      //   const scaleX = width / canvas.width
+      //   const scaleY = height / canvas.height
+      //   var objects = canvas.getObjects()
+
+      //   objects.forEach((obj) => {
+      //     obj.scaleX = obj.scaleX * scaleX
+      //     obj.scaleY = obj.scaleY * scaleY
+      //     obj.left = obj.left * scaleX
+      //     obj.top = obj.top * scaleY
+      //     obj.setCoords()
+      //   })
+
+      //   canvas.discardActiveObject()
+      //   canvas.requestRenderAll()
+      //   canvas.calcOffset()
+      // }
 
       canvas.setDimensions({ width, height })
     }
 
     setIsReady(true)
-  }, [containerSize, canvasOptions.backgroundColor])
+  }, [initialSize, containerSize, canvasOptions.backgroundColor])
 
   useEffect(() => {
     initCanvas()

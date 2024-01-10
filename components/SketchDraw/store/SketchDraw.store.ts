@@ -9,6 +9,7 @@ const useSketchDrawStore = create<{
   canvasRef: SketchDraw['canvasRef']
   containerRef: SketchDraw['containerRef']
   containerSize: SketchDraw['containerSize']
+  initialSize: SketchDraw['initialSize']
   canvas: SketchDraw['canvas']
   history: SketchDraw['history']
   historyStates: string[]
@@ -19,6 +20,7 @@ const useSketchDrawStore = create<{
   setCanvasRef: (_: SketchDraw['canvasRef']) => void
   setContainerRef: (_: SketchDraw['containerRef']) => void
   setContainerSize: (_: SketchDraw['containerSize']) => void
+  setInitialSize: (_: SketchDraw['initialSize']) => void
   setCanvas: (_: SketchDraw['canvas']) => void
   setHistory: (_: SketchDraw['history']) => void
   pushHistoryState: (_: string) => void
@@ -32,6 +34,7 @@ const useSketchDrawStore = create<{
   canvasRef: createRef(),
   containerRef: createRef(),
   containerSize: { width: 0, height: 0 },
+  initialSize: { width: 0, height: 0 },
   canvas: null,
   history: null,
   historyStates: [],
@@ -46,6 +49,7 @@ const useSketchDrawStore = create<{
   setCanvasRef: (canvasRef) => set(() => ({ canvasRef })),
   setContainerRef: (containerRef) => set(() => ({ containerRef })),
   setContainerSize: (containerSize) => set(() => ({ containerSize })),
+  setInitialSize: (initialSize) => set(() => ({ initialSize })),
   setCanvas: (canvas) => set(() => ({ canvas })),
   setHistory: (history) => set(() => ({ history })),
   pushHistoryState: (historyState) =>

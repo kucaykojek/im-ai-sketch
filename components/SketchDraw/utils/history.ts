@@ -14,6 +14,7 @@ const historyManager = (): HistoryManager => {
   let commands: HistoryCommand[] = [],
     index = -1,
     limit = 0,
+    on = true,
     isExecuting = false,
     callback: (() => void) | undefined
 
@@ -29,8 +30,12 @@ const historyManager = (): HistoryManager => {
   }
 
   return {
+    on: function (status: boolean): void {
+      on = status
+    },
+
     add: function (command: HistoryCommand): HistoryManager {
-      if (isExecuting) {
+      if (isExecuting || !on) {
         return this
       }
 
