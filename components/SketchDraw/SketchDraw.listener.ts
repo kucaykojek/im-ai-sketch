@@ -170,7 +170,7 @@ const SketchDrawListener = ({ initCanvas }: Props) => {
         selectionStopListen()
       }
     }
-  }, [canvas])
+  }, [canvas, canvasOptions.backgroundColor])
 
   // Listen for history
   useEffect(() => {

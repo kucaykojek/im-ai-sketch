@@ -66,10 +66,10 @@ const GenerateImage = () => {
       {selectedImage ? (
         <Image
           src={selectedImage}
-          priority
           fill={true}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           alt=""
+          placeholder="blur"
+          blurDataURL={selectedImage}
         />
       ) : (
         <div className="text-neutral-300">

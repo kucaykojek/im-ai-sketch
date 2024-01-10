@@ -234,6 +234,9 @@ const useSketchDrawHandler = () => {
   const objectSelection = (e: any) => {
     if (canvas) {
       setSelectedObjects(e.selected || [])
+
+      // ONLY FOR DEMO
+      canvas.backgroundColor = canvasOptions.backgroundColor
       saveCanvasToStorage(canvas)
     }
   }
@@ -307,6 +310,7 @@ const useSketchDrawHandler = () => {
       ;(
         await canvas.loadFromJSON(historyStates[historyStates.length - 1])
       ).requestRenderAll()
+
       historyStartListen()
     }
   }

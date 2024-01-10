@@ -19,7 +19,7 @@
 }
 
 html {
-  @apply bg-neutral-200 text-neutral-800;
+  @apply bg-neutral-200 text-neutral-800 select-none;
 }
 
 main {

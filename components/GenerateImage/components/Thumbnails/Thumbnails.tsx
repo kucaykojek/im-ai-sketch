@@ -31,7 +31,8 @@ const Thumbnails = () => {
                 'w-7 h-7 rounded bg-neutral-300 cursor-pointer overflow-hidden object-cover',
                 activeIndex === index && '!ring-primary ring-2'
               )}
-              priority
+              placeholder="blur"
+              blurDataURL={resultImages[index]}
               onClick={() => handleClick(index)}
             />
           ) : (
