@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
-    "@types/fabric": "^5.3.6",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
