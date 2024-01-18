@@ -12,7 +12,7 @@ const Download = () => {
       const a = document.createElement('a')
       a.download = `result-${new Date().getTime()}`
       a.style.display = 'none'
-      a.href = `data:image/png;base64,${selectedImage}`
+      a.href = selectedImage
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
